@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<meta name="generator" content="AsciiDoc 5.0.2"/>
+<title>TODO</title>
+<style type="text/css">
+<!--
+        body {
+                background: #ffffff;
+                color: #000000;
+                font-size: 12pt;
+                font-family: verdana, sans-serif;
+                margin: 0 50px 0 50px;
+        }
+        a {
+                color: #111177;
+                text-decoration: none;
+        }
+        h1 { font-size: 24pt; }
+        h2 { font-size: 18pt; }
+        h3 { font-size: 14pt; }
+        pre {
+                font-size: 10pt;
+                font-weight: normal;
+        }
+-->
+</style>
+</head>
+<body>
+<h1>TODO</h1>
+<p>
+</p>
+<ul>
+<li>
+
+not sure if encode_frame() in toolame.c is correct
+    frame of mpeg1 is only 576 samples, not 1152 ?
+
+</li>
+<li>
+
+revamp frontend - GNU style long options, more integrated libsndfile
+
+</li>
+<li>
+
+Fix broken energy level support
+
+</li>
+<li>
+
+Fix broken DAB support
+
+</li>
+<li>
+
+Merge common.h and toolame_global.h ?
+
+</li>
+<li>
+
+Change documentation from asciidoc to POD
+
+</li>
+<li>
+
+Re-add support for encoding from stdin when sndfile is available
+
+</li>
+<li>
+
+Automatic downmixing / upmixing (toolame_set_num_channels)
+
+</li>
+<li>
+
+Add libresample support to libtoolame (toolame_set_in_samplerate etc.)
+
+</li>
+<li>
+
+parameter checking in toolame.c using assert
+
+</li>
+<li>
+
+full options checking in toolame_init_params
+
+</li>
+<li>
+
+Add a new toolame.spec
+
+</li>
+<li>
+
+Create Debian packages
+
+</li>
+<li>
+
+write a frontend conversant with the BWF (Broadcast Wave Format) specification
+
+</li>
+<li>
+
+quite a lot of duplicated code between toolame_encode_buffer_interleaved
+  and toolame_encode_buffer
+
+</li>
+<li>
+
+sort out changing parameter for toolame_set_VBR_q from FLOAT to int
+
+</li>
+<li>
+
+set num_ancillary_bits in libtoolame, not front end
+
+</li>
+<li>
+
+Update documentation
+
+</li>
+<li>
+
+with this VBR mode, we know the bits aren't going to run out, so we can
+  just assign them "greedily".
+
+</li>
+<li>
+
+VBR_a_bit_allocation() is yet to be written :)
+
+</li>
+<li>
+
+Sort out tab size / space mixture in source files
+
+</li>
+<li>
+
+Add a layer 2 decoder ? mpglib ?
+
+</li>
+</ul>
+<p></p>
+<p></p>
+<hr/><p><small>
+Last updated 15-Apr-2005 02:05:22 BST
+</small></p>
+</body>
+</html>

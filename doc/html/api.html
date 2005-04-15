@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<meta name="generator" content="AsciiDoc 5.0.2"/>
+<title>The libtwolame API</title>
+<style type="text/css">
+<!--
+        body {
+                background: #ffffff;
+                color: #000000;
+                font-size: 12pt;
+                font-family: verdana, sans-serif;
+                margin: 0 50px 0 50px;
+        }
+        a {
+                color: #111177;
+                text-decoration: none;
+        }
+        h1 { font-size: 24pt; }
+        h2 { font-size: 18pt; }
+        h3 { font-size: 14pt; }
+        pre {
+                font-size: 10pt;
+                font-weight: normal;
+        }
+-->
+</style>
+</head>
+<body>
+<h1>The libtwolame API</h1>
+<p>
+</p>
+<p>
+This is the interface for encoding PCM audio to MPEG Audio Layer 2.
+</p>
+<p>
+It is <em>very</em> similar to the libmp3lame API.
+</p>
+<p>
+See simplefrontend/simplefrontend.c for a very simple application
+using the API.
+</p>
+<h2>Steps to encode PCM to MP2</h2>
+<ol>
+<li>
+<p>
+Grab a set of default options by calling:
+</p>
+<pre>
+twolame_options *encodeOptions;
+encodeOptions = twolame_init();
+</pre>
+</li>
+<li>
+<p>
+Adjust those options to suit your requirements.
+   See twolame.h for a full list of options. eg.
+</p>
+<pre>
+twolame_set_out_samplerate(encodeOptions, 32000);
+twolame_set_bitrate(encodeOptions, 160);
+</pre>
+</li>
+<li>
+<p>
+Initialise twolame library with these options by calling:
+</p>
+<pre>
+twolame_init_params(encodeOptions);
+</pre>
+<pre>
+NOTE: The return value should be checked to see if the options were valid.
+Currently only ever returns 0
+</pre>
+</li>
+<li>
+<p>
+Encode PCM audio to MP2 by calling:
+</p>
+<pre>
+int twolame_encode_buffer(
+ twolame_options *glopts,   // the set of options you're using
+ const short int leftpcm[], // the left and right audio channels
+ const short int rightpcm[],
+ int num_samples,           // the number of samples in each channel
+ unsigned char *mp2buffer,  // a pointer to a buffer for the MP2 audio data
+                            // NB User must allocate space!
+ int mp2buffer_size);       // The size of the mp2buffer that the user allocated
+ int *mp2fill_size);
+</pre>
+<pre>
+This function returns the number of bytes written into mp2buffer by the library MPEG.
+Multiple calls can be made to this function.
+It is the users responsibility to:
+</pre>
+<ul>
+<li>
+
+allocate the mp2buffer
+
+</li>
+<li>
+
+read the pcmaudio from somewhere with new samples always staring from
+           the beginning of the buffer
+
+</li>
+<li>
+
+write the mp2buffer contents to somewhere (it is overwritten with each call)
+
+</li>
+</ul>
+</li>
+<li>
+<p>
+Flush the encoder by calling:
+</p>
+<pre>
+int twolame_encode_flush(
+    twolame_options *glopts,
+    unsigned char *mp2buffer,
+    int mp2buffer_size);
+</pre>
+<pre>
+When encoding is finished, unless there was exactly a multiple of 1152 samples/channel
+sent to the encoder, there will be some remaining audio that is not encoded. This function
+encodes this last bit of audio by padding out with zeros until there is 1152 samples per channel
+in the PCM audio buffers and then encoding this.
+</pre>
+<pre>
+This function returns the number of bytes written into mp2buffer by the library MPEG.
+</pre>
+</li>
+<li>
+<p>
+The user must "de-initialise" the encoder at the end by calling:
+</p>
+<pre>
+void twolame_close(twolame_options **glopts);
+</pre>
+<pre>
+This function must be called to free all the memory and structures
+associated with this set of encoding parameters.
+POST: glopts = NULL
+</pre>
+</li>
+</ol>
+<p></p>
+<p></p>
+<hr/><p><small>
+Last updated 15-Apr-2005 02:05:24 BST
+</small></p>
+</body>
+</html>

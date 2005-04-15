@@ -1,0 +1,191 @@
+TwoLAME
+=======
+
+Based on tooLAME by Michael Cheng
+
+All changes to the ISO source are licensed under the LGPL  
+(see COPYING for details)
+
+  TwoLAME is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 2.1 of the License, or (at your option) any later version.
+
+  TwoLAME is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
+
+  You should have received a copy of the GNU Lesser General Public
+  License along with TwoLAME; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+INTRODUCTION
+------------
+
+TwoLAME is an optimized MPEG Audio Layer 2 encoder. 
+It is based heavily on:
+
+- tooLAME by Michael Cheng
+- the ISO dist10 code 
+- improvement to algorithms as part of the LAME project (lame.sf.net)
+- other contributors (see AUTHORS)
+
+
+For the latest version of TwoLAME, visit the project homepage:
+http://twolame.sourceforge.net/
+
+
+INSTALLATION
+------------
+
+Standard automate processs:
+
+  ./configure
+  make
+  make install
+
+
+USAGE
+-----
+
+	./twolame [options] <input> <output>
+
+Input File
+~~~~~~~~~~
+	TwoLAME parses AIFF and WAV files for file info
+	raw PCM is assumed if no header is found
+	for stdin use a -
+
+Output File
+~~~~~~~~~~~
+	file is automatically renamed from *.* to *.mp2
+	for stdout use a -
+
+
+Input Options
+~~~~~~~~~~~~~
+	-s [int]
+		if inputting raw PCM sound, you must specify the sample rate
+		default sample rate is 44.1khz.
+
+	-a	
+		downmix from stereo to mono
+		if the incoming file is stereo, combine the audio into 
+		a single channel
+
+	-x 	
+		force byte-swapping of the input.  (current endian detection is dodgy, 
+		so if twolame produces only noise, use -x )
+
+	-g
+		swap the LR channels of a stereo file
+
+
+Output Options
+~~~~~~~~~~~~~~
+
+	-m [char]
+		the encoding mode (default 'j')
+		's' stereo
+		'd' dual channel
+		'j' joint stereo
+		'm' mono
+
+	-p [int]
+		which psy model to use (default '1')
+		Different models for the psychoacoustics
+		Models: -1 to 4
+
+	-b [int]
+		the total bitrate 	
+		For 48/44.1/32kHz default = 192 
+		For 24/22.05/16kHz default = 96
+
+	-v [int]
+		Switch on VBR mode.
+		The higher the number the better the quality.
+		Useful range -10 to 10.
+		See README.VBR for details.
+
+Operation
+~~~~~~~~~
+
+	-f 	
+		fast mode turns off calculation of the psychoacoustic model.
+		Instead a set of default values are assumed
+
+	-q [int]
+		quick mode calculates the psy model every 'num' frames.
+
+	-E
+		Store peak energy information at the end of each frame
+
+Misc
+~~~~
+
+	-d emp
+		de-emphasis (default 'n')
+	-c 	
+		mark as copyright
+	-o
+		mark as original
+	-e
+		add error protection
+	-r
+		force padding bits off
+	-D [int]
+		add DAB extensions with an XPAD length as specified.
+	-t [int]
+		'talkativity' setting. 0 = no message. 3 = too much information
+
+
+EXAMPLES
+--------
+
+	twolame sound.wav
+
+This will encode sound.wav to sound.mp2 using the default bitrate of 192 kbps 
+and using the default psychoacoustic model (model 3)
+
+	twolame -p 2 -v 5 sound.wav newfile.mp2
+
+Encode sound.wav to newfile.mp2 using psychoacoustic model 2 and encoding
+with variable bitrate. The high value of the "-v" argument means that 
+the encoding will tend to favour higher bitrates.
+
+
+	twolame -p 2 -v -5 sound.wav newfile.mp2
+
+Same as example above, except that the negative value of the "-v" argument
+means that the lower bitrates will be favoured over the higher ones.
+
+
+REFERENCE PAPERS
+----------------
+
+(Specifically Layer II Papers)
+
+Kumar, M & Zubair, M., A high performance software implementation of mpeg audio 
+encoder, 1996, ICASSP Conf Proceedings (I think)
+
+Fischer, K.A., Calculation of the psychoacoustic simultaneous masked threshold 
+based on MPEG/Audio Encoder Model One, ICSI Technical Report, 1997
+ftp://ftp.icsi.berkeley.edu/pub/real/kyrill/PsychoMpegOne.tar.Z 
+
+Hyen-O et al, New Implementation techniques of a real-time mpeg-2 audio encoding 
+system. p2287, ICASSP 99.
+
+Imai, T., et al, MPEG-1 Audio real-time encoding system, IEEE Trans on Consumer
+Electronics, v44, n3 1998. p888
+
+Teh, D., et al, Efficient bit allocation algorithm for ISO/MPEG audio encoder,
+Electronics Letters, v34, n8, p721
+
+Murphy, C & Anandakumar, K, Real-time MPEG-1 audio coding and decoding on a DSP
+Chip, IEEE Trans on Consumer Electronics, v43, n1, 1997 p40
+
+Hans, M & Bhaskaran, V., A compliant MPEG-1 layer II audio decoder with 16-B 
+arithmetic operations, IEEE Signal Proc Letters v4 n5 1997 p121
+

@@ -1,0 +1,42 @@
+What is new in TwoLAME 
+======================
+
+
+Version 0.3.2 (2005-04-10)
+--------------------------
+
+- Added scaling of input samples
+- Added downmixing/upmixing of samples
+- Applied patch from Christophe Massiot to make TwoLAME thread-safe
+
+
+Version 0.3.1 (2004-09-17)
+--------------------------
+
+- Frontend displays information about the input file format
+- Fixed bug with audio_get_samples reading more than buffer size
+- Added asciidoc documentation
+- Added doxygen documentation
+
+
+Version 0.3.0 (2004-09-14)
+--------------------------
+
+- Based on tooLAME 0.2m beta 8
+- changed build system to use automake/libtool
+- now builds shared library
+- restructured lots of code
+   * Removed some dead code and unused files
+- should now be close to being thread safe
+- removed memory leaks / static variables
+- changed library API so that it is almost the same as LAMEs
+   * hopefully not too many people have been using the old API
+   * not too many big differences
+   * will hopefully add resampling support to next release
+   * API is ready for resampling support to be added
+   * ready for downmixing to be added to libtoolame
+- Added libsndfile support to toolame frontend (if you have it)
+- moved set/get functions into get_set.c
+- I have broken energy levels support (sorry !) - will try and fix
+- Added LGPL header to the top of all the files
+- Added toolame_encode_buffer_interleaved

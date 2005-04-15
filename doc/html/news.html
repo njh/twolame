@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<meta name="generator" content="AsciiDoc 5.0.2"/>
+<title>What is new in TwoLAME</title>
+<style type="text/css">
+<!--
+        body {
+                background: #ffffff;
+                color: #000000;
+                font-size: 12pt;
+                font-family: verdana, sans-serif;
+                margin: 0 50px 0 50px;
+        }
+        a {
+                color: #111177;
+                text-decoration: none;
+        }
+        h1 { font-size: 24pt; }
+        h2 { font-size: 18pt; }
+        h3 { font-size: 14pt; }
+        pre {
+                font-size: 10pt;
+                font-weight: normal;
+        }
+-->
+</style>
+</head>
+<body>
+<h1>What is new in TwoLAME</h1>
+<p>
+</p>
+<h2>Version 0.3.2 (2005-04-10)</h2>
+<ul>
+<li>
+
+Added scaling of input samples
+
+</li>
+<li>
+
+Added downmixing/upmixing of samples
+
+</li>
+<li>
+
+Applied patch from Christophe Massiot to make TwoLAME thread-safe
+
+</li>
+</ul>
+<h2>Version 0.3.1 (2004-09-17)</h2>
+<ul>
+<li>
+
+Frontend displays information about the input file format
+
+</li>
+<li>
+
+Fixed bug with audio_get_samples reading more than buffer size
+
+</li>
+<li>
+
+Added asciidoc documentation
+
+</li>
+<li>
+
+Added doxygen documentation
+
+</li>
+</ul>
+<h2>Version 0.3.0 (2004-09-14)</h2>
+<ul>
+<li>
+
+Based on tooLAME 0.2m beta 8
+
+</li>
+<li>
+
+changed build system to use automake/libtool
+
+</li>
+<li>
+
+now builds shared library
+
+</li>
+<li>
+
+restructured lots of code
+
+<ul>
+<li>
+
+Removed some dead code and unused files
+
+</li>
+</ul>
+</li>
+<li>
+
+should now be close to being thread safe
+
+</li>
+<li>
+
+removed memory leaks / static variables
+
+</li>
+<li>
+
+changed library API so that it is almost the same as LAMEs
+
+<ul>
+<li>
+
+hopefully not too many people have been using the old API
+
+</li>
+<li>
+
+not too many big differences
+
+</li>
+<li>
+
+will hopefully add resampling support to next release
+
+</li>
+<li>
+
+API is ready for resampling support to be added
+
+</li>
+<li>
+
+ready for downmixing to be added to libtoolame
+
+</li>
+</ul>
+</li>
+<li>
+
+Added libsndfile support to toolame frontend (if you have it)
+
+</li>
+<li>
+
+moved set/get functions into get_set.c
+
+</li>
+<li>
+
+I have broken energy levels support (sorry !) - will try and fix
+
+</li>
+<li>
+
+Added LGPL header to the top of all the files
+
+</li>
+<li>
+
+Added toolame_encode_buffer_interleaved
+
+</li>
+</ul>
+<p></p>
+<p></p>
+<hr/><p><small>
+Last updated 15-Apr-2005 02:05:16 BST
+</small></p>
+</body>
+</html>

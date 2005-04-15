@@ -1,0 +1,255 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+<meta name="generator" content="AsciiDoc 5.0.2"/>
+<title>TwoLAME</title>
+<style type="text/css">
+<!--
+        body {
+                background: #ffffff;
+                color: #000000;
+                font-size: 12pt;
+                font-family: verdana, sans-serif;
+                margin: 0 50px 0 50px;
+        }
+        a {
+                color: #111177;
+                text-decoration: none;
+        }
+        h1 { font-size: 24pt; }
+        h2 { font-size: 18pt; }
+        h3 { font-size: 14pt; }
+        pre {
+                font-size: 10pt;
+                font-weight: normal;
+        }
+-->
+</style>
+</head>
+<body>
+<h1>TwoLAME</h1>
+<p>
+</p>
+<p>
+Based on tooLAME by Michael Cheng
+</p>
+<p>
+All changes to the ISO source are licensed under the LGPL
+(see COPYING for details)
+</p>
+<pre>
+TwoLAME is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+</pre>
+<pre>
+TwoLAME is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+</pre>
+<pre>
+You should have received a copy of the GNU Lesser General Public
+License along with TwoLAME; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+</pre>
+<h2>INTRODUCTION</h2>
+<p>
+TwoLAME is an optimized MPEG Audio Layer 2 encoder.
+It is based heavily on:
+</p>
+<ul>
+<li>
+
+tooLAME by Michael Cheng
+
+</li>
+<li>
+
+the ISO dist10 code
+
+</li>
+<li>
+
+improvement to algorithms as part of the LAME project (lame.sf.net)
+
+</li>
+<li>
+
+other contributors (see AUTHORS)
+
+</li>
+</ul>
+<p>
+For the latest version of TwoLAME, visit the project homepage:
+http://twolame.sourceforge.net/
+</p>
+<h2>INSTALLATION</h2>
+<p>
+Standard automate processs:
+</p>
+<pre>
+./configure
+make
+make install
+</pre>
+<h2>USAGE</h2>
+<pre>
+./twolame [options] &lt;input&gt; &lt;output&gt;
+</pre>
+<h3>Input File</h3>
+<pre>
+TwoLAME parses AIFF and WAV files for file info
+raw PCM is assumed if no header is found
+for stdin use a -
+</pre>
+<h3>Output File</h3>
+<pre>
+file is automatically renamed from *.* to *.mp2
+for stdout use a -
+</pre>
+<h3>Input Options</h3>
+<pre>
+-s [int]
+        if inputting raw PCM sound, you must specify the sample rate
+        default sample rate is 44.1khz.
+</pre>
+<pre>
+-a
+        downmix from stereo to mono
+        if the incoming file is stereo, combine the audio into
+        a single channel
+</pre>
+<pre>
+-x
+        force byte-swapping of the input.  (current endian detection is dodgy,
+        so if twolame produces only noise, use -x )
+</pre>
+<pre>
+-g
+        swap the LR channels of a stereo file
+</pre>
+<h3>Output Options</h3>
+<pre>
+-m [char]
+        the encoding mode (default 'j')
+        's' stereo
+        'd' dual channel
+        'j' joint stereo
+        'm' mono
+</pre>
+<pre>
+-p [int]
+        which psy model to use (default '1')
+        Different models for the psychoacoustics
+        Models: -1 to 4
+</pre>
+<pre>
+-b [int]
+        the total bitrate
+        For 48/44.1/32kHz default = 192
+        For 24/22.05/16kHz default = 96
+</pre>
+<pre>
+-v [int]
+        Switch on VBR mode.
+        The higher the number the better the quality.
+        Useful range -10 to 10.
+        See README.VBR for details.
+</pre>
+<h3>Operation</h3>
+<pre>
+-f
+        fast mode turns off calculation of the psychoacoustic model.
+        Instead a set of default values are assumed
+</pre>
+<pre>
+-q [int]
+        quick mode calculates the psy model every 'num' frames.
+</pre>
+<pre>
+-E
+        Store peak energy information at the end of each frame
+</pre>
+<h3>Misc</h3>
+<pre>
+-d emp
+        de-emphasis (default 'n')
+-c
+        mark as copyright
+-o
+        mark as original
+-e
+        add error protection
+-r
+        force padding bits off
+-D [int]
+        add DAB extensions with an XPAD length as specified.
+-t [int]
+        'talkativity' setting. 0 = no message. 3 = too much information
+</pre>
+<h2>EXAMPLES</h2>
+<pre>
+twolame sound.wav
+</pre>
+<p>
+This will encode sound.wav to sound.mp2 using the default bitrate of 192 kbps
+and using the default psychoacoustic model (model 3)
+</p>
+<pre>
+twolame -p 2 -v 5 sound.wav newfile.mp2
+</pre>
+<p>
+Encode sound.wav to newfile.mp2 using psychoacoustic model 2 and encoding
+with variable bitrate. The high value of the "-v" argument means that
+the encoding will tend to favour higher bitrates.
+</p>
+<pre>
+twolame -p 2 -v -5 sound.wav newfile.mp2
+</pre>
+<p>
+Same as example above, except that the negative value of the "-v" argument
+means that the lower bitrates will be favoured over the higher ones.
+</p>
+<h2>REFERENCE PAPERS</h2>
+<p>
+(Specifically Layer II Papers)
+</p>
+<p>
+Kumar, M &amp; Zubair, M., A high performance software implementation of mpeg audio
+encoder, 1996, ICASSP Conf Proceedings (I think)
+</p>
+<p>
+Fischer, K.A., Calculation of the psychoacoustic simultaneous masked threshold
+based on MPEG/Audio Encoder Model One, ICSI Technical Report, 1997
+ftp://ftp.icsi.berkeley.edu/pub/real/kyrill/PsychoMpegOne.tar.Z
+</p>
+<p>
+Hyen-O et al, New Implementation techniques of a real-time mpeg-2 audio encoding
+system. p2287, ICASSP 99.
+</p>
+<p>
+Imai, T., et al, MPEG-1 Audio real-time encoding system, IEEE Trans on Consumer
+Electronics, v44, n3 1998. p888
+</p>
+<p>
+Teh, D., et al, Efficient bit allocation algorithm for ISO/MPEG audio encoder,
+Electronics Letters, v34, n8, p721
+</p>
+<p>
+Murphy, C &amp; Anandakumar, K, Real-time MPEG-1 audio coding and decoding on a DSP
+Chip, IEEE Trans on Consumer Electronics, v43, n1, 1997 p40
+</p>
+<p>
+Hans, M &amp; Bhaskaran, V., A compliant MPEG-1 layer II audio decoder with 16-B
+arithmetic operations, IEEE Signal Proc Letters v4 n5 1997 p121
+</p>
+<p></p>
+<p></p>
+<hr/><p><small>
+Last updated 15-Apr-2005 02:05:09 BST
+</small></p>
+</body>
+</html>

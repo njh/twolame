@@ -1,0 +1,16 @@
+TwoLAME Documentation
+=====================
+
+TwoLAME - an optimized MPEG Audio Layer 2 encoder
+
+- link:readme.html[Read Me]
+- link:news.html[What is New]
+- link:todo.html[TODO]
+- link:api.html[libtwolame API Overview]
+- link:twolame_8h.html[libtwolame API Reference]
+- link:psycho.html[Psychoacoustic Models Overview]
+- link:vbr.html[VBR Features Overview]
+- link:authors.html[The TwoLAME Authors]
+
+twolame homepage: link:http://twolame.sourceforge.net[http://twolame.sourceforge.net] +
+twolame mailing list: link:http://lists.sourceforge.net/lists/listinfo/twolame-discuss[twolame-discuss@lists.sourceforge.net]
