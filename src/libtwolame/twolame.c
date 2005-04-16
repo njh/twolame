@@ -45,7 +45,6 @@
 #include "subband.h"
 #include "encode.h"
 #include "energy.h"
-#include "tables.h"
 
 
 static void init_header_info( twolame_options *glopts ) {
@@ -100,12 +99,13 @@ static void init_frame_info(twolame_options *glopts)
   frame->actual_mode = header->mode;
   frame->nch = (header->mode == TWOLAME_MONO) ? 1 : 2;
 
-  frame->sblimit = pick_table ( glopts );
+  //frame->sblimit = pick_table ( glopts );
   /* MFC FIX this up */
+  // Select table number and sblimit
   encode_init( glopts );
 
   if (glopts->mode == TWOLAME_JOINT_STEREO)
-    frame->jsbound = js_bound(header->mode_ext);
+    frame->jsbound = get_js_bound(header->mode_ext);
   else
     frame->jsbound = frame->sblimit;
   /* alloc, tab_num set in pick_table */
@@ -157,9 +157,7 @@ twolame_options *twolame_init(void) {
 	
 	
 	newoptions->vbr_frame_count = 0;	/* only used for debugging */
-    newoptions->alloc_tab_num = -1;		/* no table loaded */
-	newoptions->alloc_tab = NULL;
-	
+    newoptions->tablenum = 0;	
 
 	newoptions->twolame_init = 0;
 	newoptions->subband = NULL;
@@ -175,7 +173,6 @@ twolame_options *twolame_init(void) {
 	newoptions->p4mem = NULL;
 
     memset(newoptions->vbrstats, 0, sizeof(newoptions->vbrstats));
-    newoptions->tablenum = 0;
 	
 	return(newoptions);
 }
@@ -648,7 +645,6 @@ void twolame_close(twolame_options **glopts) {
 	if (opts->p1mem) psycho_1_deinit( &opts->p1mem );
 	if (opts->p0mem) psycho_0_deinit( &opts->p0mem );
 	
-	if (opts->alloc_tab) twolame_free( (void **) &opts->alloc_tab );
 	if (opts->subband) twolame_free( (void **) &opts->subband );
 	if (opts->j_sample) twolame_free( (void **) &opts->j_sample );
 	if (opts->sb_sample) twolame_free( (void **) &opts->sb_sample );

@@ -27,6 +27,8 @@
 #include "common.h"
 #include "twolame.h"
 #include "twolame_global.h"
+#include "bitbuffer.h"
+#include "encode.h"
 #include "crc.h"
 
 /*****************************************************************************
@@ -44,7 +46,6 @@ void crc_calc (twolame_options *glopts, unsigned int bit_alloc[2][SBLIMIT],
   int nch = frame->nch;
   int sblimit = frame->sblimit;
   int jsbound = frame->jsbound;
-  alloc_table *alloc = glopts->alloc_tab;
 
   *crc = 0xffff;		/* changed from '0' 92-08-11 shn */
   crc_update (header->bitrate_index, 4, crc);
@@ -59,7 +60,9 @@ void crc_calc (twolame_options *glopts, unsigned int bit_alloc[2][SBLIMIT],
 
   for (i = 0; i < sblimit; i++)
     for (k = 0; k < ((i < jsbound) ? nch : 1); k++)
-      crc_update (bit_alloc[k][i], (*alloc)[i][0].bits, crc);
+      crc_update ( bit_alloc[k][i],
+                   get_alloc_table_bits(glopts->tablenum, i, bit_alloc[k][i]),
+                   crc );
 
   for (i = 0; i < sblimit; i++)
     for (k = 0; k < nch; k++)

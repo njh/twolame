@@ -38,13 +38,13 @@
 
 int twolame_set_mode (twolame_options *glopts, TWOLAME_MPEG_mode mode)
 {
-  if (mode<0 || mode>3)
-{
-    fprintf(stderr,"invalid mode %i\n",mode);
-    return(-1);
-  }
-  glopts->mode = mode;
-  return(0);
+	if (mode<0 || mode>3)
+	{
+		fprintf(stderr,"invalid mode %i\n",mode);
+		return(-1);
+	}
+	glopts->mode = mode;
+	return(0);
 }
 
 TWOLAME_MPEG_mode twolame_get_mode (twolame_options *glopts)
@@ -54,34 +54,32 @@ TWOLAME_MPEG_mode twolame_get_mode (twolame_options *glopts)
 
 const char *twolame_get_mode_name(twolame_options *glopts)
 {
-  static const char *mode_name[5] = { "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode"};
-  int mode = glopts->mode;
-  if (mode>=0 && mode<4)
-    return (mode_name[mode]);
-  else 
-    return (mode_name[4]);
+	static const char *mode_name[5] = { "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode"};
+	int mode = glopts->mode;
+	if (mode>=0 && mode<4)
+		return (mode_name[mode]);
+	else 
+		return (mode_name[4]);
 }
 
 
 int twolame_set_psymodel (twolame_options *glopts, int psymodel)
 {
-  if (psymodel<-1 || psymodel>4)
-    return(-1);
-  glopts->psymodel = psymodel;
-  return(0);
+	glopts->psymodel = psymodel;
+	return(0);
 }
 
 int twolame_get_psymodel (twolame_options *glopts)
 {
-  return(glopts->psymodel);
+	return(glopts->psymodel);
 }
 
 
 /* number of channels on the input stream */
 int twolame_set_num_channels(twolame_options* glopts, int num_channels)
 {
-    glopts->num_channels = num_channels;
-    return 0;
+	glopts->num_channels = num_channels;
+	return 0;
 }
 
 int twolame_get_num_channels(twolame_options* glopts)
@@ -125,153 +123,153 @@ float twolame_get_scale_right(twolame_options* glopts)
 
 int twolame_set_in_samplerate (twolame_options *glopts, int samplerate)
 {  
-  glopts->samplerate_in = samplerate;
-  return(0);
+	glopts->samplerate_in = samplerate;
+	return(0);
 }
 
 int twolame_get_in_samplerate (twolame_options *glopts)
 {
-  return(glopts->samplerate_in);
+	return(glopts->samplerate_in);
 }
 
 int twolame_set_out_samplerate (twolame_options *glopts, int samplerate)
 {  
-  glopts->samplerate_out = samplerate;
-  return(0);
+	glopts->samplerate_out = samplerate;
+	return(0);
 }
 
 int twolame_get_out_samplerate (twolame_options *glopts)
 {
-  return(glopts->samplerate_out);
+	return(glopts->samplerate_out);
 }
 
 int twolame_set_brate (twolame_options *glopts, int bitrate)
 {
-  glopts->bitrate = bitrate;
-  return(0);
+	glopts->bitrate = bitrate;
+	return(0);
 }
 
 int twolame_get_brate (twolame_options *glopts)
 {
-  return(glopts->bitrate);
+	return(glopts->bitrate);
 }
 
 
 /* Because the LAME API isn't always the best way ;) */
 int twolame_set_bitrate (twolame_options *glopts, int bitrate)
 {
-  glopts->bitrate = bitrate;
-  return(0);
+	glopts->bitrate = bitrate;
+	return(0);
 }
 
 int twolame_get_bitrate (twolame_options *glopts)
 {
-  return(glopts->bitrate);
+	return(glopts->bitrate);
 }
 
 
 int twolame_set_emphasis (twolame_options *glopts, TWOLAME_Emphasis emphasis)
 {
-  //MFC Fix: add #defines for the emphasis modes
-  if (emphasis!=0 && emphasis!=1 && emphasis!=3) 
-    return(-1);
-  glopts->emphasis = emphasis;
-  return(0);
+	if (emphasis!=TWOLAME_EMPHASIS_N &&
+	    emphasis!=TWOLAME_EMPHASIS_5 &&
+	    emphasis!=TWOLAME_EMPHASIS_C)     return(-1);
+	glopts->emphasis = emphasis;
+	return(0);
 }
 
 TWOLAME_Emphasis twolame_get_emphasis (twolame_options *glopts)
 {
-  return(glopts->emphasis);
+	return(glopts->emphasis);
 }
 
 int twolame_set_error_protection (twolame_options *glopts, int error_protection)
 {
-  if (error_protection)
-    glopts->error_protection = TRUE;
-  else
-    error_protection = FALSE;
-  return(0);
+	if (error_protection)
+		glopts->error_protection = TRUE;
+	else
+		error_protection = FALSE;
+	return(0);
 }
 
 int twolame_get_error_protection (twolame_options *glopts)
 {
-  return(glopts->error_protection);
+	return(glopts->error_protection);
 }
 
 int twolame_set_copyright (twolame_options *glopts, int copyright)
 {
-  if (copyright)
-    glopts->copyright = TRUE;
-  else 
-    glopts->copyright = FALSE;
-  return(0);
+	if (copyright)
+		glopts->copyright = TRUE;
+	else 
+		glopts->copyright = FALSE;
+	return(0);
 }
 int twolame_get_copyright (twolame_options *glopts)
 {
-  return(glopts->copyright);
+	return(glopts->copyright);
 }
 
 int twolame_set_original (twolame_options *glopts, int original)
 {
-  if (original)
-    glopts->original = TRUE;
-  else
-    glopts->original = FALSE;
-  return(0);
+	if (original)
+		glopts->original = TRUE;
+	else
+		glopts->original = FALSE;
+	return(0);
 }
 int twolame_get_original (twolame_options *glopts)
 {
-  return(glopts->original);
+	return(glopts->original);
 }
 
 int twolame_set_padding (twolame_options *glopts, TWOLAME_Padding padding)
 {
-  if (padding)
-    glopts->padding = TRUE;
-  else
-    glopts->padding = FALSE;
+	if (padding)
+		glopts->padding = TRUE;
+	else
+		glopts->padding = FALSE;
       
-  return(0);
+	return(0);
 }
 
 TWOLAME_Padding twolame_get_padding (twolame_options *glopts)
 {
-  return(glopts->padding);
+	return(glopts->padding);
 }
 
 int twolame_set_VBR (twolame_options *glopts, int vbr)
 {
-  if (vbr)
-    glopts->vbr = TRUE;
-  else
-    glopts->vbr = FALSE;
-  return(0);
+	if (vbr)
+		glopts->vbr = TRUE;
+	else
+		glopts->vbr = FALSE;
+	return(0);
 }
 
 int twolame_get_VBR (twolame_options *glopts)
 {
-  return(glopts->vbr);
+	return(glopts->vbr);
 }
 
 /* VBR quality level.  - *** change to int: 0=highest  9=lowest  */
 int twolame_set_VBR_q (twolame_options *glopts, float level)
 {
-  if (fabs(level)>50.0)
-    return(-1);
-  else
-    glopts->vbrlevel = level;
-  return(0);
+	if (fabs(level)>50.0)
+		return(-1);
+	else
+		glopts->vbrlevel = level;
+	return(0);
 }
 
 float twolame_get_VBR_q (twolame_options *glopts)
 {
-  return(glopts->vbrlevel);
+	return(glopts->vbrlevel);
 }
 
 int twolame_set_ATH_level (twolame_options *glopts, float level)
 {
-  glopts->athlevel = level;
-  return(0);
+	glopts->athlevel = level;
+	return(0);
 }
 
 float twolame_get_ATH_level (twolame_options *glopts)
@@ -281,12 +279,13 @@ float twolame_get_ATH_level (twolame_options *glopts)
 
 int twolame_set_quick_mode (twolame_options *glopts, int quickmode)
 {
-  if (quickmode)
-    glopts->quickmode = TRUE;
-  else
-    glopts->quickmode = FALSE;
-  return(0);
+	if (quickmode)
+		glopts->quickmode = TRUE;
+	else
+		glopts->quickmode = FALSE;
+	return(0);
 }
+
 int twolame_get_quick_mode (twolame_options *glopts)
 {
   return(glopts->quickmode);
@@ -294,23 +293,25 @@ int twolame_get_quick_mode (twolame_options *glopts)
 
 int twolame_set_quick_count (twolame_options *glopts, int quickcount )
 {
-  glopts->quickcount = quickcount;
-  return(0);
+	glopts->quickcount = quickcount;
+	return(0);
 }
+
 int twolame_get_quick_count (twolame_options *glopts)
 {
-  return(glopts->quickcount);
+	return(glopts->quickcount);
 }
 
 
 int twolame_set_verbosity (twolame_options *glopts, int verbosity)
 {
-  glopts->verbosity = verbosity;
-  return(0);
+	glopts->verbosity = verbosity;
+	return(0);
 }
+
 int twolame_get_verbosity (twolame_options *glopts)
 {
-  return(glopts->verbosity);
+	return(glopts->verbosity);
 }
 
 int twolame_set_VBR_max_bitrate_kbps (twolame_options *glopts, int bitrate)
@@ -326,108 +327,91 @@ int twolame_get_VBR_max_bitrate_kbps (twolame_options *glopts)
 
 int twolame_set_num_ancillary_bits (twolame_options *glopts, int num)
 {
-  if (num<0)
-    return(-1);
-  glopts->num_ancillary_bits = num;
-  return(0);
+	if (num<0)
+		return(-1);
+	glopts->num_ancillary_bits = num;
+	return(0);
 }
 int twolame_get_num_ancillary_bits (twolame_options *glopts)
 {
-  return(glopts->num_ancillary_bits);
+	return(glopts->num_ancillary_bits);
 }
 
 int twolame_set_energy_levels (twolame_options *glopts, int energylevels )
 {
-  if (energylevels)
-    glopts->do_energy_levels = TRUE;    
-  else
-    glopts->do_energy_levels = FALSE;
-  return(0);
+	if (energylevels)
+		glopts->do_energy_levels = TRUE;    
+	else
+		glopts->do_energy_levels = FALSE;
+	return(0);
 }
 int twolame_get_energy_levels (twolame_options *glopts)
 {
-  return(glopts->do_energy_levels);
+	return(glopts->do_energy_levels);
 }
 
 int twolame_set_version (twolame_options *glopts, TWOLAME_MPEG_version version)
 {
-  if (version!=0 && version!=1)
-    return(-1);
-  glopts->version = version;
-  return(0);
+	if (version!=0 && version!=1)
+		return(-1);
+	glopts->version = version;
+	return(0);
 }
 
 TWOLAME_MPEG_version twolame_get_version (twolame_options *glopts)
 {
-  return(glopts->version);
+	return(glopts->version);
 }
 
 const char *twolame_get_version_name(twolame_options *glopts)
 {
-  static const char *version_name[3] = { "MPEG-2 LSF", "MPEG-1", "Illegal Version" };
-  int version = glopts->version;
-  if (version==0)
-    return(version_name[0]);
-  if (version==1)
-    return(version_name[1]);
-  return(version_name[2]);
+	static const char *version_name[3] = { "MPEG-2 LSF", "MPEG-1", "Illegal Version" };
+	int version = glopts->version;
+	if (version==0)
+		return(version_name[0]);
+	if (version==1)
+		return(version_name[1]);
+	return(version_name[2]);
 }
 
 
 int twolame_set_DAB (twolame_options *glopts, int dab)
 {
-  if (dab)
-    glopts->do_dab = TRUE;
-  else
-    glopts->do_dab = FALSE;
-  return(0);
+	if (dab)
+		glopts->do_dab = TRUE;
+	else
+		glopts->do_dab = FALSE;
+	return(0);
 }
 
 int twolame_get_DAB (twolame_options *glopts)
 {
-  return(glopts->do_dab);
+	return(glopts->do_dab);
 }
 
 int twolame_set_DAB_xpad_length (twolame_options *glopts, int length)
 {
-  if (length<0)
-    return(-1);
-  glopts->dab_xpad_len = length;
-  return(0);
+	if (length<0) return(-1);
+	glopts->dab_xpad_len = length;
+	return(0);
 }
 
 int twolame_get_DAB_xpad_length (twolame_options *glopts)
 {
-  return(glopts->dab_xpad_len);
+	return(glopts->dab_xpad_len);
 }
 
 int twolame_set_DAB_crc_length (twolame_options *glopts, int length)
 {
-  if (length<0)
-    return(-1);
-  else
-    glopts->dab_crc_len = length;
-  return(0);
+	if (length<0)
+		return(-1);
+	else
+    	glopts->dab_crc_len = length;
+	return(0);
 }
 
 int twolame_get_DAB_crc_length (twolame_options *glopts)
 {
-  return(glopts->dab_crc_len);
+	return(glopts->dab_crc_len);
 }
-
-/************ generic
-
-int twolame_set (twolame_options *glopts, )
-{
-
-  return(0);
-}
-int twolame_get (twolame_options *glopts)
-{
-  return(glopts->);
-}
-
-
-
-*************/
 

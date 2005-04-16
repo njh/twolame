@@ -152,16 +152,6 @@ typedef struct subband_mem_struct {
       e.g. int twolame_setBitrate(twolame_options *options, int bitrate)
 ****************************************************************************************/
 
-/* Structure for Reading Layer II Allocation Tables from File */
-typedef struct {
-	unsigned int steps;
-	unsigned int bits;
-	unsigned int group;
-	unsigned int quant;
-} sb_alloc, *alloc_ptr;
-
-typedef sb_alloc alloc_table[32][16];
-
 /* Raw Header Information Structure */
 typedef struct {
 	int version;
@@ -256,8 +246,6 @@ struct twolame_options_struct
 	int upper_index;
 	int bitrateindextobits[15];
 	int vbr_frame_count;			// Used for debugging VBR
-	int alloc_tab_num;			// number of table as loaded 
-	alloc_table *alloc_tab;			// bit allocation table 
 	
 	
 	// Used by twolame_encode_frame

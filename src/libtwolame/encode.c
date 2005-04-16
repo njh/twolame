@@ -154,75 +154,86 @@ static const FLOAT SNR[18] = {
    0.00,  7.00, 11.00, 16.00, 20.84, 25.28, 31.59, 37.75, 43.84,
   49.89, 55.93, 61.96, 67.98, 74.01, 80.03, 86.05, 92.01, 98.01 };
 
-int encode_init( twolame_options *glopts ) {
-  frame_info *frame = &glopts->frame;
-  frame_header *header = &glopts->header;
-  int bsp, br_per_ch, sfrq;
+void encode_init( twolame_options *glopts ) {
+	frame_info *frame = &glopts->frame;
+	frame_header *header = &glopts->header;
+	int bsp, br_per_ch, sfrq;
+	
+	bsp = header->bitrate_index;
+	br_per_ch = glopts->bitrate / frame->nch;
+	sfrq = (int) (glopts->samplerate_out/1000.0);
+	
+	/* decision rules refer to per-channel bitrates (kbits/sec/chan) */
+	if (header->version == TWOLAME_MPEG1) {	/* MPEG-1 */
+		if ((sfrq == 48 && br_per_ch >= 56)
+		|| (br_per_ch >= 56 && br_per_ch <= 80))
+			glopts->tablenum = 0;
+		else if (sfrq != 48 && br_per_ch >= 96)
+			glopts->tablenum = 1;
+		else if (sfrq != 32 && br_per_ch <= 48)
+			glopts->tablenum = 2;
+		else
+			glopts->tablenum = 3;
+	} else { /* MPEG-2 LSF */
+		glopts->tablenum = 4;
+	}
+	
+	frame->sblimit = table_sblimit[glopts->tablenum];
+	//fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, frame->sblimit);
+	
+	
+	#define DUMPTABLESx
+	#ifdef DUMPTABLES 
+	{
+		int tablenumber,j,sblimit, sb;
+		fprintf(stdout,"Tables B.21,b,c,d from ISO11172 and the LSF table from ISO13818\n");
+		for (tablenumber=0;tablenumber<NUMTABLES;tablenumber++) {
+			/* Print Table Header */
+			fprintf(stdout,"Tablenum %i\n",tablenumber);
+			fprintf(stdout,"sb nbal ");
+			for (j=0;j<16;j++)
+				fprintf(stdout,"%6i ",j);
+			fprintf(stdout,"\n");
+			fprintf(stdout,"-----------------------------------------------------------------------------------------------------------------------\n");
+			
+			sblimit = table_sblimit[tablenumber];
+			for (sb=0;sb<SBLIMIT;sb++) {
+				int thisline = line[tablenumber][sb];
+				fprintf(stdout,"%2i %4i ",sb,nbal[thisline]);
+				if (nbal[thisline] != 0) {
+					for (j=0; j<(1<<nbal[thisline]); j++)
+						fprintf(stdout,"%6i ", steps[ step_index[thisline][j] ]);
+				}
+				fprintf(stdout,"\n");
+			}
+			fprintf(stdout,"\n");
+		}
+		exit(0);
+	}
+	#endif
 
-  bsp = header->bitrate_index;
-  br_per_ch = glopts->bitrate / frame->nch;
-  sfrq = (int) (glopts->samplerate_out/1000.0);
-
-  /* decision rules refer to per-channel bitrates (kbits/sec/chan) */
-  if (header->version == TWOLAME_MPEG1) {	/* MPEG-1 */
-    if ((sfrq == 48 && br_per_ch >= 56)
-	|| (br_per_ch >= 56 && br_per_ch <= 80))
-      glopts->tablenum = 0;
-    else if (sfrq != 48 && br_per_ch >= 96)
-      glopts->tablenum = 1;
-    else if (sfrq != 32 && br_per_ch <= 48)
-      glopts->tablenum = 2;
-    else
-      glopts->tablenum = 3;
-  } else {			/* MPEG-2 LSF */
-    glopts->tablenum = 4;
-  }
-  //fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, table_sblimit[glopts->tablenum]);
-  
-#define DUMPTABLESx
-#ifdef DUMPTABLES 
-  {
-    int tablenumber,j,sblimit, sb;
-    fprintf(stdout,"Tables B.21,b,c,d from ISO11172 and the LSF table from ISO13818\n");
-    for (tablenumber=0;tablenumber<NUMTABLES;tablenumber++) {
-      /* Print Table Header */
-      fprintf(stdout,"Tablenum %i\n",tablenumber);
-      fprintf(stdout,"sb nbal ");
-      for (j=0;j<16;j++)
-	fprintf(stdout,"%6i ",j);
-      fprintf(stdout,"\n");
-      fprintf(stdout,"-----------------------------------------------------------------------------------------------------------------------\n");
-      
-      sblimit = table_sblimit[tablenumber];
-      for (sb=0;sb<SBLIMIT;sb++) {
-	int thisline = line[tablenumber][sb];
-	fprintf(stdout,"%2i %4i ",sb,nbal[thisline]);
-	if (nbal[thisline] != 0)
-	  for (j=0; j<(1<<nbal[thisline]); j++)
-	    fprintf(stdout,"%6i ", steps[ step_index[thisline][j] ]);
-	fprintf(stdout,"\n");
-      }
-      fprintf(stdout,"\n");
-    }
-    exit(0);
-  }
-#endif
-  return (table_sblimit[glopts->tablenum]);
 }
 
 
-int js_bound (int m_ext)
+int get_js_bound (int m_ext)
 {
-  /* layer 2 only */
-  static const int jsb_table[4] = { 4, 8, 12, 16 };
-
-  if (m_ext < 0 || m_ext > 3) {
-    fprintf (stderr, "js_bound bad modext (%d)\n", m_ext);
-    exit (1);
-  }
-  return (jsb_table[m_ext]);
+	/* layer 2 only */
+	static const int jsb_table[4] = { 4, 8, 12, 16 };
+	
+	if (m_ext < 0 || m_ext > 3) {
+		fprintf (stderr, "get_js_bound() bad modext (%d)\n", m_ext);
+		exit (1);
+	}
+	return (jsb_table[m_ext]);
 }
 
+int get_alloc_table_bits (int tablenum, int sb, int ba)
+{
+	int thisline = line[tablenum][sb];
+	int thisstep_index = step_index[thisline][ba];
+	
+	return bits[thisstep_index];
+}
 
 /* 
    scale_factor_calc
@@ -903,7 +914,7 @@ void main_bit_allocation (twolame_options * glopts,
       lay = header->lay;
       do {
 	--mode_ext;
-	frame->jsbound = js_bound (mode_ext);
+	frame->jsbound = get_js_bound (mode_ext);
 	rq_db = bits_for_nonoise (glopts, SMR, scfsi, 0, bit_alloc);
       }
       while ((rq_db > *adb) && (mode_ext > 0));
