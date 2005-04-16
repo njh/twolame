@@ -24,7 +24,6 @@ values. Some models are better than others - meaning that the 32 values chosen
 are pretty good at spreading the bits where they should go.  Even with a really 
 bad PAM (e.g. Model -1) you can still get satisfactory results a lot of the time.
 All of these models have strengths and weaknesses.  The model 'you' end up using 
-
 will be the one that produces the best sound for your ears, for your audio.  
 
 Psychoacoustic Model -1
