@@ -1,2 +1,3 @@
 usr/include/twolame.h
-usr/lib/*.{a,la,so}
+usr/lib/*.{a,la}
+usr/lib/libtwolame.so
