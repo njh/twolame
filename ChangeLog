@@ -1,59 +1,3 @@
-? aclocal.m4
-? autom4te.cache
-? config.log
-? config.status
-? configure
-? libtool
-? Makefile
-? Makefile.in
-? twolame.pc
-? build/config.guess
-? build/config.sub
-? build/depcomp
-? build/install-sh
-? build/ltmain.sh
-? build/missing
-? src/config.h
-? src/config.h.in
-? src/Makefile
-? src/Makefile.in
-? src/stamp-h1
-? src/frontend/.deps
-? src/frontend/.libs
-? src/frontend/Makefile
-? src/frontend/Makefile.in
-? src/frontend/twolame
-? src/libtwolame/.deps
-? src/libtwolame/.libs
-? src/libtwolame/ath.lo
-? src/libtwolame/availbits.lo
-? src/libtwolame/bitbuffer.lo
-? src/libtwolame/crc.lo
-? src/libtwolame/dab.lo
-? src/libtwolame/encode.lo
-? src/libtwolame/energy.lo
-? src/libtwolame/fft.lo
-? src/libtwolame/get_set.lo
-? src/libtwolame/libtwolame.la
-? src/libtwolame/Makefile
-? src/libtwolame/Makefile.in
-? src/libtwolame/mem.lo
-? src/libtwolame/psycho_0.lo
-? src/libtwolame/psycho_1.lo
-? src/libtwolame/psycho_2.lo
-? src/libtwolame/psycho_3.lo
-? src/libtwolame/psycho_4.lo
-? src/libtwolame/psycho_n1.lo
-? src/libtwolame/subband.lo
-? src/libtwolame/tables.lo
-? src/libtwolame/twolame.lo
-? src/libtwolame/version.lo
-? src/simplefrontend/.deps
-? src/simplefrontend/.libs
-? src/simplefrontend/Makefile
-? src/simplefrontend/Makefile.in
-? src/simplefrontend/stwolame
-
 RCS file: /cvsroot/twolame/twolame/AUTHORS,v
 Working file: AUTHORS
 head: 1.1
@@ -102,16 +46,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/ChangeLog,v
 Working file: ChangeLog
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 13:08:13;  author: nhumfrey;  state: Exp;  lines: +2483 -202
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;
@@ -148,7 +96,7 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/Makefile.am,v
 Working file: Makefile.am
-head: 1.2
+head: 1.4
 branch:
 locks: strict
 access list:
@@ -156,8 +104,16 @@ symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 3;	selected revisions: 3
+total revisions: 5;	selected revisions: 5
 description:
+----------------------------
+revision 1.4
+date: 2005/04/19 16:41:01;  author: nhumfrey;  state: Exp;  lines: +2 -29
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.3
+date: 2005/04/19 13:08:14;  author: nhumfrey;  state: Exp;  lines: +30 -4
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.2
 date: 2005/04/19 12:31:42;  author: nhumfrey;  state: Exp;  lines: +3 -1
@@ -175,16 +131,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/NEWS,v
 Working file: NEWS
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:01;  author: nhumfrey;  state: Exp;  lines: +7 -0
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
@@ -267,7 +227,7 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/configure.in,v
 Working file: configure.in
-head: 1.2
+head: 1.4
 branch:
 locks: strict
 access list:
@@ -275,8 +235,16 @@ symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 3;	selected revisions: 3
+total revisions: 5;	selected revisions: 5
 description:
+----------------------------
+revision 1.4
+date: 2005/04/19 16:41:02;  author: nhumfrey;  state: Exp;  lines: +3 -1
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.3
+date: 2005/04/19 13:08:14;  author: nhumfrey;  state: Exp;  lines: +0 -1
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.2
 date: 2005/04/19 12:31:42;  author: nhumfrey;  state: Exp;  lines: +1 -0
@@ -317,14 +285,22 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/debian/Makefile.am,v
 Working file: debian/Makefile.am
-head: 1.1
+head: 1.3
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.3
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +5 -4
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.2
+date: 2005/04/19 13:08:15;  author: nhumfrey;  state: dead;  lines: +0 -0
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
@@ -333,14 +309,18 @@ Added starts of a Debian package, and a manpage.
 
 RCS file: /cvsroot/twolame/twolame/debian/changelog,v
 Working file: debian/changelog
-head: 1.1
+head: 1.2
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 2;	selected revisions: 2
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -2
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
@@ -349,14 +329,22 @@ Added starts of a Debian package, and a manpage.
 
 RCS file: /cvsroot/twolame/twolame/debian/control,v
 Working file: debian/control
-head: 1.1
+head: 1.3
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.3
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +30 -9
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.2
+date: 2005/04/19 13:08:15;  author: nhumfrey;  state: Exp;  lines: +1 -1
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
@@ -381,6 +369,26 @@ Added starts of a Debian package, and a manpage.
 
 RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.docs,v
 Working file: debian/libtwolame0-dev.docs
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +1 -0
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.examples,v
+Working file: debian/libtwolame0-dev.examples
 head: 1.1
 branch:
 locks: strict
@@ -391,28 +399,36 @@ total revisions: 1;	selected revisions: 1
 description:
 ----------------------------
 revision 1.1
-date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
-Added starts of a Debian package, and a manpage.
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
 =============================================================================
 
-RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.files,v
+RCS file: /cvsroot/twolame/twolame/debian/Attic/libtwolame0-dev.files,v
 Working file: debian/libtwolame0-dev.files
-head: 1.1
+head: 1.3
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.3
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: dead;  lines: +0 -0
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.2
+date: 2005/04/19 13:34:08;  author: nhumfrey;  state: Exp;  lines: +2 -1
+Minor Debian package fix.
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
 Added starts of a Debian package, and a manpage.
 =============================================================================
 
-RCS file: /cvsroot/twolame/twolame/debian/libtwolame0.files,v
-Working file: debian/libtwolame0.files
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.install,v
+Working file: debian/libtwolame0-dev.install
 head: 1.1
 branch:
 locks: strict
@@ -423,20 +439,80 @@ total revisions: 1;	selected revisions: 1
 description:
 ----------------------------
 revision 1.1
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0.docs,v
+Working file: debian/libtwolame0.docs
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/Attic/libtwolame0.files,v
+Working file: debian/libtwolame0.files
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: dead;  lines: +0 -0
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
 Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0.install,v
+Working file: debian/libtwolame0.install
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
 =============================================================================
 
 RCS file: /cvsroot/twolame/twolame/debian/rules,v
 Working file: debian/rules
-head: 1.1
+head: 1.3
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.3
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +38 -33
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.2
+date: 2005/04/19 13:08:15;  author: nhumfrey;  state: Exp;  lines: +30 -28
+Updated Debian package and "make install" installs HTML documentation
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
@@ -445,22 +521,50 @@ Added starts of a Debian package, and a manpage.
 
 RCS file: /cvsroot/twolame/twolame/debian/twolame.docs,v
 Working file: debian/twolame.docs
-head: 1.1
+head: 1.2
 branch:
 locks: strict
 access list:
 symbolic names:
 keyword substitution: kv
-total revisions: 1;	selected revisions: 1
+total revisions: 2;	selected revisions: 2
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -1
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
 Added starts of a Debian package, and a manpage.
 =============================================================================
 
-RCS file: /cvsroot/twolame/twolame/debian/twolame.files,v
+RCS file: /cvsroot/twolame/twolame/debian/Attic/twolame.files,v
 Working file: debian/twolame.files
+head: 1.3
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.3
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: dead;  lines: +0 -0
+Finished making Debian package and documentation build changes.
+----------------------------
+revision 1.2
+date: 2005/04/19 13:08:15;  author: nhumfrey;  state: Exp;  lines: +1 -0
+Updated Debian package and "make install" installs HTML documentation
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/twolame.install,v
+Working file: debian/twolame.install
 head: 1.1
 branch:
 locks: strict
@@ -471,8 +575,24 @@ total revisions: 1;	selected revisions: 1
 description:
 ----------------------------
 revision 1.1
-date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
-Added starts of a Debian package, and a manpage.
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/Makefile.am,v
+Working file: doc/Makefile.am
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;
+Finished making Debian package and documentation build changes.
 =============================================================================
 
 RCS file: /cvsroot/twolame/twolame/doc/api.txt,v
@@ -567,18 +687,22 @@ date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
 Initial import.
 =============================================================================
 
-RCS file: /cvsroot/twolame/twolame/doc/make-html.sh,v
+RCS file: /cvsroot/twolame/twolame/doc/Attic/make-html.sh,v
 Working file: doc/make-html.sh
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: dead;  lines: +0 -0
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
@@ -830,16 +954,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/api.html,v
 Working file: doc/html/api.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -2
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
@@ -853,16 +981,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/authors.html,v
 Working file: doc/html/authors.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -2
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
@@ -899,16 +1031,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/doxygen.css,v
 Working file: doc/html/doxygen.css
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +121 -30
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -922,16 +1058,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/doxygen.png,v
 Working file: doc/html/doxygen.png
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +5 -3
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -945,16 +1085,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/index.html,v
 Working file: doc/html/index.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -2
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -968,16 +1112,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/news.html,v
 Working file: doc/html/news.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +22 -4
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -991,16 +1139,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/psycho.html,v
 Working file: doc/html/psycho.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -4
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -1014,16 +1166,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/readme.html,v
 Working file: doc/html/readme.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +2 -2
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
@@ -1037,16 +1193,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/todo.html,v
 Working file: doc/html/todo.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +10 -10
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;
@@ -1060,16 +1220,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/twolame_8h-source.html,v
 Working file: doc/html/twolame_8h-source.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +72 -70
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;
@@ -1083,16 +1247,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/twolame_8h.html,v
 Working file: doc/html/twolame_8h.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:03;  author: nhumfrey;  state: Exp;  lines: +574 -572
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;
@@ -1106,16 +1274,20 @@ Initial import.
 
 RCS file: /cvsroot/twolame/twolame/doc/html/vbr.html,v
 Working file: doc/html/vbr.html
-head: 1.1
-branch: 1.1.1
+head: 1.2
+branch:
 locks: strict
 access list:
 symbolic names:
 	start: 1.1.1.1
 	vendor: 1.1.1
 keyword substitution: kv
-total revisions: 2;	selected revisions: 2
+total revisions: 3;	selected revisions: 3
 description:
+----------------------------
+revision 1.2
+date: 2005/04/19 16:41:04;  author: nhumfrey;  state: Exp;  lines: +6 -6
+Finished making Debian package and documentation build changes.
 ----------------------------
 revision 1.1
 date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;
