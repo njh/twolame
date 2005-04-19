@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
-<meta name="generator" content="AsciiDoc 5.0.2"/>
+<meta name="generator" content="AsciiDoc 5.0.8"/>
 <title>TwoLAME: MPEG Audio Layer II VBR</title>
 <style type="text/css">
 <!--
@@ -285,8 +285,8 @@ sampling frequencies in order to optimize the range of bitrates possible.
 </pre>
 <h2>Tech Stuff</h2>
 <p>
-The VBR mode is mainly centered around the main_bit_allocation() and
-a_bit_allocation() routines in encode.c.
+The VBR mode is mainly centered around the main<sub>bit</sub>allocation() and
+a<sub>bit</sub>allocation() routines in encode.c.
 </p>
 <p>
 The limited range of VBR is due to my particular implementation which restricts
@@ -351,7 +351,7 @@ Pick the bitrate which has more bits than the  required_bits we just calculated
 </li>
 <li>
 
-calculate a_bit_allocation()
+calculate a<sub>bit</sub>allocation()
 
 </li>
 <li>
@@ -371,14 +371,14 @@ with this VBR mode, we know the bits aren't going to run out, so we can
 </li>
 <li>
 
-VBR_a_bit_allocation() is yet to be written :)
+VBR<sub>a</sub>bit_allocation() is yet to be written :)
 
 </li>
 </ul>
 <p></p>
 <p></p>
 <hr/><p><small>
-Last updated 15-Apr-2005 02:05:32 BST
+Last updated 19-Apr-2005 17:40:01 BST
 </small></p>
 </body>
 </html>

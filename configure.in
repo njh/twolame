@@ -6,7 +6,7 @@ AC_PREREQ(2.57)
 
 dnl ############# Initialization
 
-AC_INIT([twolame], [0.3.2], [twolame-discuss@lists.sourceforge.net])
+AC_INIT([twolame], [0.3.3], [twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(src/libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build)
@@ -77,6 +77,8 @@ dnl ############## Final Output
 AC_OUTPUT(
 	Makefile \
 	twolame.pc \
+	debian/Makefile \
+	doc/Makefile \
 	src/Makefile \
 	src/libtwolame/Makefile \
 	src/frontend/Makefile \

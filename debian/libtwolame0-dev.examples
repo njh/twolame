@@ -1,0 +1,3 @@
+src/simplefrontend/audio_wave.c
+src/simplefrontend/audio_wave.h
+src/simplefrontend/simplefrontend.c

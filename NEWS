@@ -1,6 +1,13 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.3 (2005-04-19)
+--------------------------
+
+- Added Debian package description
+- Now installs documentation
+- Removed old unused tables.c and tables.h sources
+
 
 Version 0.3.2 (2005-04-10)
 --------------------------
