@@ -1,0 +1,34 @@
+Source: twolame
+Section: sound
+Priority: optional
+Maintainer: Nicholas Humfrey <njh@ecs.soton.ac.uk>
+Build-Depends: debhelper, libsndfile1-dev
+Standards-Version: 3.5.6
+
+Package: libtwolame0-dev
+Section: libdevel
+Architecture: any
+Depends: libtwolame0 (= ${Source-Version}), pkg-config
+Provides: libtwolame-dev
+Description: Development files for twolame
+ TwoLame is blah.
+ .
+ This package contains the static library and header files.
+
+Package: libtwolame0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: Shared library for MPEG Audio Layer 2 encoding
+ TwoLame is blah.
+ .
+ This package contains the dynamic library.
+
+Package: twolame
+Section: sound
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: An optimized MPEG Audio Layer 2 encoder
+ TwoLame is blah.
+ .
+ This package contains the command line frontend encoder.

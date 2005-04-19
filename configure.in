@@ -78,6 +78,7 @@ AC_OUTPUT(
 	Makefile \
 	twolame.pc \
 	src/Makefile \
+	src/debian/Makefile \
 	src/libtwolame/Makefile \
 	src/frontend/Makefile \
 	src/simplefrontend/Makefile \
