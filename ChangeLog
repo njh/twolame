@@ -1,203 +1,2484 @@
-------------------------------------------------------------------------
-r10 | njh | 2005-04-08 18:05:08 +0100 (Fri, 08 Apr 2005) | 2 lines
-Changed paths:
-   D /trunk/bootstrap
-   A /trunk/bootstrap.sh (from /trunk/bootstrap:5)
+? aclocal.m4
+? autom4te.cache
+? config.log
+? config.status
+? configure
+? libtool
+? Makefile
+? Makefile.in
+? twolame.pc
+? build/config.guess
+? build/config.sub
+? build/depcomp
+? build/install-sh
+? build/ltmain.sh
+? build/missing
+? src/config.h
+? src/config.h.in
+? src/Makefile
+? src/Makefile.in
+? src/stamp-h1
+? src/frontend/.deps
+? src/frontend/.libs
+? src/frontend/Makefile
+? src/frontend/Makefile.in
+? src/frontend/twolame
+? src/libtwolame/.deps
+? src/libtwolame/.libs
+? src/libtwolame/ath.lo
+? src/libtwolame/availbits.lo
+? src/libtwolame/bitbuffer.lo
+? src/libtwolame/crc.lo
+? src/libtwolame/dab.lo
+? src/libtwolame/encode.lo
+? src/libtwolame/energy.lo
+? src/libtwolame/fft.lo
+? src/libtwolame/get_set.lo
+? src/libtwolame/libtwolame.la
+? src/libtwolame/Makefile
+? src/libtwolame/Makefile.in
+? src/libtwolame/mem.lo
+? src/libtwolame/psycho_0.lo
+? src/libtwolame/psycho_1.lo
+? src/libtwolame/psycho_2.lo
+? src/libtwolame/psycho_3.lo
+? src/libtwolame/psycho_4.lo
+? src/libtwolame/psycho_n1.lo
+? src/libtwolame/subband.lo
+? src/libtwolame/tables.lo
+? src/libtwolame/twolame.lo
+? src/libtwolame/version.lo
+? src/simplefrontend/.deps
+? src/simplefrontend/.libs
+? src/simplefrontend/Makefile
+? src/simplefrontend/Makefile.in
+? src/simplefrontend/stwolame
 
-Renamed bootstrap to bootstrap.sh and added some echos
+RCS file: /cvsroot/twolame/twolame/AUTHORS,v
+Working file: AUTHORS
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:16;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:16;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-------------------------------------------------------------------------
-r9 | njh | 2005-04-08 18:04:09 +0100 (Fri, 08 Apr 2005) | 2 lines
-Changed paths:
-   D /trunk/debian
+RCS file: /cvsroot/twolame/twolame/COPYING,v
+Working file: COPYING
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-Will add debian directory back when it gets done.
+RCS file: /cvsroot/twolame/twolame/ChangeLog,v
+Working file: ChangeLog
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-------------------------------------------------------------------------
-r8 | njh | 2005-04-08 18:00:45 +0100 (Fri, 08 Apr 2005) | 2 lines
-Changed paths:
-   D /trunk/src/libresample
+RCS file: /cvsroot/twolame/twolame/INSTALL,v
+Working file: INSTALL
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-Removing libresample - may add it back in a later version
+RCS file: /cvsroot/twolame/twolame/Makefile.am,v
+Working file: Makefile.am
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/19 12:31:42;  author: nhumfrey;  state: Exp;  lines: +3 -1
+Added starts of a Debian package, and a manpage.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-------------------------------------------------------------------------
-r7 | njh | 2005-04-08 18:00:05 +0100 (Fri, 08 Apr 2005) | 2 lines
-Changed paths:
-   A /trunk/src/libtwolame (from /trunk/src/libtoolame:5)
-   R /trunk/src/libtwolame/Makefile.am (from /trunk/src/libtoolame/Makefile.am:6)
-   R /trunk/src/libtwolame/encode.c (from /trunk/src/libtoolame/encode.c:6)
-   R /trunk/src/libtwolame/enwindow.h (from /trunk/src/libtoolame/enwindow.h:6)
-   R /trunk/src/libtwolame/psycho_1.c (from /trunk/src/libtoolame/psycho_1.c:6)
-   R /trunk/src/libtwolame/psycho_2.c (from /trunk/src/libtoolame/psycho_2.c:6)
-   R /trunk/src/libtwolame/psycho_3.c (from /trunk/src/libtoolame/psycho_3.c:6)
-   R /trunk/src/libtwolame/psycho_3.h (from /trunk/src/libtoolame/psycho_3.h:6)
-   R /trunk/src/libtwolame/psycho_4.c (from /trunk/src/libtoolame/psycho_4.c:6)
-   R /trunk/src/libtwolame/subband.c (from /trunk/src/libtoolame/subband.c:6)
-   R /trunk/src/libtwolame/subband.h (from /trunk/src/libtoolame/subband.h:6)
-   R /trunk/src/libtwolame/toolame.c (from /trunk/src/libtoolame/toolame.c:6)
-   R /trunk/src/libtwolame/toolame_global_flags.h (from /trunk/src/libtoolame/toolame_global_flags.h:6)
+RCS file: /cvsroot/twolame/twolame/NEWS,v
+Working file: NEWS
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-toolame is now forked to twolame
+RCS file: /cvsroot/twolame/twolame/README,v
+Working file: README
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-------------------------------------------------------------------------
-r6 | njh | 2005-04-08 17:48:03 +0100 (Fri, 08 Apr 2005) | 2 lines
-Changed paths:
-   M /trunk/src/libtoolame/Makefile.am
-   M /trunk/src/libtoolame/encode.c
-   M /trunk/src/libtoolame/enwindow.h
-   M /trunk/src/libtoolame/psycho_1.c
-   M /trunk/src/libtoolame/psycho_2.c
-   M /trunk/src/libtoolame/psycho_3.c
-   M /trunk/src/libtoolame/psycho_3.h
-   M /trunk/src/libtoolame/psycho_4.c
-   M /trunk/src/libtoolame/subband.c
-   M /trunk/src/libtoolame/subband.h
-   M /trunk/src/libtoolame/toolame.c
-   M /trunk/src/libtoolame/toolame_global_flags.h
+RCS file: /cvsroot/twolame/twolame/TODO,v
+Working file: TODO
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-Applied patch from Christophe Massiot <cmassiot@freebox.fr>
+RCS file: /cvsroot/twolame/twolame/bootstrap.sh,v
+Working file: bootstrap.sh
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:16;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:16;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-------------------------------------------------------------------------
-r5 | root | 2005-01-14 02:52:21 +0000 (Fri, 14 Jan 2005) | 3 lines
-Changed paths:
-   D /trunk/src/libresample/libresample.a
+RCS file: /cvsroot/twolame/twolame/configure.in,v
+Working file: configure.in
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/19 12:31:42;  author: nhumfrey;  state: Exp;  lines: +1 -0
+Added starts of a Debian package, and a manpage.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:17;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
-Wasn't supposed to be imported.
+RCS file: /cvsroot/twolame/twolame/twolame.pc.in,v
+Working file: twolame.pc.in
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
 
+RCS file: /cvsroot/twolame/twolame/debian/Makefile.am,v
+Working file: debian/Makefile.am
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
 
-------------------------------------------------------------------------
-r4 | njh | 2005-01-14 02:51:16 +0000 (Fri, 14 Jan 2005) | 1 line
-Changed paths:
-   A /trunk/AUTHORS
-   A /trunk/COPYING
-   A /trunk/ChangeLog
-   A /trunk/INSTALL
-   A /trunk/Makefile.am
-   A /trunk/NEWS
-   A /trunk/README
-   A /trunk/TODO
-   A /trunk/aclocal.m4
-   A /trunk/bootstrap
-   A /trunk/build
-   A /trunk/configure.in
-   A /trunk/debian
-   A /trunk/doc
-   A /trunk/doc/api.txt
-   A /trunk/doc/asciidoc.conf
-   A /trunk/doc/dist10-text
-   A /trunk/doc/dist10-text/common.text
-   A /trunk/doc/dist10-text/commonh.text
-   A /trunk/doc/dist10-text/encode.text
-   A /trunk/doc/dist10-text/encoderh.text
-   A /trunk/doc/dist10-text/musicin.text
-   A /trunk/doc/dist10-text/psy.text
-   A /trunk/doc/dist10-text/tonal.text
-   A /trunk/doc/doxygen.conf
-   A /trunk/doc/html
-   A /trunk/doc/html/api.html
-   A /trunk/doc/html/authors.html
-   A /trunk/doc/html/changelog.html
-   A /trunk/doc/html/changes.txt
-   A /trunk/doc/html/doxygen.css
-   A /trunk/doc/html/doxygen.png
-   A /trunk/doc/html/index.html
-   A /trunk/doc/html/psycho.html
-   A /trunk/doc/html/readme.html
-   A /trunk/doc/html/todo.html
-   A /trunk/doc/html/toolame_8h-source.html
-   A /trunk/doc/html/toolame_8h.html
-   A /trunk/doc/html/vbr.html
-   A /trunk/doc/index.txt
-   A /trunk/doc/make-html.sh
-   A /trunk/doc/psycho.txt
-   A /trunk/doc/toolame.1
-   A /trunk/doc/vbr.txt
-   A /trunk/src
-   A /trunk/src/Makefile.am
-   A /trunk/src/frontend
-   A /trunk/src/frontend/.gdb_history
-   A /trunk/src/frontend/Makefile.am
-   A /trunk/src/frontend/audio.c
-   A /trunk/src/frontend/audio.h
-   A /trunk/src/frontend/audio_aiff.c
-   A /trunk/src/frontend/audio_wave.c
-   A /trunk/src/frontend/frontend.c
-   A /trunk/src/frontend/frontend.h
-   A /trunk/src/libresample
-   A /trunk/src/libresample/CHANGES-toolame.txt
-   A /trunk/src/libresample/Makefile.am
-   A /trunk/src/libresample/README.txt
-   A /trunk/src/libresample/filterkit.c
-   A /trunk/src/libresample/filterkit.h
-   A /trunk/src/libresample/libresample.a
-   A /trunk/src/libresample/libresample.h
-   A /trunk/src/libresample/resample.c
-   A /trunk/src/libresample/resample_defs.h
-   A /trunk/src/libresample/resamplesubs.c
-   A /trunk/src/libtoolame
-   A /trunk/src/libtoolame/Makefile.am
-   A /trunk/src/libtoolame/ath.c
-   A /trunk/src/libtoolame/ath.h
-   A /trunk/src/libtoolame/availbits.c
-   A /trunk/src/libtoolame/availbits.h
-   A /trunk/src/libtoolame/bitbuffer.c
-   A /trunk/src/libtoolame/bitbuffer.h
-   A /trunk/src/libtoolame/common.h
-   A /trunk/src/libtoolame/crc.c
-   A /trunk/src/libtoolame/crc.h
-   A /trunk/src/libtoolame/dab.c
-   A /trunk/src/libtoolame/dab.h
-   A /trunk/src/libtoolame/encode.c
-   A /trunk/src/libtoolame/encode.h
-   A /trunk/src/libtoolame/energy.c
-   A /trunk/src/libtoolame/energy.h
-   A /trunk/src/libtoolame/enwindow.h
-   A /trunk/src/libtoolame/fft.c
-   A /trunk/src/libtoolame/fft.h
-   A /trunk/src/libtoolame/get_set.c
-   A /trunk/src/libtoolame/mem.c
-   A /trunk/src/libtoolame/mem.h
-   A /trunk/src/libtoolame/psycho_0.c
-   A /trunk/src/libtoolame/psycho_0.h
-   A /trunk/src/libtoolame/psycho_1.c
-   A /trunk/src/libtoolame/psycho_1.h
-   A /trunk/src/libtoolame/psycho_1_critband.h
-   A /trunk/src/libtoolame/psycho_1_freqtable.h
-   A /trunk/src/libtoolame/psycho_2.c
-   A /trunk/src/libtoolame/psycho_2.h
-   A /trunk/src/libtoolame/psycho_2_absthr.h
-   A /trunk/src/libtoolame/psycho_3.c
-   A /trunk/src/libtoolame/psycho_3.h
-   A /trunk/src/libtoolame/psycho_4.c
-   A /trunk/src/libtoolame/psycho_4.h
-   A /trunk/src/libtoolame/psycho_n1.c
-   A /trunk/src/libtoolame/psycho_n1.h
-   A /trunk/src/libtoolame/subband.c
-   A /trunk/src/libtoolame/subband.h
-   A /trunk/src/libtoolame/tables.c
-   A /trunk/src/libtoolame/tables.h
-   A /trunk/src/libtoolame/toolame-15.c
-   A /trunk/src/libtoolame/toolame-20040920.c
-   A /trunk/src/libtoolame/toolame-new.c
-   A /trunk/src/libtoolame/toolame-old.c
-   A /trunk/src/libtoolame/toolame.c
-   A /trunk/src/libtoolame/toolame.h
-   A /trunk/src/libtoolame/toolame_global_flags.h
-   A /trunk/src/libtoolame/version.c
-   A /trunk/src/simplefrontend
-   A /trunk/src/simplefrontend/.gdb_history
-   A /trunk/src/simplefrontend/Makefile.am
-   A /trunk/src/simplefrontend/audio_wave.c
-   A /trunk/src/simplefrontend/audio_wave.h
-   A /trunk/src/simplefrontend/simplefrontend.c
-   A /trunk/toolame.pc.in
-   A /trunk/toolame.spec
+RCS file: /cvsroot/twolame/twolame/debian/changelog,v
+Working file: debian/changelog
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
 
-Initial import
-------------------------------------------------------------------------
-r1 | njh | 2005-01-14 01:46:00 +0000 (Fri, 14 Jan 2005) | 1 line
-Changed paths:
-   A /trunk
+RCS file: /cvsroot/twolame/twolame/debian/control,v
+Working file: debian/control
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
 
-Initial Directory Structure
-------------------------------------------------------------------------
+RCS file: /cvsroot/twolame/twolame/debian/copyright,v
+Working file: debian/copyright
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.docs,v
+Working file: debian/libtwolame0-dev.docs
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0-dev.files,v
+Working file: debian/libtwolame0-dev.files
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/libtwolame0.files,v
+Working file: debian/libtwolame0.files
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/rules,v
+Working file: debian/rules
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/twolame.docs,v
+Working file: debian/twolame.docs
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/debian/twolame.files,v
+Working file: debian/twolame.files
+head: 1.1
+branch:
+locks: strict
+access list:
+symbolic names:
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+----------------------------
+revision 1.1
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;
+Added starts of a Debian package, and a manpage.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/api.txt,v
+Working file: doc/api.txt
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/asciidoc.conf,v
+Working file: doc/asciidoc.conf
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/doxygen.conf,v
+Working file: doc/doxygen.conf
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/index.txt,v
+Working file: doc/index.txt
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/make-html.sh,v
+Working file: doc/make-html.sh
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/psycho.txt,v
+Working file: doc/psycho.txt
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 01:13:01;  author: nhumfrey;  state: Exp;  lines: +0 -1
+Minor typographical fix.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:18;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/twolame.1,v
+Working file: doc/twolame.1
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/19 12:31:44;  author: nhumfrey;  state: Exp;  lines: +3 -4
+Added starts of a Debian package, and a manpage.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/vbr.txt,v
+Working file: doc/vbr.txt
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/common.text,v
+Working file: doc/dist10-text/common.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/commonh.text,v
+Working file: doc/dist10-text/commonh.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:19;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/encode.text,v
+Working file: doc/dist10-text/encode.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/encoderh.text,v
+Working file: doc/dist10-text/encoderh.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/musicin.text,v
+Working file: doc/dist10-text/musicin.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/psy.text,v
+Working file: doc/dist10-text/psy.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/dist10-text/tonal.text,v
+Working file: doc/dist10-text/tonal.text
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/api.html,v
+Working file: doc/html/api.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/authors.html,v
+Working file: doc/html/authors.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/changes.txt,v
+Working file: doc/html/changes.txt
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:20;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/doxygen.css,v
+Working file: doc/html/doxygen.css
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/doxygen.png,v
+Working file: doc/html/doxygen.png
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/index.html,v
+Working file: doc/html/index.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/news.html,v
+Working file: doc/html/news.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/psycho.html,v
+Working file: doc/html/psycho.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/readme.html,v
+Working file: doc/html/readme.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:21;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/todo.html,v
+Working file: doc/html/todo.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/twolame_8h-source.html,v
+Working file: doc/html/twolame_8h-source.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:22;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/twolame_8h.html,v
+Working file: doc/html/twolame_8h.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/doc/html/vbr.html,v
+Working file: doc/html/vbr.html
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/Makefile.am,v
+Working file: src/Makefile.am
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:27;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/Makefile.am,v
+Working file: src/frontend/Makefile.am
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/audio.c,v
+Working file: src/frontend/audio.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/audio.h,v
+Working file: src/frontend/audio.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/audio_aiff.c,v
+Working file: src/frontend/audio_aiff.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/audio_wave.c,v
+Working file: src/frontend/audio_wave.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:28;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/frontend.c,v
+Working file: src/frontend/frontend.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/frontend/frontend.h,v
+Working file: src/frontend/frontend.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/Makefile.am,v
+Working file: src/libtwolame/Makefile.am
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +0 -2
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/ath.c,v
+Working file: src/libtwolame/ath.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/ath.h,v
+Working file: src/libtwolame/ath.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/availbits.c,v
+Working file: src/libtwolame/availbits.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/availbits.h,v
+Working file: src/libtwolame/availbits.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/bitbuffer.c,v
+Working file: src/libtwolame/bitbuffer.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/bitbuffer.h,v
+Working file: src/libtwolame/bitbuffer.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/common.h,v
+Working file: src/libtwolame/common.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/crc.c,v
+Working file: src/libtwolame/crc.c
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +5 -2
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/crc.h,v
+Working file: src/libtwolame/crc.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/dab.c,v
+Working file: src/libtwolame/dab.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/dab.h,v
+Working file: src/libtwolame/dab.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:29;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/encode.c,v
+Working file: src/libtwolame/encode.c
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +74 -63
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/encode.h,v
+Working file: src/libtwolame/encode.h
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +4 -2
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/energy.c,v
+Working file: src/libtwolame/energy.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/energy.h,v
+Working file: src/libtwolame/energy.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/enwindow.h,v
+Working file: src/libtwolame/enwindow.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:31;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/fft.c,v
+Working file: src/libtwolame/fft.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/fft.h,v
+Working file: src/libtwolame/fft.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/get_set.c,v
+Working file: src/libtwolame/get_set.c
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +127 -143
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:32;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/mem.c,v
+Working file: src/libtwolame/mem.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/mem.h,v
+Working file: src/libtwolame/mem.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_0.c,v
+Working file: src/libtwolame/psycho_0.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_0.h,v
+Working file: src/libtwolame/psycho_0.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:33;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_1.c,v
+Working file: src/libtwolame/psycho_1.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_1.h,v
+Working file: src/libtwolame/psycho_1.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_1_critband.h,v
+Working file: src/libtwolame/psycho_1_critband.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_1_freqtable.h,v
+Working file: src/libtwolame/psycho_1_freqtable.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:34;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_2.c,v
+Working file: src/libtwolame/psycho_2.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:35;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:35;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_2.h,v
+Working file: src/libtwolame/psycho_2.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:35;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:35;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_2_absthr.h,v
+Working file: src/libtwolame/psycho_2_absthr.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:36;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:36;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_3.c,v
+Working file: src/libtwolame/psycho_3.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:37;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:37;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_3.h,v
+Working file: src/libtwolame/psycho_3.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:37;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:37;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_4.c,v
+Working file: src/libtwolame/psycho_4.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_4.h,v
+Working file: src/libtwolame/psycho_4.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_n1.c,v
+Working file: src/libtwolame/psycho_n1.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/psycho_n1.h,v
+Working file: src/libtwolame/psycho_n1.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/subband.c,v
+Working file: src/libtwolame/subband.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/subband.h,v
+Working file: src/libtwolame/subband.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:38;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/Attic/tables.c,v
+Working file: src/libtwolame/tables.c
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: dead;  lines: +0 -0
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:39;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:39;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/Attic/tables.h,v
+Working file: src/libtwolame/tables.h
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: dead;  lines: +0 -0
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:39;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:39;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/twolame.c,v
+Working file: src/libtwolame/twolame.c
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +4 -8
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/twolame.h,v
+Working file: src/libtwolame/twolame.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/twolame_global.h,v
+Working file: src/libtwolame/twolame_global.h
+head: 1.2
+branch:
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+----------------------------
+revision 1.2
+date: 2005/04/16 17:10:12;  author: nhumfrey;  state: Exp;  lines: +0 -12
+Completed removal of old tables.c and tables.h code
+Added new get_alloc_table_bits() function to encode.c, for use by crc.c.
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:40;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/libtwolame/version.c,v
+Working file: src/libtwolame/version.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/simplefrontend/Makefile.am,v
+Working file: src/simplefrontend/Makefile.am
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/simplefrontend/audio_wave.c,v
+Working file: src/simplefrontend/audio_wave.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/simplefrontend/audio_wave.h,v
+Working file: src/simplefrontend/audio_wave.h
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
+
+RCS file: /cvsroot/twolame/twolame/src/simplefrontend/simplefrontend.c,v
+Working file: src/simplefrontend/simplefrontend.c
+head: 1.1
+branch: 1.1.1
+locks: strict
+access list:
+symbolic names:
+	start: 1.1.1.1
+	vendor: 1.1.1
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+----------------------------
+revision 1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;
+branches:  1.1.1;
+Initial revision
+----------------------------
+revision 1.1.1.1
+date: 2005/04/15 01:10:41;  author: nhumfrey;  state: Exp;  lines: +0 -0
+Initial import.
+=============================================================================
