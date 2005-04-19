@@ -1,6 +1,5 @@
 
 AM_CFLAGS = -I../libtwolame/
-AM_LDFLAGS = 
 
 # This is just sample code - don't install it
 noinst_PROGRAMS = stwolame
@@ -11,3 +10,4 @@ stwolame_SOURCES = \
 	audio_wave.c
 
 stwolame_LDADD = $(top_srcdir)/src/libtwolame/libtwolame.la
+

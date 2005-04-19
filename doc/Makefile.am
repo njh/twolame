@@ -46,7 +46,7 @@ pkghtml_DATA = \
     $(htmldir)/vbr.html
 
 
-EXTRA_DIST = $(pkghtml_DATA) \
+EXTRA_DIST = $(man_MANS) $(pkghtml_DATA) \
 	api.txt \
 	asciidoc.conf \
 	doxygen.conf \
