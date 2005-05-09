@@ -23,9 +23,9 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "common.h"
+
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "ath.h"
 #include "mem.h"
 #include "psycho_0.h"

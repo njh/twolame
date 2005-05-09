@@ -26,9 +26,8 @@
 #include <math.h>
 #include <string.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "mem.h"
 #include "fft.h"
 #include "psycho_2.h"

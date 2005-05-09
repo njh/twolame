@@ -24,12 +24,12 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "ath.h"
 
-  /* freq in hz */
+
+/* freq in hz */
 FLOAT ath_db(FLOAT f, FLOAT value)
 {
   /* from Painter & Spanias

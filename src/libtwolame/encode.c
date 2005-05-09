@@ -25,12 +25,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "bitbuffer.h"
 #include "availbits.h"
 #include "encode.h"
+
 
 static const FLOAT multiple[64] = {
   2.00000000000000, 1.58740105196820, 1.25992104989487,

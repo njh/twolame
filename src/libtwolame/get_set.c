@@ -26,11 +26,10 @@
 #include <math.h>
 #include <assert.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "mem.h"
-
+#include "util.h"
 
 
 
@@ -124,7 +123,7 @@ float twolame_get_scale_right(twolame_options* glopts)
 int twolame_set_in_samplerate (twolame_options *glopts, int samplerate)
 {  
 	glopts->samplerate_in = samplerate;
-	return(0);
+	return twolame_set_out_samplerate( glopts, samplerate );
 }
 
 int twolame_get_in_samplerate (twolame_options *glopts)
@@ -134,8 +133,14 @@ int twolame_get_in_samplerate (twolame_options *glopts)
 
 int twolame_set_out_samplerate (twolame_options *glopts, int samplerate)
 {  
-	glopts->samplerate_out = samplerate;
-	return(0);
+	int ver = twolame_get_version_for_samplerate(samplerate);
+	if (ver<0) {
+		return -1;
+	} else {
+		glopts->samplerate_out = samplerate;
+		glopts->version = ver;
+		return(0);
+	}
 }
 
 int twolame_get_out_samplerate (twolame_options *glopts)

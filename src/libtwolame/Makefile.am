@@ -43,4 +43,5 @@ libtwolame_la_SOURCES = \
 	subband.h \
 	twolame_global.h \
 	twolame.c \
-	version.c 
+	util.c \
+	util.h

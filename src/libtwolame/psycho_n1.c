@@ -22,9 +22,8 @@
 
 #include <stdio.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "psycho_n1.h"
 
 /* this is the null psychoacoustic model 

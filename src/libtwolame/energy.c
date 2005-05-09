@@ -23,11 +23,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "common.h"
+
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "bitbuffer.h"
 #include "energy.h"
+
 
 void do_energy_levels(twolame_options *glopts, bit_stream *bs)
 //void do_energy_levels(twolame_options *glopts, unsigned char *mp2buffer, int frameEnd, short int *leftpcm, short int *rightpcm)

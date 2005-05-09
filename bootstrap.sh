@@ -17,5 +17,5 @@ run_cmd automake --add-missing --copy
 run_cmd autoconf
 
 echo
-echo "Now type './configure' to configure twolame"
+echo "Now type './configure' to configure TwoLAME"
 echo

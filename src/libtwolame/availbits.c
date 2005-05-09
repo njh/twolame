@@ -23,9 +23,8 @@
 
 #include <stdio.h>
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "availbits.h"
 
 

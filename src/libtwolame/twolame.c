@@ -28,9 +28,8 @@
 
 #include "../config.h"
 
-#include "common.h"
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "bitbuffer.h"
 #include "mem.h"
 #include "crc.h"
@@ -45,49 +44,57 @@
 #include "subband.h"
 #include "encode.h"
 #include "energy.h"
+#include "util.h"
+
+
+
 
 
 static void init_header_info( twolame_options *glopts ) {
-  frame_header *header = &glopts->header;
+	frame_header *header = &glopts->header;
+	
+	/* use the options to create header info structure */
+	header->lay = 2;
+	header->error_protection = glopts->error_protection;
+	
+	// Get the MPEG version for the chosen samplerate
+	header->version = twolame_get_version_for_samplerate( glopts->samplerate_out );
+	if (header->version < 0) {
+		fprintf(stdout,"Not a valid samplerate: %i\n", glopts->samplerate_out );
+		exit(99);
+	}
 
-  /* use the options to create header info structure */
-  header->lay = 2;
-  header->error_protection = glopts->error_protection;
-
-  if ((header->bitrate_index = twolame_get_bitrate_index(glopts->version, glopts->bitrate)) < 0) {
-    fprintf(stdout,"Not a valid bitrate for this version: %i\n",glopts->bitrate);
-    exit(99);
-  }
-  
-  // Convert the sampling frequency to the required index
-  header->samplerate_idx = twolame_get_samplerate_index ((long) glopts->samplerate_out, &glopts->version); 
-  //  fprintf(stdout,"Not a valid samplerate for this version: %i\n",glopts->bitrate);
-  //  exit(99);
-  //}
-
-
-  glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->version, glopts->vbr_max_bitrate);
-  //  fprintf(stdout,"Not a valid bitrate for this version: %i\n",glopts->vbr_max_bitrate);
-  //  exit(99);
-  //}
-
-
-  /* if the sampling frequency is >=32000, set to MPEG1
-     else set to MPEG2 */
-  if (glopts->samplerate_out < 32000)
-    header->version = glopts->version = 0;
-  else
-    header->version = glopts->version = 1;
-
-
-  header->padding = glopts->padding;
-  header->private_bit = glopts->private_bit;
-  header->mode = glopts->mode;
-  header->mode_ext = 0;
-  header->copyright = glopts->copyright;
-  header->original = glopts->original;
-  header->emphasis = glopts->emphasis;  
+	// Convert the sampling frequency to the required index
+	header->samplerate_idx = twolame_get_samplerate_index( glopts->samplerate_out ); 
+	if (header->samplerate_idx < 0) {
+		fprintf(stdout,"Not a valid samplerate: %i\n",glopts->samplerate_out );
+		exit(99);
+	}
+	
+	// Convert the bitrate to the an index	
+	header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
+	if (header->bitrate_index < 0) {
+		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version (%i)\n", glopts->bitrate, glopts->version);
+		exit(99);
+	}
+		
+	// Convert the max VBR bitrate to the an index	
+	glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
+	if (glopts->vbr_upper_index < 0) {
+		fprintf(stdout,"Not a valid max VBR bitrate for this version: %i\n",glopts->vbr_max_bitrate);
+		exit(99);
+	}
+	
+	// Copy accross the other settings	
+	header->padding = glopts->padding;
+	header->private_bit = glopts->private_bit;
+	header->mode = glopts->mode;
+	header->mode_ext = 0;
+	header->copyright = glopts->copyright;
+	header->original = glopts->original;
+	header->emphasis = glopts->emphasis;  
 }
+
 
 
 static void init_frame_info(twolame_options *glopts)
@@ -238,7 +245,7 @@ int twolame_init_params (twolame_options *glopts) {
 	
 	/* initialises bitrate allocation */
 	if (glopts->samplerate_out != glopts->samplerate_in) {
-		fprintf(stderr,"twolame_init_params(): twolame doesn't support resampling yet.\n");
+		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling yet.\n");
 		exit(1);
 	}
 
@@ -636,7 +643,12 @@ int twolame_encode_buffer_interleaved(
 
 
 void twolame_close(twolame_options **glopts) {
-	twolame_options *opts = *glopts;
+	twolame_options *opts = NULL;
+
+	// Check input pointers aren't NULL
+	if (glopts==NULL) return;
+	opts = *glopts;
+	if (opts==NULL) return;
 
 	// free mem
 	if (opts->p4mem) psycho_4_deinit( &opts->p4mem );
@@ -649,6 +661,7 @@ void twolame_close(twolame_options **glopts) {
 	if (opts->j_sample) twolame_free( (void **) &opts->j_sample );
 	if (opts->sb_sample) twolame_free( (void **) &opts->sb_sample );
 	
+	// Free the memory and zero the pointer
 	twolame_free ( (void **)glopts );
 }
 
@@ -682,71 +695,4 @@ int twolame_encode_flush(twolame_options *glopts, unsigned char *mp2buffer, int 
 	return mp2_size;
 }
 
-
-/* 1: MPEG-1, 0: MPEG-2 LSF, 1995-07-11 shn */
-static const int bitrate[2][15] = {
-{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
-{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384}
-};
-
-
-/* legal bitrates rates from 32 to 448 
-   version is MPEG-1 or MPEG-2 LSF
-   convert bitrate in kbps to index */
-int twolame_get_bitrate_index (TWOLAME_MPEG_version version, int bRate) {
-	int index = 0;
-	int found = 0;
-
-	// MFC sanity check.
-	if (version!=0 && version!=1) {
-		fprintf(stderr,"twolame_get_bitrate_index error %i\n",version);
-		exit(99);
-	}
-
-	while (!found && index < 15) {
-		if (bitrate[version][index] == bRate)
-			found = 1;
-		else
-			++index;
-	}
-	
-	if (found)  return (index);
-	else {
-		fprintf (stderr,
-			"twolame_get_bitrate_index: %d is not a legal bitrate for version %i\n",
-			bRate, version);
-		exit (-1);			/* Error! */
-	}
-}
-
-// convert samp frq in Hz to index
-// legal rates 16000, 22050, 24000, 32000, 44100, 48000
-int twolame_get_samplerate_index (long sRate, TWOLAME_MPEG_version *version)
-{
-	/* 1: MPEG-1, 0: MPEG-2 LSF, 1995-07-11 shn */
-	//static FLOAT s_freq[2][4] = { {22.05, 24, 16, 0}, {44.1, 48, 32, 0} };
-
-	if (sRate == 44100L) {
-		*version = TWOLAME_MPEG1;
-		return (0);
-	} else if (sRate == 48000L) {
-		*version = TWOLAME_MPEG1;
-		return (1);
-	} else if (sRate == 32000L) {
-		*version = TWOLAME_MPEG1;
-		return (2);
-	} else if (sRate == 24000L) {
-		*version = TWOLAME_MPEG2;
-		return (1);
-	} else if (sRate == 22050L) {
-		*version = TWOLAME_MPEG2;
-		return (0);
-	} else if (sRate == 16000L) {
-		*version = TWOLAME_MPEG2;
-		return (2);
-	} else {
-		fprintf (stderr, "twolame_get_samplerate_index: %ld is not a legal sample rate\n", sRate);
-		exit(99);
-	}
-}
 

@@ -24,9 +24,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "common.h"
+
 #include "twolame.h"
-#include "twolame_global.h"
+#include "common.h"
 #include "mem.h"
 #include "bitbuffer.h"
 #include "enwindow.h"

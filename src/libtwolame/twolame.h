@@ -79,12 +79,27 @@ typedef struct twolame_options_struct twolame_options;
 
 
 
-/** Get version number of the twolame library. 
+/** Get the version number of the TwoLAME library. 
  *  eg "0.3.1".
  *
- *  \return The version number as a string
+ *  \return The version number as a C string
  */
 const char* get_twolame_version( void );
+
+
+/** Get the URL of the TwoLAME homepage. 
+ *  eg "http://twolame.sourceforge.net/".
+ *
+ *  \return The url as a C string
+ */
+const char* get_twolame_url( void );
+
+
+/** Print the library version and 
+ *  encoder parameter settings to STDERR
+ *
+ */
+void twolame_print_config(const twolame_options *glopts);
 
 
 /** Initialise the twolame encoder.
@@ -207,33 +222,6 @@ int twolame_set_verbosity(twolame_options *glopts, int verbosity);
  *  \return			integer indicating the verbosity of the encoder
  */
 int twolame_get_verbosity(twolame_options *glopts);
-
-
-/** Get the bitrate index for a bitrate.
- *
- *  Returns the index associated with a bitrate for
- *	the specified version of MPEG.
- *
- *  \param version 			The version of MPEG 
- *							[TWOLAME_MPEG1 or TWOLAME_MPEG2]
- *  \param bitrate 			The bitrate to lookup in kbps
- *  \return 				The bitrate index if successful, 
- *							-1 if invalid bitrate
- */
-int twolame_get_bitrate_index(TWOLAME_MPEG_version version, int bitrate);
-
-
-/** Get the sample rate index for a samplerate.
- *
- *  Returns the index associated with a bitrate for
- *	the specified version of MPEG.
- *
- *  \param sampleRate 		The sample rate to lookup (Hz)
- *  \param version 			The version of MPEG to use is returned in this integer pointer
- *  \return 				The sample rate index if successful, 
- *							-1 if invalid sample rate
- */
-int twolame_get_samplerate_index(long sampleRate, TWOLAME_MPEG_version *version);
 
 
 /** Set the MPEG Audio Mode (Mono, Stereo, etc) for 
