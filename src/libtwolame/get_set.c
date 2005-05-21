@@ -97,7 +97,7 @@ float twolame_get_scale(twolame_options* glopts)
 	return(glopts->scale);
 }
 
-int lame_set_scale_left(twolame_options* glopts, float scale)
+int twolame_set_scale_left(twolame_options* glopts, float scale)
 {
     glopts->scale_left = scale;
     return 0;
@@ -108,7 +108,7 @@ float twolame_get_scale_left(twolame_options* glopts)
 	return(glopts->scale_left);
 }
 
-int lame_set_scale_right(twolame_options* glopts, float scale)
+int twolame_set_scale_right(twolame_options* glopts, float scale)
 {
     glopts->scale_right = scale;
     return 0;
