@@ -208,7 +208,6 @@ void encode_init( twolame_options *glopts ) {
 			}
 			fprintf(stdout,"\n");
 		}
-		exit(0);
 	}
 	#endif
 
@@ -217,7 +216,6 @@ void encode_init( twolame_options *glopts ) {
 
 int get_js_bound (int m_ext)
 {
-	/* layer 2 only */
 	static const int jsb_table[4] = { 4, 8, 12, 16 };
 	
 	if (m_ext < 0 || m_ext > 3) {
@@ -795,7 +793,7 @@ int bits_for_nonoise ( twolame_options * glopts,
 
 
 /* must be called before calling main_bit_allocation */
-void init_bit_allocation( twolame_options * glopts )
+int init_bit_allocation( twolame_options * glopts )
 {
 	frame_info *frame = &glopts->frame;
 	frame_header *header = &glopts->header;
@@ -844,7 +842,7 @@ void init_bit_allocation( twolame_options * glopts )
 		if ((glopts->vbr_upper_index < glopts->lower_index) ||
           (glopts->vbr_upper_index > glopts->upper_index)) {
 			fprintf(stderr,"Can't satisfy upper bitrate index constraint. out of bounds. %i\n", glopts->vbr_upper_index);
-			exit(2);
+			return -2;
 		}
 		else
 			glopts->upper_index = glopts->vbr_upper_index;
@@ -864,6 +862,7 @@ void init_bit_allocation( twolame_options * glopts )
 			(int) (1152.0 / (glopts->samplerate_out/1000.0) * (FLOAT) glopts->bitrate);
 	}
 
+	return 0;
 }
 
 

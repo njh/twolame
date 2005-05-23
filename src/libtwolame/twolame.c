@@ -49,8 +49,9 @@
 
 
 
-
-static void init_header_info( twolame_options *glopts ) {
+// Returns 0 if successful
+// Returns -1 if unsuccessful
+static int init_header_info( twolame_options *glopts ) {
 	frame_header *header = &glopts->header;
 	
 	/* use the options to create header info structure */
@@ -61,28 +62,28 @@ static void init_header_info( twolame_options *glopts ) {
 	header->version = twolame_get_version_for_samplerate( glopts->samplerate_out );
 	if (header->version < 0) {
 		fprintf(stdout,"Not a valid samplerate: %i\n", glopts->samplerate_out );
-		exit(99);
+		return -1;
 	}
 
 	// Convert the sampling frequency to the required index
 	header->samplerate_idx = twolame_get_samplerate_index( glopts->samplerate_out ); 
 	if (header->samplerate_idx < 0) {
 		fprintf(stdout,"Not a valid samplerate: %i\n",glopts->samplerate_out );
-		exit(99);
+		return -1;
 	}
 	
 	// Convert the bitrate to the an index	
 	header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
 	if (header->bitrate_index < 0) {
 		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version (%i)\n", glopts->bitrate, glopts->version);
-		exit(99);
+		return -1;
 	}
 		
 	// Convert the max VBR bitrate to the an index	
 	glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
 	if (glopts->vbr_upper_index < 0) {
 		fprintf(stdout,"Not a valid max VBR bitrate for this version: %i\n",glopts->vbr_max_bitrate);
-		exit(99);
+		return -1;
 	}
 	
 	// Copy accross the other settings	
@@ -92,42 +93,53 @@ static void init_header_info( twolame_options *glopts ) {
 	header->mode_ext = 0;
 	header->copyright = glopts->copyright;
 	header->original = glopts->original;
-	header->emphasis = glopts->emphasis;  
+	header->emphasis = glopts->emphasis;
+	
+	return 0;
 }
 
 
 
-static void init_frame_info(twolame_options *glopts)
+// Returns 0 if successful
+// Returns -1 if unsuccessful
+static int init_frame_info(twolame_options *glopts)
 /* interpret data in hdr str to fields in frame */
 {
-  frame_info *frame = &glopts->frame;
-  frame_header *header = &glopts->header;
-
-  frame->actual_mode = header->mode;
-  frame->nch = (header->mode == TWOLAME_MONO) ? 1 : 2;
-
-  //frame->sblimit = pick_table ( glopts );
-  /* MFC FIX this up */
-  // Select table number and sblimit
-  encode_init( glopts );
-
-  if (glopts->mode == TWOLAME_JOINT_STEREO)
-    frame->jsbound = get_js_bound(header->mode_ext);
-  else
-    frame->jsbound = frame->sblimit;
-  /* alloc, tab_num set in pick_table */
+	frame_info *frame = &glopts->frame;
+	frame_header *header = &glopts->header;
+	
+	frame->actual_mode = header->mode;
+	frame->nch = (header->mode == TWOLAME_MONO) ? 1 : 2;
+	
+	//frame->sblimit = pick_table ( glopts );
+	/* MFC FIX this up */
+	// Select table number and sblimit
+	encode_init( glopts );
+	
+	if (glopts->mode == TWOLAME_JOINT_STEREO)
+		frame->jsbound = get_js_bound(header->mode_ext);
+	else
+		frame->jsbound = frame->sblimit;
+	/* alloc, tab_num set in pick_table */
+	
+	return 0;
 }
 
 
 /*
   twolame_init
-  Create a set of encoding options and return
-  a pointer to this structure
+  Create a set of encoding options and return a pointer to this structure
+  
+  Returns NULL if unsuccessful (can't allocate memory)
+  Otherwise returns pointer to memory block
 */
 twolame_options *twolame_init(void) {
 	twolame_options *newoptions = NULL;  
 	
 	newoptions = (twolame_options *)twolame_malloc(sizeof(twolame_options), "twolame_options");
+	if (newoptions==NULL) {
+		return NULL;
+	}
 	
 	newoptions->version = TWOLAME_MPEG1; /* default to 32/44.1/48 kHz input. i.e. mpeg-1 */
 	newoptions->num_channels = 0;
@@ -203,14 +215,14 @@ int twolame_init_params (twolame_options *glopts) {
 	   information into the ancillary section of the frame */
 	if (glopts->do_dab && glopts->do_energy_levels) {
 		fprintf(stderr,"Can't do DAB and Energy Levels at the same time\n");
-		exit(99);
+		return -1;
 	}
 
 	
 	/* initialises bitrate allocation */
 	if (glopts->num_channels != 1 && glopts->num_channels != 2) {
 		fprintf(stderr,"twolame_init_params(): must specify number of channels in input samples using twolame_set_num_channels().\n");
-		exit(1);
+		return -1;
 	}
 
 	/* Check that if we're doing energy levels, that there's enough space 
@@ -235,18 +247,24 @@ int twolame_init_params (twolame_options *glopts) {
 
 
 	/* build header from parameters */
-	init_header_info( glopts );
+	if (init_header_info( glopts )<0) {
+		return -1;
+	}
 	
 	/* this will load the alloc tables and do some other stuff */
-	init_frame_info( glopts );
+	if (init_frame_info( glopts )<0) {
+		return -1;
+	}
 	
 	/* initialises bitrate allocation */
-	init_bit_allocation( glopts );
+	if (init_bit_allocation( glopts )<0) {
+		return -1;
+	}
 	
 	/* initialises bitrate allocation */
 	if (glopts->samplerate_out != glopts->samplerate_in) {
 		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling yet.\n");
-		exit(1);
+		return -1;
 	}
 
 
@@ -261,10 +279,7 @@ int twolame_init_params (twolame_options *glopts) {
     glopts->subband = (subband_t *) twolame_malloc (sizeof (subband_t), "subband");
 	glopts->j_sample = (jsb_sample_t *) twolame_malloc (sizeof (jsb_sample_t), "j_sample");
     glopts->sb_sample = (sb_sample_t *) twolame_malloc (sizeof (sb_sample_t), "sb_sample");
-
-    init_subband (&glopts->smem);
-
-
+	
 	/* clear buffers */
     memset ((char *) glopts->buffer, 0, sizeof(glopts->buffer));
     memset ((char *) glopts->bit_alloc, 0, sizeof (glopts->bit_alloc));
@@ -275,11 +290,66 @@ int twolame_init_params (twolame_options *glopts) {
     memset ((char *) glopts->smr, 0, sizeof (glopts->smr));
     memset ((char *) glopts->max_sc, 0, sizeof (glopts->max_sc));
 
+	/* Initialise subband windowfilter */
+    if (init_subband(&glopts->smem)<0) {
+		return -1;
+	}
 
 	// All initalised now :)
 	glopts->twolame_init++;
 
 	return(0);
+}
+
+
+/* Scale the samples in the frame sample buffer
+   using the user specified values
+   and downmix/upmix according to the number of input/output channels 
+*/
+static void scale_and_mix_samples( twolame_options *glopts )
+{
+	frame_info *frame = &glopts->frame;
+	int num_samples = glopts->samples_in_buffer;
+	int i;
+	
+	// apply scaling to both channels 
+    if (glopts->scale != 0 && glopts->scale != 1.0) {
+		for (i=0 ; i<num_samples; ++i) {
+	    	glopts->buffer[0][i] *= glopts->scale;
+	    	if (glopts->num_channels == 2)
+			glopts->buffer[1][i] *= glopts->scale;
+	    }
+    }
+
+    // apply scaling to channel 0 (left) 
+    if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
+		for (i=0 ; i<num_samples; ++i) {
+			glopts->buffer[0][i] *= glopts->scale_left;
+	    }
+    }
+
+    // apply scaling to channel 1 (right) 
+	if (glopts->scale_right != 0 && glopts->scale_right != 1.0) {
+	    for (i=0 ; i<num_samples; ++i) {
+			glopts->buffer[1][i] *= glopts->scale_right;
+	    }
+	}
+
+    // Downmix to Mono if 2 channels in and 1 channel out 
+	if (glopts->num_channels == 2 && frame->nch == 1) {
+		for (i=0; i<num_samples; ++i) {
+			glopts->buffer[0][i] = ((long) glopts->buffer[0][i] + glopts->buffer[1][i]) / 2;
+			glopts->buffer[1][i] = 0;
+		}
+	}
+
+   // Upmix to Stereo if 2 channels out and 1 channel in
+	if (glopts->num_channels == 1 && frame->nch == 2) {
+		for (i=0; i<num_samples; ++i) {
+			glopts->buffer[1][i] = glopts->buffer[0][i];
+		}
+	}
+
 }
 
 
@@ -290,6 +360,7 @@ int twolame_init_params (twolame_options *glopts) {
 	(not intended for use outside the library)
 	
 	Returns the size of the frame
+	or -1 if there is an error
 */
 static int encode_frame(twolame_options *glopts, bit_stream *bs)
 {
@@ -300,8 +371,11 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	
 	if (!glopts->twolame_init) {
 		fprintf (stderr, "Please call twolame_init_params() before starting encoding.\n");
-		exit (0);
+		return -1;
 	}
+	
+	// Scale and mix the input buffer
+	scale_and_mix_samples( glopts );
 	
 	
     // Clear the saved audio buffer
@@ -398,7 +472,8 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 			break;	
 			default:
 				fprintf (stderr, "Invalid psy model specification: %i\n", glopts->psymodel);
-				exit (0);
+				return -1;
+			break;
 		}
 
 		if (glopts->quickmode == TRUE) {
@@ -457,7 +532,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		fprintf (stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits/8, frameBits%8);
 		fprintf (stderr, "If you are reading this, the program is broken\n");
 		fprintf (stderr, "email %s with the command line arguments and other info\n", PACKAGE_BUGREPORT);
-		exit (0);
+		return -1;
     }
 
     //fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
@@ -469,57 +544,6 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	return frameBits/8;
 }
 
-
-
-/* Scale the samples in the frame sample buffer
-   using the user specified values
-   and downmix/upmix according to the number of input/output channels 
-*/
-static void scale_and_mix_samples( twolame_options *glopts )
-{
-	frame_info *frame = &glopts->frame;
-	int num_samples = glopts->samples_in_buffer;
-	int i;
-	
-	// apply scaling to both channels 
-    if (glopts->scale != 0 && glopts->scale != 1.0) {
-		for (i=0 ; i<num_samples; ++i) {
-	    	glopts->buffer[0][i] *= glopts->scale;
-	    	if (glopts->num_channels == 2)
-			glopts->buffer[1][i] *= glopts->scale;
-	    }
-    }
-
-    // apply scaling to channel 0 (left) 
-    if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
-		for (i=0 ; i<num_samples; ++i) {
-			glopts->buffer[0][i] *= glopts->scale_left;
-	    }
-    }
-
-    // apply scaling to channel 1 (right) 
-	if (glopts->scale_right != 0 && glopts->scale_right != 1.0) {
-	    for (i=0 ; i<num_samples; ++i) {
-			glopts->buffer[1][i] *= glopts->scale_right;
-	    }
-	}
-
-    // Downmix to Mono if 2 channels in and 1 channel out 
-	if (glopts->num_channels == 2 && frame->nch == 1) {
-		for (i=0; i<num_samples; ++i) {
-			glopts->buffer[0][i] = ((long) glopts->buffer[0][i] + glopts->buffer[1][i]) / 2;
-			glopts->buffer[1][i] = 0;
-		}
-	}
-
-   // Upmix to Stereo if 2 channels out and 1 channel in
-	if (glopts->num_channels == 1 && frame->nch == 2) {
-		for (i=0; i<num_samples; ++i) {
-			glopts->buffer[1][i] = glopts->buffer[0][i];
-		}
-	}
-
-}
 
 
 /*
@@ -574,8 +598,12 @@ int twolame_encode_buffer(
 		
 		// is there enough to encode a whole frame ?
 		if (glopts->samples_in_buffer >= 1152) {
-			scale_and_mix_samples( glopts );
-			mp2_size += encode_frame( glopts, mybs );
+			int bytes = encode_frame( glopts, mybs );
+			if (bytes<=0) {
+				buffer_deinit( &mybs );
+				return bytes;
+			}
+			mp2_size += bytes;
 			glopts->samples_in_buffer -= 1152;
 		}
 	}
@@ -628,8 +656,12 @@ int twolame_encode_buffer_interleaved(
 		
 		// is there enough to encode a whole frame ?
 		if (glopts->samples_in_buffer >= 1152) {
-			scale_and_mix_samples( glopts );
-			mp2_size += encode_frame( glopts, mybs );
+			int bytes = encode_frame( glopts, mybs );
+			if (bytes<=0) {
+				buffer_deinit( &mybs );
+				return bytes;
+			}
+			mp2_size += bytes;
 			glopts->samples_in_buffer -= 1152;
 		}
 	}
@@ -639,30 +671,6 @@ int twolame_encode_buffer_interleaved(
 	
 	
 	return(mp2_size);
-}
-
-
-void twolame_close(twolame_options **glopts) {
-	twolame_options *opts = NULL;
-
-	// Check input pointers aren't NULL
-	if (glopts==NULL) return;
-	opts = *glopts;
-	if (opts==NULL) return;
-
-	// free mem
-	if (opts->p4mem) psycho_4_deinit( &opts->p4mem );
-	if (opts->p3mem) psycho_3_deinit( &opts->p3mem );
-	if (opts->p2mem) psycho_2_deinit( &opts->p2mem );
-	if (opts->p1mem) psycho_1_deinit( &opts->p1mem );
-	if (opts->p0mem) psycho_0_deinit( &opts->p0mem );
-	
-	if (opts->subband) twolame_free( (void **) &opts->subband );
-	if (opts->j_sample) twolame_free( (void **) &opts->j_sample );
-	if (opts->sb_sample) twolame_free( (void **) &opts->sb_sample );
-	
-	// Free the memory and zero the pointer
-	twolame_free ( (void **)glopts );
 }
 
 
@@ -696,3 +704,27 @@ int twolame_encode_flush(twolame_options *glopts, unsigned char *mp2buffer, int 
 }
 
 
+
+
+void twolame_close(twolame_options **glopts) {
+	twolame_options *opts = NULL;
+
+	// Check input pointers aren't NULL
+	if (glopts==NULL) return;
+	opts = *glopts;
+	if (opts==NULL) return;
+
+	// free mem
+	if (opts->p4mem) psycho_4_deinit( &opts->p4mem );
+	if (opts->p3mem) psycho_3_deinit( &opts->p3mem );
+	if (opts->p2mem) psycho_2_deinit( &opts->p2mem );
+	if (opts->p1mem) psycho_1_deinit( &opts->p1mem );
+	if (opts->p0mem) psycho_0_deinit( &opts->p0mem );
+	
+	if (opts->subband) twolame_free( (void **) &opts->subband );
+	if (opts->j_sample) twolame_free( (void **) &opts->j_sample );
+	if (opts->sb_sample) twolame_free( (void **) &opts->sb_sample );
+	
+	// Free the memory and zero the pointer
+	twolame_free ( (void **)glopts );
+}

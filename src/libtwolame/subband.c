@@ -47,23 +47,22 @@ static void create_dct_matrix (FLOAT filter[16][32])
     }
 }
 
-void init_subband (subband_mem *smem)
+int init_subband (subband_mem *smem)
 {
-  register int i, j;
-  smem->off[0] = 0;
-  smem->off[1] = 0;
-  smem->half[0] = 0;
-  smem->half[1] = 0;
-  for (i = 0; i < 2; i++)
-    for (j = 0; j < 512; j++)
-  smem->x[i][j] = 0;
-  create_dct_matrix (smem->m);  
+	register int i, j;
+	smem->off[0] = 0;
+	smem->off[1] = 0;
+	smem->half[0] = 0;
+	smem->half[1] = 0;
+	for (i = 0; i < 2; i++)
+		for (j = 0; j < 512; j++)
+			smem->x[i][j] = 0;
+	create_dct_matrix (smem->m);
+	
+	return 0;
 }
 
 
-//____________________________________________________________________________
-//____ window_filter_subband() _________________________________________
-//____ RS&A - Feb 2003 _______________________________________________________
 void window_filter_subband (subband_mem *smem, short *pBuffer, int ch, FLOAT s[SBLIMIT])
 {
   register int i, j;
@@ -105,7 +104,7 @@ void window_filter_subband (subband_mem *smem, short *pBuffer, int ch, FLOAT s[S
     y[i] = t;
   }
 
-  yprime[0] = y[16];		// Michael Chen´s dct filter
+  yprime[0] = y[16];		// Michael Chen's dct filter
 
   dp = smem->half[ch] ? smem->x[ch] : (smem->x[ch] + 256);
   pa = smem->half[ch] ? (smem->off[ch] + 1) & 7 : smem->off[ch];

@@ -56,52 +56,52 @@ void buffer_deinit( bit_stream ** bs )
 /*write 1 bit from the bit stream */
 void buffer_put1bit (bit_stream * bs, int bit)
 {
-  bs->totbit++;
-
-  bs->buf[bs->buf_byte_idx] |= (bit & 0x1) << (bs->buf_bit_idx - 1);
-  bs->buf_bit_idx--;
-  if (!bs->buf_bit_idx) {
-    bs->buf_bit_idx = 8;
-    bs->buf_byte_idx++;
-    if (bs->buf_byte_idx >= bs->buf_size) {
-      //empty_buffer (bs, minimum);
-      fprintf(stdout,"buffer_put1bit: error. bit_stream buffer needs to be bigger\n");
-      exit(99);
-    }
-    bs->buf[bs->buf_byte_idx] = 0;
-  }
+	bs->totbit++;
+	
+	bs->buf[bs->buf_byte_idx] |= (bit & 0x1) << (bs->buf_bit_idx - 1);
+	bs->buf_bit_idx--;
+	if (!bs->buf_bit_idx) {
+		bs->buf_bit_idx = 8;
+		bs->buf_byte_idx++;
+		if (bs->buf_byte_idx >= bs->buf_size) {
+			//empty_buffer (bs, minimum);
+			fprintf(stdout,"buffer_put1bit: error. bit_stream buffer needs to be bigger\n");
+			exit(99);
+		}
+		bs->buf[bs->buf_byte_idx] = 0;
+	}
 }
 
 /*write N bits into the bit stream */
 inline void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 {
-  static const int putmask[9] = { 0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
-  register int j = N;
-  register int k, tmp;
-
-  bs->totbit += N;
-  while (j > 0) {
-    k = MIN (j, bs->buf_bit_idx);
-    tmp = val >> (j - k);
-    bs->buf[bs->buf_byte_idx] |= (tmp & putmask[k]) << (bs->buf_bit_idx - k);
-    bs->buf_bit_idx -= k;
-    if (!bs->buf_bit_idx) {
-      bs->buf_bit_idx = 8;
-      bs->buf_byte_idx++;
-      if (bs->buf_byte_idx >= bs->buf_size) {
-	//empty_buffer (bs, minimum);
-	fprintf(stdout,"buffer_putbits: error. bit_stream buffer needs to be bigger\n");
-	exit(99);	
-      }
-      bs->buf[bs->buf_byte_idx] = 0;
-    }
-    j -= k;
-  }
+	static const int putmask[9] = { 0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
+	register int j = N;
+	register int k, tmp;
+	
+	bs->totbit += N;
+	while (j > 0) {
+		k = MIN (j, bs->buf_bit_idx);
+		tmp = val >> (j - k);
+		bs->buf[bs->buf_byte_idx] |= (tmp & putmask[k]) << (bs->buf_bit_idx - k);
+		bs->buf_bit_idx -= k;
+		if (!bs->buf_bit_idx) {
+			bs->buf_bit_idx = 8;
+			bs->buf_byte_idx++;
+			if (bs->buf_byte_idx >= bs->buf_size) {
+				//empty_buffer (bs, minimum);
+				fprintf(stdout,"buffer_putbits: error. bit_stream buffer needs to be bigger\n");
+				exit(99);	
+			}
+			bs->buf[bs->buf_byte_idx] = 0;
+		}
+		j -= k;
+	}
 }
 
 /*return the current bit stream length (in bits)*/
 unsigned long buffer_sstell (bit_stream * bs)
 {
-  return (bs->totbit);
+	return (bs->totbit);
 }
 

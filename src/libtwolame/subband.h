@@ -24,7 +24,7 @@
 #ifndef	_SUBBAND_H_
 #define	_SUBBAND_H_
 
-void init_subband (subband_mem *smem);
+int init_subband (subband_mem *smem);
 void window_filter_subband(subband_mem *smem, short *pBuffer, int ch, FLOAT s[SBLIMIT]);
 
 #endif

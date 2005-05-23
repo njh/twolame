@@ -78,7 +78,7 @@ int bits_for_nonoise (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 			  unsigned int scfsi[2][SBLIMIT], FLOAT min_mnr,
 			  unsigned int bit_alloc[2][SBLIMIT]);
 
-void init_bit_allocation( twolame_options * glopts );
+int init_bit_allocation( twolame_options * glopts );
 
 void main_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 			  unsigned int scfsi[2][SBLIMIT],

@@ -61,7 +61,10 @@ static const int bitrate_table[2][15] = {
 
 // *  Returns the index associated with a bitrate for
 // *  the specified version of MPEG.
-int twolame_get_bitrate_index (int bitrate, TWOLAME_MPEG_version version)
+// *
+// *  Returns -1 for invalid bitrates
+//
+int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 {
 	int index = 0;
 	int found = 0;
@@ -69,7 +72,7 @@ int twolame_get_bitrate_index (int bitrate, TWOLAME_MPEG_version version)
 	// MFC sanity check.
 	if (version!=0 && version!=1) {
 		fprintf(stderr,"twolame_get_bitrate_index error %i\n",version);
-		exit(99);
+		return -1;
 	}
 
 	while (!found && index < 15) {
@@ -84,12 +87,13 @@ int twolame_get_bitrate_index (int bitrate, TWOLAME_MPEG_version version)
 		fprintf (stderr,
 			"twolame_get_bitrate_index: %d is not a legal bitrate for version %i\n",
 			bitrate, version);
-		exit (-1);			/* Error! */
+		return -1;
 	}
 }
 
 // convert samp frq in Hz to index
 // legal rates 16000, 22050, 24000, 32000, 44100, 48000
+//  -1 is returned for invalid samplerates
 int twolame_get_samplerate_index (long sample_rate)
 {
 
@@ -131,19 +135,42 @@ int twolame_get_version_for_samplerate (long sample_rate)
 
 // Print the library version and 
 //  encoder parameter settings to STDERR
-void twolame_print_config(const twolame_options *glopts)
+void twolame_print_config(twolame_options *glopts)
 {
 	FILE* fd = stderr;
 
     fprintf(fd, "TwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
 
-    //fprintf(fd, "Output Samplerate=%d  Bitrate=%d\n", twolame_set_out_samplerate(glopts), twolame_get_bitrate(glopts));
-
-    if (glopts->num_channels == 2 && glopts->mode == TWOLAME_MONO ) {
-		fprintf(fd, "Autoconverting from stereo to mono. Setting encoding to mono mode.\n");
-    }
-
+	fprintf (stderr, "---------------------------------------------------------\n");
+	fprintf (stderr, "Input : %d Hz, %d channels\n",
+				twolame_get_in_samplerate(glopts),
+				twolame_get_num_channels(glopts));
+	fprintf (stderr, "Output: %d Hz, %s\n",
+				twolame_get_out_samplerate(glopts), 
+				twolame_get_mode_name(glopts));
+	fprintf (stderr, "%d kbps ", twolame_get_bitrate(glopts) );
+	fprintf (stderr, "%s Layer II ", twolame_get_version_name(glopts));
+	fprintf (stderr, "psycho model=%d \n", twolame_get_psymodel(glopts));
 	
-
+	fprintf (stderr, "[De-emph:%s    Copyright:%s   Original:%s]\n",
+	((twolame_get_emphasis(glopts)) ? "On " : "Off"),
+	((twolame_get_copyright(glopts)) ? "Yes" : "No "),
+	((twolame_get_original(glopts)) ? "Yes" : "No "));
+	
+	fprintf (stderr, "[Padding:%s CRC:%s         DAB:%s     ]\n",
+	((twolame_get_padding(glopts)) ? "Normal" : "Off   "),
+	((twolame_get_error_protection(glopts)) ? "On " : "Off"),
+	((twolame_get_DAB(glopts)) ? "On " : "Off")); 
+	
+	if (twolame_get_VBR(glopts))
+	fprintf (stderr, "VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_q(glopts));
+	fprintf(stderr,"ATH adjustment %f\n", twolame_get_ATH_level(glopts));
+	fprintf(stderr,"Reserving %i Ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
+	
+    if (glopts->num_channels == 2 && glopts->mode == TWOLAME_MONO ) {
+		fprintf(fd, "Autoconverting from stereo to mono.\n");
+    }
+	
+	fprintf (stderr, "---------------------------------------------------------\n");
 }
 

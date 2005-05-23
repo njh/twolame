@@ -95,7 +95,8 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
 
   {
     mem = (psycho_2_mem *)twolame_malloc(sizeof(psycho_2_mem), "psycho_2_mem");
-
+	if (!mem) return NULL;
+	
     mem->tmn = (FLOAT *) twolame_malloc (sizeof (DCB), "tmn");
     mem->s = (FCB *) twolame_malloc (sizeof (FCBCB), "s");
     mem->lthr = (FHBLK *) twolame_malloc (sizeof (F2HBLK), "lthr");
@@ -139,7 +140,7 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
     break;
   default:
     fprintf (stderr, "error, invalid sampling frequency: %d Hz\n", sfreq);
-    exit (-1);
+    return NULL;
   }
   fprintf (stderr, "absthr[][] sampling frequency index: %d\n", sfreq_idx);
   psycho_2_read_absthr (mem->absthr, sfreq_idx);

@@ -99,7 +99,7 @@ const char* get_twolame_url( void );
  *  encoder parameter settings to STDERR
  *
  */
-void twolame_print_config(const twolame_options *glopts);
+void twolame_print_config(twolame_options *glopts);
 
 
 /** Initialise the twolame encoder.
@@ -140,6 +140,7 @@ int twolame_init_params(twolame_options *glopts);
  *  \param mp2buffer		Buffer to place encoded audio into
  *  \param mp2buffer_size	Size of the output buffer
  *  \return 				The number of bytes put in output buffer
+ *							or a negative value on error
  */
 int twolame_encode_buffer(
 		twolame_options *glopts,
@@ -161,6 +162,7 @@ int twolame_encode_buffer(
  *  \param mp2buffer		Buffer to place encoded audio into
  *  \param mp2buffer_size	Size of the output buffer
  *  \return 				The number of bytes put in output buffer
+ *							or a negative value on error
  */
 int twolame_encode_buffer_interleaved(
 		twolame_options *glopts,
@@ -180,6 +182,7 @@ int twolame_encode_buffer_interleaved(
  *  \param mp2buffer		Buffer to place encoded audio into
  *  \param mp2buffer_size	Size of the output buffer
  *  \return 				The number of bytes put in output buffer
+ *							or a negative value on error
  */
 int twolame_encode_flush(
 		twolame_options *glopts,
