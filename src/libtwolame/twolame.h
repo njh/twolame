@@ -21,8 +21,13 @@
  */
  
 
-#ifndef	_TWOLAME_H_
-#define	_TWOLAME_H_
+#ifndef	__TWOLAME_H__
+#define	__TWOLAME_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 #ifndef TRUE
 #define TRUE	(1)
@@ -790,6 +795,11 @@ int twolame_set_DAB_crc_length(twolame_options *glopts, int length);
 int twolame_get_DAB_crc_length(twolame_options *glopts);
 
 
+
+#ifdef __cplusplus
+}
 #endif
+
+#endif /* _TWOLAME_H_ */
 
 
