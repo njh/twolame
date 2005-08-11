@@ -6,7 +6,6 @@ TODO
 - revamp frontend - GNU style long options, more integrated libsndfile
 - Fix broken energy level support
 - Fix broken DAB support
-- Merge common.h and toolame_global.h ?
 - Change documentation from asciidoc to POD
 - Re-add support for encoding from stdin when sndfile is available
 - Automatic downmixing / upmixing (toolame_set_num_channels)
