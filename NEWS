@@ -1,10 +1,11 @@
 What is new in TwoLAME 
 ======================
 
-Version 0.3.4 (2005-05-09)
+Version 0.3.4 (2005-08-10)
 --------------------------
 
 - Checks parameters a bit better
+- Fixed twolame.h so that it works with C++ code
 
 
 Version 0.3.3 (2005-04-19)

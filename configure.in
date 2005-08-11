@@ -6,7 +6,7 @@ AC_PREREQ(2.57)
 
 dnl ############# Initialization
 
-AC_INIT([twolame], [0.3.3], [twolame-discuss@lists.sourceforge.net])
+AC_INIT([twolame], [0.3.4], [twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(src/libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build)
@@ -45,8 +45,10 @@ AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([mx], [powf])
 
 PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
-	[ AC_DEFINE_UNQUOTED([HAVE_SNDFILE],1,[Set to 1 if you have libsndfile.]) ],
-	[ AC_MSG_WARN(library libsndfile is unavailable) ]
+	[ HAVE_SNDFILE=yes
+	  AC_DEFINE_UNQUOTED([HAVE_SNDFILE],1,[Set to 1 if you have libsndfile.]) ],
+	[ HAVE_SNDFILE=no
+	  AC_MSG_WARN(library libsndfile is unavailable) ]
 )
 
 
@@ -62,13 +64,24 @@ AC_CHECK_HEADERS(inttypes.h)
 dnl ############## Compiler and Linker Flags
 
 # Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
-
 CFLAGS="$CFLAGS -O3 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
 if test x$Debugging = xEnabled; then
 	CFLAGS="$CFLAGS -g -Werror"
 fi
+
+
+
+dnl ############## Only compile frontend if sndfile is available
+
+TWOLAME_BIN=""
+if test x$HAVE_SNDFILE = xyes; then
+	TWOLAME_BIN="$TWOLAME_BIN twolame"
+else 
+	AC_MSG_WARN(Not building twolame frontend because sndfile isn't available.)
+fi
+AC_SUBST( TWOLAME_BIN )
 
 
 
