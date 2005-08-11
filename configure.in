@@ -79,7 +79,7 @@ TWOLAME_BIN=""
 if test x$HAVE_SNDFILE = xyes; then
 	TWOLAME_BIN="$TWOLAME_BIN twolame"
 else 
-	AC_MSG_WARN(Not building twolame frontend because sndfile isn't available.)
+	AC_MSG_WARN(Not building twolame frontend because libsndfile isn't available.)
 fi
 AC_SUBST( TWOLAME_BIN )
 
