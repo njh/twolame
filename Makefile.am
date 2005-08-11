@@ -1,4 +1,6 @@
 
+AUTOMAKE_OPTIONS = foreign
+
 SUBDIRS = debian doc src
 
 pkgconfigdir = $(libdir)/pkgconfig
