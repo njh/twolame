@@ -9,6 +9,11 @@ run_cmd() {
     fi
 }
 
+# Create the (empty) build directory if it doesn't exist
+if ! [ -d build ]; then
+	echo "creating build directory"
+	mkdir build
+fi
 
 run_cmd aclocal
 run_cmd autoheader
