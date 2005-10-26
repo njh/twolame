@@ -1,2 +1,0 @@
-
-SUBDIRS = libtwolame frontend simplefrontend
