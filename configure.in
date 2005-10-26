@@ -8,12 +8,12 @@ dnl ############# Initialization
 
 AC_INIT([twolame], [0.3.4], [twolame-discuss@lists.sourceforge.net])
 
-AC_CONFIG_SRCDIR(src/libtwolame/twolame.h)
-AC_CONFIG_AUX_DIR(build)
+AC_CONFIG_SRCDIR( libtwolame/twolame.h )
+AC_CONFIG_AUX_DIR( build )
 AC_CANONICAL_SYSTEM
 
 AM_INIT_AUTOMAKE($PACKAGE_NAME,$PACKAGE_VERSION)
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER( build/config.h )
 
 
 
@@ -58,6 +58,7 @@ dnl ############## Header Checks
 AC_HEADER_STDC
 AC_CHECK_HEADERS(assert.h unistd.h)
 AC_CHECK_HEADERS(inttypes.h)
+AC_CHECK_HEADERS(getopt.h)
 
 
 
@@ -92,8 +93,7 @@ AC_OUTPUT(
 	twolame.pc \
 	debian/Makefile \
 	doc/Makefile \
-	src/Makefile \
-	src/libtwolame/Makefile \
-	src/frontend/Makefile \
-	src/simplefrontend/Makefile \
+	libtwolame/Makefile \
+	frontend/Makefile \
+	simplefrontend/Makefile \
 )

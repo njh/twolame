@@ -1,7 +1,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-SUBDIRS = debian doc src
+SUBDIRS = libtwolame frontend simplefrontend debian doc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = twolame.pc

@@ -63,6 +63,7 @@ run_cmd() {
 
 run_cmd aclocal
 run_cmd autoheader
+run_cmd libtoolize --force --copy
 run_cmd automake --add-missing --copy
 run_cmd autoconf
 
