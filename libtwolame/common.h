@@ -299,10 +299,10 @@ struct twolame_options_struct
 	int error_protection;    // [FALSE] 
 	
 	// Digital Audio Broadcasting Extensions
-	int do_dab;              // Allocate space for the DigitalAudioBroadcasting info [FALSE] 
-	int dab_crc_len;         // Number of CRC bytes for DAB [2], 4 
-	int dab_crc[4];          // DAB CRC bytes are inserted here. User must insert them in frame
-	int dab_xpad_len;        // Number of bytes in the XPAD
+	unsigned int do_dab;              // Allocate space for the DigitalAudioBroadcasting info [FALSE] 
+	unsigned int dab_crc_len;         // Number of CRC bytes for DAB [2], 4 
+	unsigned int dab_crc[4];          // DAB CRC bytes are inserted here. User must insert them in frame
+	unsigned int dab_xpad_len;        // Number of bytes in the XPAD
 	
 	// Processing Options
 	int verbosity;           // Verbosity of output 0(never output a thing) [2] 100(output everything)
@@ -325,9 +325,9 @@ struct twolame_options_struct
 	// Used by twolame_encode_frame
 	int twolame_init;
 	short int buffer[2][1152];	// Sample buffer
-	int samples_in_buffer;		// Number of samples currently in buffer
-	int psycount;
-	int crc;
+	unsigned int samples_in_buffer;		// Number of samples currently in buffer
+	unsigned int psycount;
+	unsigned int crc;
 	
 	unsigned int bit_alloc[2][SBLIMIT];
 	unsigned int scfsi[2][SBLIMIT];
