@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <twolame.h>
+
 #include "audio_wave.h"
 
 
@@ -33,8 +34,8 @@
 
 
 void usage (void) {			       
-  fprintf(stdout,"stwolame <input wavefile> <output mp2 file>\n");
-  exit (1);
+	fprintf(stdout,"stwolame <input wavefile> <output mp2 file>\n");
+	exit (1);
 }
 
 
@@ -44,23 +45,23 @@ int main (int argc, char **argv) {
 	char *outputfilename = argv[2];
 	FILE *outfile;
 	short int *pcmaudio;
-	int num_samples=0;
-	int frames=0;
 	unsigned char *mp2buffer;
-	int mp2fill_size;
+	int num_samples=0;
+	int mp2fill_size=0;
+	int frames=0;
 	wave_info_t *wave_info = NULL;
 	
 	if (argc != 3) usage();
 	
 
 	/* Allocate some space for the PCM audio data */
-	if ( (pcmaudio=(short int *)calloc(AUDIOBUFSIZE, sizeof(short int)))==NULL) {
+	if ( (pcmaudio=(short *)calloc(AUDIOBUFSIZE, sizeof(short)))==NULL) {
 		fprintf(stdout,"pcmaudio alloc failed\n");
 		exit(99);
 	}
 
 	/* Allocate some space for the encoded MP2 audio data */
-	if ( (mp2buffer=(char *)calloc(MP2BUFSIZE, sizeof(char)))==NULL) {
+	if ( (mp2buffer=(unsigned char *)calloc(MP2BUFSIZE, sizeof(unsigned char)))==NULL) {
 		fprintf(stdout,"mp2buffer alloc failed\n");
 		exit(99);
 	}
@@ -135,6 +136,8 @@ int main (int argc, char **argv) {
 	free(pcmaudio);
 	
 	fprintf(stdout,"\nFinished nicely.\n");
+	
+	
 	return(0);
 }
 
