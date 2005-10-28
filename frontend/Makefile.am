@@ -7,4 +7,4 @@ bin_PROGRAMS = @TWOLAME_BIN@
 EXTRA_PROGRAMS = twolame
 
 twolame_SOURCES = frontend.c
-twolame_LDADD = $(top_srcdir)/src/libtwolame/libtwolame.la
+twolame_LDADD = $(top_srcdir)/libtwolame/libtwolame.la
