@@ -93,7 +93,7 @@ const char* get_twolame_version( void );
 
 
 /** Get the URL of the TwoLAME homepage. 
- *  eg "http://twolame.sourceforge.net/".
+ *  eg "http://www.twolame.org/".
  *
  *  \return The url as a C string
  */
