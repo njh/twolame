@@ -68,6 +68,7 @@ dnl ############## Compiler and Linker Flags
 CFLAGS="$CFLAGS -O3 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
+# If debugging is enabled then make warnings errors
 if test x$Debugging = xEnabled; then
 	CFLAGS="$CFLAGS -g -Werror"
 fi
