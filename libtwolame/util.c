@@ -46,7 +46,7 @@ const char* get_twolame_version( void )
 // of this library
 const char* get_twolame_url( void )
 {
-	const char* str = "http://twolame.sourceforge.net";
+	const char* str = "http://www.twolame.org";
 	
 	return str;
 }
