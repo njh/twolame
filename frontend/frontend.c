@@ -41,15 +41,14 @@
 /* 
   Global Variables
 */
-int single_frame_mode = FALSE;
-int downmix = FALSE;
-int byteswap = FALSE;
-int channelswap = FALSE;
-int samplerate = 44100;
-int channels = 2;
+int single_frame_mode = FALSE;		// only encode a single frame of MPEG audio ?
+int downmix = FALSE;				// downmix from stereo to mono ?
+int byteswap = FALSE;				// swap endian on input audio ?
+int channelswap = FALSE;			// swap left and right channels ?
+SF_INFO	sfinfo = {0,0,0,0,0,0};		// contains information about input file format
 
-char inputfilename[MAX_NAME_SIZE] = "";
-char outputfilename[MAX_NAME_SIZE] = "";
+char inputfilename[MAX_NAME_SIZE] = "go_away.aif";
+char outputfilename[MAX_NAME_SIZE] = "go_away.mp2";
 
 
 
@@ -101,10 +100,18 @@ new_extension(char *filename, char *extname, char *newname)
   Display information about input and output files
 */
 static void
-print_file_config()
+print_file_config( SNDFILE *inputfile )
 {
+	SF_FORMAT_INFO format_info;
 
+	format_info.format = sfinfo.format;
+	sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof (format_info)) ;
 
+	fprintf(stderr, ">>> Input File Name: %s\n", inputfilename );
+	fprintf(stderr, ">>> Output File Name: %s\n", outputfilename );
+	fprintf(stderr, ">>> Input File Format: %s\n", format_info.name );
+	fprintf(stderr, ">>> Sample Rate: %d Hz\n", sfinfo.samplerate );
+	fprintf(stderr, ">>> Channels: %d\n", sfinfo.channels );
 
 }
 
@@ -214,11 +221,62 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 }
 
 
+SNDFILE*
+open_input_file( char* filename )
+{
+	SNDFILE* file = NULL;
+
+
+	// Do they want STDIN ?
+	if (strncmp( filename, "-", 1 )==0) {
+		/// *** do stuff here ***
+		// sf_open_fd()
+		fprintf(stderr, "reading from stdin does not work yet.\n");
+		exit(99);
+	}
+
+	
+	// Open the input file
+	file = sf_open(filename, SFM_READ, &sfinfo);
+	
+	// Check for errors
+	if (file == NULL) {
+		fprintf(stderr,"failed to open input file\n");
+		exit(2);
+	}
+	
+	return file;
+}
+
+
+FILE*
+open_output_file( char* filename )
+{
+	FILE* file;
+
+	
+	// Do they want STDOUT ?
+	if (strncmp( filename, "-", 1 )==0) {
+		file = stdout;
+	} else {
+		file = fopen(filename, "w");
+	}
+	
+	// Check for errors
+	if (file == NULL) {
+		perror("failed to open output file");
+		exit(2);
+	}
+
+	return file;
+}
+
 
 int
 main(int argc, char **argv)
 {
 	twolame_options	*encopts = NULL;
+	SNDFILE			*inputfile = NULL;
 	FILE			*outputfile = NULL;
 	short int		*pcmaudio = NULL;
 	//int				num_samples = 0;
@@ -232,53 +290,37 @@ main(int argc, char **argv)
 
 	// Allocate memory for the PCM audio data
 	if ((pcmaudio = (short int *) calloc(AUDIOBUFSIZE, sizeof(short int))) == NULL) {
-		fprintf(stderr, "pcmaudio alloc failed\n");
+		fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
 		exit(99);
 	}
 	
 	// Allocate memory for the encoded MP2 audio data
 	if ((mp2buffer = (unsigned char *) calloc(MP2BUFSIZE, sizeof(unsigned char))) == NULL) {
-		fprintf(stderr, "Error: mp2buffer alloc failed\n");
+		fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
 		exit(99);
 	}
 	
 	// Initialise Encoder Options Structure 
 	encopts = twolame_init();
+	if (encopts == NULL) {
+		fprintf(stderr, "Error: initializing libtwolame encoder failed.\n");
+		exit(99);
+	}
 
+	
 	// Get options and parameters from the command line
 	parse_args(argc, argv, encopts);
 
 
-
 	// Open the input file
-	
-	
+	inputfile = open_input_file( inputfilename );
+		
 	// Open the output file
-	if ((outputfile = fopen(outputfilename, "w")) == 0) {
-		perror("failed to open output file");
-		exit(2);
-	}
-
-
-
-
-/*	audio_info = audio_open(inputfilename, frontOptions->channels, frontOptions->samplerate);
-	if (audio_info == NULL) {
-		fprintf(stderr, "No input file opened.\n");
-		exit(99);
-	} else {
-		//Use sound file to over - ride preferences for
-			//mono
-			/stereo and sampling - frequency
-				if (audio_info->channels == 1)
-				twolame_set_mode(encodeOptions, TWOLAME_MONO);
-
-		twolame_set_num_channels(encodeOptions, audio_info->channels);
-		twolame_set_in_samplerate(encodeOptions, audio_info->samplerate);
-		twolame_set_out_samplerate(encodeOptions, audio_info->samplerate);
-		audio_info->byteswap = frontOptions->byteswap;
-	}*/
+	outputfile = open_output_file( outputfilename );
 	
+	// display file settings
+	print_file_config( inputfile );
+
 
 	/*
 	 * If energy information is required, see if we're in MONO mode in
@@ -290,13 +332,11 @@ main(int argc, char **argv)
 	// only 2 bytes needed for energy level for mono channel
 
 
-
-
 	// initialise twolame with this set of options
-	twolame_init_params( encopts );
-	
-	// display file settings
-	print_file_config();
+	if (twolame_init_params( encopts ) != 0) {
+		fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
+		exit(99);
+	}
 
 	// display encoder settings
 	twolame_print_config( encopts );
@@ -325,6 +365,11 @@ main(int argc, char **argv)
 	//fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outfile);
 
 	twolame_close(&encopts);
+	
+	
+	// Close input and output files
+	sf_close( inputfile );
+	fclose( outputfile );
 	
 
 	fprintf(stderr, "\nFinished nicely\n");
