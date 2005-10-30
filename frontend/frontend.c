@@ -37,6 +37,19 @@
 #define AUDIOBUFSIZE	(9210)
 #define MAX_NAME_SIZE	(256)
 
+/*
+  Result codes
+*/
+#define ERR_NO_ERROR		(0)		// No Error (encoded ok)
+#define ERR_NO_ENCODE		(1)		// No Error (no encoding performed)
+#define ERR_OPENING_INPUT	(2)		// Error opening input file
+#define ERR_OPENING_OUTPUT	(4)		// Error opening output file
+#define ERR_MEM_ALLOC		(6)		// Error allocating memory
+#define ERR_INVALID_PARAM	(8)		// Error in chosen parameters
+#define ERR_READING_INPUT	(10)	// Error reading input
+#define ERR_ENCODING		(12)	// Error occured during encoding
+#define ERR_WRITING_OUTPUT	(14)	// Error occured writing to output file
+
 
 /* 
   Global Variables
@@ -49,6 +62,8 @@ SF_INFO	sfinfo = {0,0,0,0,0,0};		// contains information about input file format
 
 char inputfilename[MAX_NAME_SIZE] = "go_away.aif";
 char outputfilename[MAX_NAME_SIZE] = "go_away.mp2";
+
+
 
 
 
@@ -107,11 +122,11 @@ print_file_config( SNDFILE *inputfile )
 	format_info.format = sfinfo.format;
 	sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof (format_info)) ;
 
-	fprintf(stderr, ">>> Input File Name: %s\n", inputfilename );
-	fprintf(stderr, ">>> Output File Name: %s\n", outputfilename );
-	fprintf(stderr, ">>> Input File Format: %s\n", format_info.name );
-	fprintf(stderr, ">>> Sample Rate: %d Hz\n", sfinfo.samplerate );
-	fprintf(stderr, ">>> Channels: %d\n", sfinfo.channels );
+	fprintf(stderr, "---------------------------------------------------------\n");
+	fprintf(stderr, "Input File Name: %s\n", inputfilename );
+	fprintf(stderr, "Input File Format: %s\n", format_info.name );
+	fprintf(stderr, "Output File Name: %s\n", outputfilename );
+	fprintf(stderr, "---------------------------------------------------------\n");
 
 }
 
@@ -175,7 +190,7 @@ usage()
 	fprintf(stdout, "brate indx 1    2    3    4    5    6    7    8    9   10   11   12   13   14\n");
 
 	fprintf(stdout, "\n");
-	exit(1);
+	exit(ERR_NO_ENCODE);
 }
 
 
@@ -192,7 +207,7 @@ short_usage(void)
 	fprintf(stderr, "MPEG Audio Layer II encoder\n\n");
 	fprintf(stderr, "USAGE: twolame [options] <infile> [outfile]\n\n");
 	fprintf(stderr, "Try \"twolame -h\" for more information.\n");
-	exit(0);
+	exit(ERR_NO_ENCODE);
 }
 
 
@@ -232,7 +247,7 @@ open_input_file( char* filename )
 		/// *** do stuff here ***
 		// sf_open_fd()
 		fprintf(stderr, "reading from stdin does not work yet.\n");
-		exit(99);
+		exit(ERR_OPENING_INPUT);
 	}
 
 	
@@ -242,7 +257,7 @@ open_input_file( char* filename )
 	// Check for errors
 	if (file == NULL) {
 		fprintf(stderr,"failed to open input file\n");
-		exit(2);
+		exit(ERR_OPENING_INPUT);
 	}
 	
 	return file;
@@ -265,7 +280,7 @@ open_output_file( char* filename )
 	// Check for errors
 	if (file == NULL) {
 		perror("failed to open output file");
-		exit(2);
+		exit(ERR_OPENING_OUTPUT);
 	}
 
 	return file;
@@ -279,11 +294,11 @@ main(int argc, char **argv)
 	SNDFILE			*inputfile = NULL;
 	FILE			*outputfile = NULL;
 	short int		*pcmaudio = NULL;
-	//int				num_samples = 0;
-	//int				frames = 0;
-	unsigned char	*mp2buffer;
-	int				audioReadSize = AUDIOBUFSIZE;
-	//int				mp2fill_size=0;
+	int				samples_read = 0;
+	unsigned int	frame_count = 0;
+	unsigned char	*mp2buffer = NULL;
+	int    			mp2fill_size = 0;
+	int				audioReadSize = 0;
 
 	if (argc == 1)
 		short_usage();
@@ -291,20 +306,20 @@ main(int argc, char **argv)
 	// Allocate memory for the PCM audio data
 	if ((pcmaudio = (short int *) calloc(AUDIOBUFSIZE, sizeof(short int))) == NULL) {
 		fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
-		exit(99);
+		exit(ERR_MEM_ALLOC);
 	}
 	
 	// Allocate memory for the encoded MP2 audio data
 	if ((mp2buffer = (unsigned char *) calloc(MP2BUFSIZE, sizeof(unsigned char))) == NULL) {
 		fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
-		exit(99);
+		exit(ERR_MEM_ALLOC);
 	}
 	
 	// Initialise Encoder Options Structure 
 	encopts = twolame_init();
 	if (encopts == NULL) {
 		fprintf(stderr, "Error: initializing libtwolame encoder failed.\n");
-		exit(99);
+		exit(ERR_MEM_ALLOC);
 	}
 
 	
@@ -314,6 +329,8 @@ main(int argc, char **argv)
 
 	// Open the input file
 	inputfile = open_input_file( inputfilename );
+	twolame_set_num_channels( encopts, sfinfo.channels );
+	twolame_set_in_samplerate( encopts, sfinfo.samplerate );
 		
 	// Open the output file
 	outputfile = open_output_file( outputfilename );
@@ -322,10 +339,10 @@ main(int argc, char **argv)
 	print_file_config( inputfile );
 
 
-	/*
-	 * If energy information is required, see if we're in MONO mode in
-	 * which case, we only need 16 bits of ancillary data
-	 */
+	//
+	// If energy information is required, see if we're in MONO mode in
+	// which case, we only need 16 bits of ancillary data
+	//
 	//if (twolame_get_energy_levels(encodeOptions))
 	//	if (twolame_get_mode(encodeOptions) == TWOLAME_MONO)
 	//		twolame_set_num_ancillary_bits(encodeOptions, 16);
@@ -335,44 +352,66 @@ main(int argc, char **argv)
 	// initialise twolame with this set of options
 	if (twolame_init_params( encopts ) != 0) {
 		fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
-		exit(99);
+		exit(ERR_INVALID_PARAM);
 	}
 
 	// display encoder settings
 	twolame_print_config( encopts );
 
 
-
-	if (single_frame_mode)
+	if (single_frame_mode) {
 		audioReadSize = 1152;
+	} else {
+		audioReadSize = AUDIOBUFSIZE;
+	}
 
-	/* Now do the buffering/encoding/writing */
-	//while ((num_samples = audio_info->get_samples(audio_info, pcmaudio, audioReadSize)) != 0) {
-		//Read num_samples of audio data * per channel * from the input file
-	//		mp2fill_size = twolame_encode_buffer_interleaved(encodeOptions, pcmaudio, num_samples, mp2buffer, MP2BUFSIZE);
-	//	fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outfile);
-	//	frames += (num_samples / 1152);
-	//	fprintf(stderr, "[%04i]\r", frames);
-	//	fflush(stderr);
-	//}
 
-	/*
-	 * flush any remaining audio. (don't send any new audio data) There
-	 * should only ever be a max of 1 frame on a flush. There may be zero
-	 * frames if the audio data was an exact multiple of 1152
-	 */
-	//mp2fill_size = twolame_encode_flush(encodeOptions, mp2buffer, MP2BUFSIZE);
-	//fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outfile);
+	// Now do the reading/encoding/writing
+	while ((samples_read = sf_read_short( inputfile, pcmaudio, audioReadSize )) > 0) {
+		int bytes_out = 0;
+		
+		// Calculate the number of samples we have (per channel)
+		samples_read /= sfinfo.channels;
 
-	twolame_close(&encopts);
+		// Encode the audio to MP2
+		mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2BUFSIZE);
+		if (mp2fill_size<=0) {
+			fprintf(stderr,"error while encoding audio\n");
+			exit(ERR_ENCODING);
+		}
+	
+		// Write the encoded audio out
+		bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
+		if (bytes_out<=0) {
+			perror("error while writing to output file");
+			exit(ERR_WRITING_OUTPUT);
+		}
+		
+		
+		// Display Progress
+		frame_count += (samples_read / 1152);
+		fprintf(stderr, "[%04i/%04i]\r", frame_count, (int)(sfinfo.frames / sfinfo.channels  / 1152));
+		fflush(stderr);
+	}
+
+	//
+	// flush any remaining audio. (don't send any new audio data) There
+	// should only ever be a max of 1 frame on a flush. There may be zero
+	// frames if the audio data was an exact multiple of 1152
+	//
+	mp2fill_size = twolame_encode_flush( encopts, mp2buffer, MP2BUFSIZE);
+	fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
 	
 	
 	// Close input and output files
 	sf_close( inputfile );
 	fclose( outputfile );
+
+	// Close the libtwolame encoder
+	twolame_close(&encopts);
 	
 
-	fprintf(stderr, "\nFinished nicely\n");
-	return (0);
+	fprintf(stderr, "\nEncoding Finished.\n");
+	return (ERR_NO_ERROR);
 }
 
