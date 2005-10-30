@@ -44,7 +44,7 @@ void *twolame_malloc (unsigned long block, char *item)
 		memset (ptr, 0, block);
 	} else {
 		fprintf (stderr, "Unable to allocate %ld bytes for %s\n", block, item);
-		exit (0);
+		return NULL;
 	}
 	
 	return (ptr);
