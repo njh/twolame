@@ -139,7 +139,7 @@ void twolame_print_config(twolame_options *glopts)
 {
 	FILE* fd = stderr;
 
-    fprintf(fd, "TwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
+    fprintf(fd, "LibTwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
 
 	fprintf (stderr, "---------------------------------------------------------\n");
 	fprintf (stderr, "Input : %d Hz, %d channels\n",
