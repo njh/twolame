@@ -37,6 +37,7 @@
 #define AUDIOBUFSIZE	(9210)
 #define MAX_NAME_SIZE	(256)
 
+
 /*
   Result codes
 */
@@ -60,7 +61,7 @@ int byteswap = FALSE;				// swap endian on input audio ?
 int channelswap = FALSE;			// swap left and right channels ?
 SF_INFO	sfinfo = {0,0,0,0,0,0};		// contains information about input file format
 
-char inputfilename[MAX_NAME_SIZE] = "go_away.aif";
+char inputfilename[MAX_NAME_SIZE] = "go_away.aiff";
 char outputfilename[MAX_NAME_SIZE] = "go_away.mp2";
 
 
@@ -222,12 +223,26 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 {
 
 	// process args
-	//static struct option longopts[] = {
-	//	{ "scale",		required_argument,		NULL,			'b' },
-	//	{ "scale-l",	required_argument,		NULL,			'f' },
-	//	{ "scale-r",	required_argument,		NULL,		1 },
-	//	{ NULL,         0,                      NULL,			0 }
-	//};
+	static struct option longopts[] = {
+		{ "raw-input",		no_argument,			NULL,		'r' },
+		{ "byte-swap",		no_argument,			NULL,		'x' },
+		{ "samplerate",		required_argument,		NULL,		's' },
+		{ "channels",		required_argument,		NULL,		'N' },
+		{ "swap-channels",	no_argument,			NULL,		'g' },
+		{ "downmix",		no_argument,			NULL,		'a' },
+		
+		//{ "scale",		required_argument,		NULL,			'' },
+		//{ "scale-l",	required_argument,		NULL,			'' },
+		//{ "scale-r",	required_argument,		NULL,			'' },
+		
+		
+		
+		{ NULL,         0,                      NULL,			0 }
+	};
+	
+	
+	//http://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Options.html
+	//http://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
 	
 	if (0) {
 	usage();
@@ -375,11 +390,14 @@ main(int argc, char **argv)
 
 		// Encode the audio to MP2
 		mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2BUFSIZE);
-		if (mp2fill_size<=0) {
-			fprintf(stderr,"error while encoding audio\n");
-			exit(ERR_ENCODING);
+		
+		// Stop if we don't have any bytes (probably don't have enough audio for a full frame of mpeg audio)
+		if (mp2fill_size==0) break;
+		if (mp2fill_size<0) {
+			fprintf(stderr,"error while encoding audio: %d\n", mp2fill_size);
+			exit(ERR_WRITING_OUTPUT);
 		}
-	
+
 		// Write the encoded audio out
 		bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
 		if (bytes_out<=0) {
@@ -400,8 +418,13 @@ main(int argc, char **argv)
 	// frames if the audio data was an exact multiple of 1152
 	//
 	mp2fill_size = twolame_encode_flush( encopts, mp2buffer, MP2BUFSIZE);
-	fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
-	
+	if (mp2fill_size>0) {
+		int bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
+		if (bytes_out<=0) {
+			perror("error while writing to output file");
+			exit(ERR_WRITING_OUTPUT);
+		}
+	}
 	
 	// Close input and output files
 	sf_close( inputfile );
