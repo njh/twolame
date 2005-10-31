@@ -45,10 +45,10 @@ AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([mx], [powf])
 
 PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
-	[ HAVE_SNDFILE=yes
+	[ HAVE_SNDFILE="yes"
 	  AC_DEFINE_UNQUOTED([HAVE_SNDFILE],1,[Set to 1 if you have libsndfile.]) ],
-	[ HAVE_SNDFILE=no
-	  AC_MSG_WARN(library libsndfile is unavailable) ]
+	[ HAVE_SNDFILE="no"
+	  AC_MSG_WARN([library libsndfile is unavailable on your system]) ]
 )
 
 
@@ -56,9 +56,12 @@ PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
 dnl ############## Header Checks
 
 AC_HEADER_STDC
-AC_CHECK_HEADERS(assert.h unistd.h)
-AC_CHECK_HEADERS(inttypes.h)
-AC_CHECK_HEADERS(getopt.h)
+AC_CHECK_HEADERS(assert.h unistd.h inttypes.h)
+AC_CHECK_HEADER(getopt.h, 
+	[ HAVE_GETOPT_H="yes" ],
+	[ HAVE_GETOPT_H="no"
+	  AC_MSG_WARN([getopt.h is unavailable on your system]) ]
+)
 
 
 
@@ -69,7 +72,7 @@ CFLAGS="$CFLAGS -O3 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
 # If debugging is enabled then make warnings errors
-if test x$Debugging = xEnabled; then
+if test "$Debugging" = "Enabled"; then
 	CFLAGS="$CFLAGS -g -Werror"
 fi
 
@@ -78,10 +81,14 @@ fi
 dnl ############## Only compile frontend if sndfile is available
 
 TWOLAME_BIN=""
-if test x$HAVE_SNDFILE = xyes; then
-	TWOLAME_BIN="$TWOLAME_BIN twolame"
+if test "$HAVE_SNDFILE" = "yes"; then
+	if test "$HAVE_GETOPT_H" = "yes"; then
+		TWOLAME_BIN="$TWOLAME_BIN twolame"
+	else
+		AC_MSG_WARN([Not building twolame frontend because getopt.h is missing.])
+	fi
 else 
-	AC_MSG_WARN(Not building twolame frontend because libsndfile isn't available.)
+	AC_MSG_WARN([Not building twolame frontend because libsndfile is missing.])
 fi
 AC_SUBST( TWOLAME_BIN )
 
