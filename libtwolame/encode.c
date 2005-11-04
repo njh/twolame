@@ -849,7 +849,7 @@ int init_bit_allocation( twolame_options * glopts )
 	}
     
     
-	if (glopts->verbosity > 2) {
+	if (glopts->verbosity > 1) {
 		fprintf (stdout, "VBR bitrate index limits [%i -> %i]\n", glopts->lower_index, glopts->upper_index);
 	}
 
@@ -963,7 +963,7 @@ void main_bit_allocation (twolame_options * glopts,
     /* update the statistics */
     glopts->vbrstats[header->bitrate_index]++;
 
-    if (glopts->verbosity > 2) {
+    if (glopts->verbosity > 1) {
       /* print out the VBR stats every 1000th frame */
       int i;
       if ((glopts->vbr_frame_count++ % 1000) == 0) {
@@ -973,7 +973,7 @@ void main_bit_allocation (twolame_options * glopts,
       }
 
       /* Print out *every* frames bitrateindex, bits required, and bits available at this bitrate */
-      if (glopts->verbosity > 5)
+      if (glopts->verbosity > 2)
 	fprintf (stdout,
 		 "> bitrate index %2i has %i bits available to encode the %i bits\n",
 		 header->bitrate_index, *adb,

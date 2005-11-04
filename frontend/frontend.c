@@ -137,7 +137,7 @@ print_file_config( SNDFILE *inputfile )
   Display the extended usage information
 */
 static void
-usage()
+usage_long()
 {
 	fprintf(stdout, "\nTwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
 	fprintf(stdout, "MPEG Audio Layer II encoder\n\n");
@@ -146,42 +146,47 @@ usage()
 
 	fprintf(stdout, "Options:\n");
 	fprintf(stdout, "Input\n");
-	fprintf(stdout, "\t-r          input is raw pcm\n");
-	fprintf(stdout, "\t-x          force byte-swapping of input\n");
-	fprintf(stdout, "\t-s sfreq    sampling frequency of raw input (kHz) (default 44.1)\n");
-	fprintf(stdout, "\t-N nch      number of channels for raw input (default 2)\n");
-	fprintf(stdout, "\t-g          swap channels of input file\n");
-	fprintf(stdout, "\t-a          downmix from stereo to mono\n");
+	fprintf(stdout, "\t-r, --raw-input          input is raw pcm\n");
+	fprintf(stdout, "\t-x, --byte-swap          force byte-swapping of input\n");
+	fprintf(stdout, "\t-s, --samplerate sfreq   sampling frequency of raw input (kHz)\n");
+	fprintf(stdout, "\t-N, --channels nch       number of channels in raw input\n");
+	fprintf(stdout, "\t-a, --downmix            downmix input from stereo to mono\n");
+	fprintf(stdout, "\t-g, --swap-channels      swap channels of input file\n");
 
-    //--scale <arg>   scale input (multiply PCM data) by <arg>
-    //--scale-l <arg> scale channel 0 (left) input (multiply PCM data) by <arg>
-    //--scale-r <arg> scale channel 1 (right) input (multiply PCM data) by <arg>
+    fprintf(stdout, "\t    --scale value        scale input (multiply PCM data)\n");
+    fprintf(stdout, "\t    --scale-l value      scale channel 0 (left) input (multiply PCM data)\n");
+    fprintf(stdout, "\t    --scale-r value      scale channel 1 (right) input (multiply PCM data)\n");
 
 	
 	fprintf(stdout, "Output\n");
-	fprintf(stdout, "\t-m mode     (s)tereo, (j)oint, (m)ono or (a)uto\n");
-	fprintf(stdout, "\t-p psy      psychoacoustic model 0/1/2/3 (dflt 3)\n");
-	fprintf(stdout, "\t-b br       total bitrate in kbps    (dflt 192)\n");
-	fprintf(stdout, "\t-v lev      vbr mode\n");
-	fprintf(stdout, "\t-l lev      ATH level (dflt 0)\n");
-	
-	fprintf(stdout, "Operation\n");
-	fprintf(stdout, "\t-q num      quick mode. only calculate psy model every num frames\n");
+	fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (m)ono or (a)uto\n");
+	fprintf(stdout, "\t-p, --psy-mode psy       psychoacoustic model 0/1/2/3 (default 3)\n");
+	fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (dflt 192)\n");
+	fprintf(stdout, "\t-v, --vbr lev            vbr mode\n");
+	fprintf(stdout, "\t-l, --eth lev            ATH level (dflt 0)\n");
+	fprintf(stdout, "\t-q, --quick num          quick mode. only calculate psy model every num frames\n");
 		
 	fprintf(stdout, "Misc\n");
-	fprintf(stdout, "\t-d emp      de-emphasis n/5/c        (dflt: (n)one)\n");
-	fprintf(stdout, "\t-c          mark as copyright\n");
-	fprintf(stdout, "\t-o          mark as original\n");
-	fprintf(stdout, "\t-e          add error protection\n");
-	fprintf(stdout, "\t-r          force padding bit/frame on\n");
-	fprintf(stdout, "\t-D len      add DAB extensions of length [len]\n");
-	fprintf(stdout, "\t-t          talkativity 0=no messages (dflt 2)\n");
-	fprintf(stdout, "\t-u ind      Set the upper bitrate when in VBR mode\n");
-	fprintf(stdout, "\t-R num      Set the number of reserved bits at the end of frame\n");
-	fprintf(stdout, "\t-E          turn on energy level extensions\n");
+	fprintf(stdout, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
+	fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
+	fprintf(stdout, "\t-o, --original           mark as original\n");
+	fprintf(stdout, "\t-p, --error-protect      enable error protection\n");
+	fprintf(stdout, "\t-r, --padding            force padding bit/frame on\n");
+	fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
+	fprintf(stdout, "\t-R, --reserve-bits num   set the number of reserved bits at the end of frame\n");
+	fprintf(stdout, "\t-E, --energy             turn on energy level extensions\n");
+	
+	
+	fprintf(stdout, "Verbosity\n");
+	fprintf(stdout, "\t-t, --talkativity num    talkativity 0-10 (default is 1)\n");
+	fprintf(stdout, "\t    --quiet    			same as --talkativity=0\n");
+	fprintf(stdout, "\t    --brief       		same as --talkativity=2\n");
+	fprintf(stdout, "\t    --verbose    		same as --talkativity=4\n");
+	
+
 
 	fprintf(stdout, "Files\n");
-	fprintf(stdout, "\tinput       input sound file. (WAV,AIFF,PCM or use '/dev/stdin')\n");
+	fprintf(stdout, "\tinput       input sound file (any format supported by libsndfile)\n");
 	fprintf(stdout, "\toutput      output bit stream of encoded audio\n");
 	
 	fprintf(stdout, "\n\tAllowable bitrates for 16, 22.05 and 24kHz sample input\n");
@@ -197,17 +202,17 @@ usage()
 
 
 /* 
-  short_usage() 
+  usage_short() 
   Display the short usage information
 */
 void
-short_usage(void)
+usage_short()
 {
 	/* print a bit of info about the program */
 	fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
 	fprintf(stderr, "MPEG Audio Layer II encoder\n\n");
 	fprintf(stderr, "USAGE: twolame [options] <infile> [outfile]\n\n");
-	fprintf(stderr, "Try \"twolame -h\" for more information.\n");
+	fprintf(stderr, "Try \"twolame --help\" for more information.\n");
 	exit(ERR_NO_ENCODE);
 }
 
@@ -314,6 +319,8 @@ main(int argc, char **argv)
 	unsigned char	*mp2buffer = NULL;
 	int    			mp2fill_size = 0;
 	int				audioReadSize = 0;
+
+	usage_long();
 
 	if (argc == 1)
 		short_usage();

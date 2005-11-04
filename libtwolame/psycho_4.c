@@ -276,7 +276,7 @@ static psycho_4_mem *psycho_4_init (twolame_options *glopts, int sfreq)
     tmn[j] = MAX(15.5+cbval[j], 24.5);
 
 
-  if (glopts->verbosity > 10) {
+  if (glopts->verbosity > 6) {
     /* Dump All the Values to STDOUT */
     int wlow, whigh=0;
     int ntot=0;

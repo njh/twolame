@@ -310,6 +310,11 @@ int twolame_get_quick_count (twolame_options *glopts)
 
 int twolame_set_verbosity (twolame_options *glopts, int verbosity)
 {
+	if (verbosity<0 || verbosity>10)
+	{
+		fprintf(stderr,"invalid verbosity level %i\n",mode);
+		return(-1);
+	}
 	glopts->verbosity = verbosity;
 	return(0);
 }

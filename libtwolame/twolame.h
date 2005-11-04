@@ -213,11 +213,13 @@ void twolame_close(twolame_options **glopts);
  *  Sets how verbose the encoder is with the debug and
  *  informational messages it displays. The higher the
  *  number, the more messages it will display.
+ *  Set to 0 for no status messages to STDERR 
+ *  ( error messages will still be displayed ).
  *
- *	Default: 2
+ *	Default: 1
  *
  *  \param glopts 			pointer to twolame options pointer
- *  \param verbosity 		integer between 0 and 100
+ *  \param verbosity 		integer between 0 and 10
  *  \return 				0 if successful, 
  *							non-zero on failure
  */

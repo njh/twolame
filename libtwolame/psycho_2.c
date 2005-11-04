@@ -237,7 +237,7 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
     }
   }
 
-  if (glopts->verbosity > 10){
+  if (glopts->verbosity > 5){
     /* Dump All the Values to STDOUT and exit */
     int wlow, whigh=0;
     fprintf(stdout,"psy model 2 init\n");

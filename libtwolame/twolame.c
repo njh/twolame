@@ -633,7 +633,6 @@ int twolame_encode_buffer_interleaved(
 	// samples/1152 * sizeof(frame) < mp2buffer_size 
 	mybs = buffer_init( mp2buffer, mp2buffer_size );
 
-
 	// Use up all the samples in in_buffer
 	while( num_samples ) {
 	

@@ -542,7 +542,7 @@ void psycho_3 (twolame_options *glopts, short int buffer[2][1152], FLOAT scale[2
     psycho_3_spl(Lsb, power, &scale[k][0]);
     psycho_3_tonal_label (mem, power, tonelabel, Xtm);
     psycho_3_noise_label (mem, power, energy, tonelabel, noiselabel, Xnm);
-    if (glopts->verbosity > 20)
+    if (glopts->verbosity > 8)
       psycho_3_dump(tonelabel, Xtm, noiselabel, Xnm);
     psycho_3_decimation(mem->ath, tonelabel, Xtm, noiselabel, Xnm, mem->bark);
     psycho_3_threshold(mem, LTg, tonelabel, Xtm, noiselabel, Xnm, mem->bark, mem->ath, glopts->bitrate / nch, mem->freq_subset);
