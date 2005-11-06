@@ -85,4 +85,4 @@ run_cmd automake --add-missing --copy
 run_cmd autoconf
 
 
-$srcdir/configure && echo
+$srcdir/configure --enable-debug && echo
