@@ -263,10 +263,48 @@ int twolame_init_params (twolame_options *glopts) {
 	
 	/* initialises bitrate allocation */
 	if (glopts->samplerate_out != glopts->samplerate_in) {
-		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling yet.\n");
+		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling (yet).\n");
 		return -1;
 	}
 
+	/*
+	 * MFC Feb 2003: in VBR mode, joint
+	 * stereo doesn't make any sense at
+	 * the moment, as there are no noisy
+	 * subbands according to
+	 * bits_for_nonoise in vbr mode
+	 */
+	if (glopts->vbr && glopts->mode==TWOLAME_JOINT_STEREO) {
+		// force stereo mode
+		twolame_set_mode(glopts, TWOLAME_STEREO);
+	}
+
+	/* don't use padding for VBR */
+	if (glopts->vbr) {
+		twolame_set_padding(glopts, FALSE);
+	}
+	
+	//MFC FIX:	Need to cross validate the number of ancillary_bits
+	// with the energylevel setting.
+	//
+	// energylevel:
+	// MFC FIX:		This option must be mutually exclusive with the
+	// reservebits(-R) option *UNLESS * the number
+	// of explicitly reserved bits > 5 bytes.
+
+
+	// If energy information is required, see if we're in MONO mode in
+	// which case, we only need 16 bits of ancillary data
+	if (glopts->do_energy_levels) {
+		if (glopts->mode==TWOLAME_MONO) {
+			// only 2 bytes needed for energy level for mono channel
+			twolame_set_num_ancillary_bits(glopts, 16);
+		} else {
+			// 5 bytes for the stereo energy info
+			twolame_set_num_ancillary_bits(glopts, 40);
+		}
+	
+	}
 
 
 	/* Initialise */
