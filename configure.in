@@ -1,7 +1,6 @@
 
-dnl Require autoconf version >= 2.57)
+dnl Require autoconf version >= 2.57
 AC_PREREQ(2.57)
-
 
 
 dnl ############# Initialization
@@ -12,7 +11,8 @@ AC_CONFIG_SRCDIR( libtwolame/twolame.h )
 AC_CONFIG_AUX_DIR( build )
 AC_CANONICAL_SYSTEM
 
-AM_INIT_AUTOMAKE($PACKAGE_NAME,$PACKAGE_VERSION)
+dnl Require automake version >= 1.7
+AM_INIT_AUTOMAKE( 1.7 )
 AM_CONFIG_HEADER( build/config.h )
 
 
@@ -45,9 +45,9 @@ AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([mx], [powf])
 
 PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
-	[ HAVE_SNDFILE="yes"
+	[ HAVE_SNDFILE="yes" 
 	  AC_DEFINE_UNQUOTED([HAVE_SNDFILE],1,[Set to 1 if you have libsndfile.]) ],
-	[ HAVE_SNDFILE="no"
+	[ HAVE_SNDFILE="no" 
 	  AC_MSG_WARN([library libsndfile is unavailable on your system]) ]
 )
 
