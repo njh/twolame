@@ -160,7 +160,7 @@ usage_long()
     fprintf(stdout, "\nInput Options\n");
     fprintf(stdout, "\t-r, --raw-input          input is raw pcm\n");
     fprintf(stdout, "\t-x, --byte-swap          force byte-swapping of input\n");
-    fprintf(stdout, "\t-s, --samplerate sfreq   sampling frequency of raw input (kHz)\n");
+    fprintf(stdout, "\t-s, --samplerate srate   sampling frequency of raw input (kHz)\n");
     fprintf(stdout, "\t-N, --channels nch       number of channels in raw input\n");
     fprintf(stdout, "\t-g, --swap-channels      swap channels of input file\n");
     fprintf(stdout, "\t    --scale value        scale input (multiply PCM data)\n");
@@ -170,6 +170,7 @@ usage_long()
     
     fprintf(stdout, "\nOutput Options\n");
     fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (m)ono or (a)uto\n");
+    fprintf(stdout, "\t-a, --downmix            downmix from stereo to mono file for mono encoding\n");
     fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (default 192)\n");
     fprintf(stdout, "\t-p, --psyc-mode psyc     psychoacoustic model 0/1/2/3 (default 3)\n");
     fprintf(stdout, "\t-v, --vbr lev            vbr mode\n");
@@ -180,8 +181,9 @@ usage_long()
         
     fprintf(stdout, "\nMisc Options\n");
     fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
-    fprintf(stdout, "\t-o, --original           mark as original\n");
-    fprintf(stdout, "\t-p, --error-protect      enable error protection\n");
+    fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
+    fprintf(stdout, "\t    --original           mark as original\n");
+    fprintf(stdout, "\t-C, --crc				enable CRC error protection\n");
     fprintf(stdout, "\t-r, --padding            force padding bit/frame on\n");
     fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
     fprintf(stdout, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
@@ -279,7 +281,6 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         { "byte-swap",      no_argument,            NULL,       'x' },
         { "samplerate",     required_argument,      NULL,       's' },
         { "channels",       required_argument,      NULL,       'N' },
-        { "downmix",        no_argument,            NULL,       'a' },
         { "swap-channels",  no_argument,            NULL,       'g' },
         { "scale",          required_argument,      NULL,       1000 },
         { "scale-l",        required_argument,      NULL,       1001 },
@@ -287,6 +288,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         
         // Output
         { "mode",           required_argument,      NULL,       'm' },
+        { "downmix",        no_argument,            NULL,       'a' },
         { "bitrate",        required_argument,      NULL,       'b' },
         { "psyc-mode",      required_argument,      NULL,       'P' },
         { "vbr",            required_argument,      NULL,       'v' },
@@ -296,9 +298,10 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         
         // Misc
         { "copyright",      no_argument,            NULL,       'c' },
-        { "original",       no_argument,            NULL,       'o' },
-        { "error-protect",  no_argument,            NULL,       'p' },
-        { "padding",        no_argument,            NULL,       'R' },
+        { "original",   	no_argument,            NULL,       1003 },
+        { "non-original",   no_argument,            NULL,       'o' },
+        { "crc", 			no_argument,            NULL,       'C' },
+        { "padding",        no_argument,            NULL,       'd' },
         { "max-bitrate",    required_argument,      NULL,       'B' },
         { "reserve-bits",   required_argument,      NULL,       'T' },
         { "deemphasis",     required_argument,      NULL,       'e' },
@@ -306,9 +309,9 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         
         // Verbosity
         { "talkativity",    required_argument,      NULL,       't' },
-        { "quiet",          no_argument,            NULL,       1003 },
-        { "brief",          no_argument,            NULL,       1004 },
-        { "verbose",        no_argument,            NULL,       1005 },
+        { "quiet",          no_argument,            NULL,       1004 },
+        { "brief",          no_argument,            NULL,       1005 },
+        { "verbose",        no_argument,            NULL,       1006 },
         { "help",           no_argument,            NULL,       'h' },
         
         { NULL,             0,                      NULL,       0 }
@@ -378,6 +381,10 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                     usage_long();
                 }
                 break;
+
+            case 'a':
+                twolame_set_mode(encopts, TWOLAME_MONO);
+                break;
                 
             case 'b':
                 twolame_set_bitrate(encopts, atoi(optarg));
@@ -396,13 +403,16 @@ parse_args(int argc, char **argv, twolame_options * encopts )
             case 'c':
                 twolame_set_copyright(encopts, TRUE);
                 break;
-            case 'o':
+            case 'o':	// --non-original
+                twolame_set_original(encopts, FALSE);
+                break;
+            case 1003:  // --original
                 twolame_set_original(encopts, TRUE);
                 break;
-            case 'e':
+            case 'C':
                 twolame_set_error_protection(encopts, TRUE);
                 break;
-            case 'P':
+            case 'd':
                 twolame_set_padding(encopts, TWOLAME_PAD_ALL);
                 break;
             case 'q':
@@ -446,15 +456,15 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 twolame_set_verbosity(encopts, atoi(optarg));
                 break;
 
-            case 1003:  // --quiet
+            case 1004:  // --quiet
                 twolame_set_verbosity(encopts, 0);
                 break;
                 
-            case 1004: // --brief
+            case 1005: // --brief
                 twolame_set_verbosity(encopts, 1);
                 break;
                 
-            case 1005: // --verbose
+            case 1006: // --verbose
                 twolame_set_verbosity(encopts, 4);
                 break;
                 
@@ -636,20 +646,31 @@ main(int argc, char **argv)
     while ((samples_read = sf_read_short( inputfile, pcmaudio, audioReadSize )) > 0) {
         int bytes_out = 0;
         
-        // Calculate the number of samples we have (per channel)
-        samples_read /= sfinfo.channels;
-        
-        // ** FIXME: do byte swapping here **
+        // Force byte swapping if requested
         if (byteswap) {
-        
+			int i;
+			for (i = 0; i<samples_read; i++) {
+				short tmp = pcmaudio[i];
+				char *src = (char*)&tmp;
+				char *dst = (char*)&pcmaudio[i];
+				dst[0] = src[1];
+				dst[1] = src[0];
+			}
         }
 
-        
-        // ** FIXME: do channel swapping here **
-        if (channelswap) {
-        
-        }
+		// Calculate the number of samples we have (per channel)
+        samples_read /= sfinfo.channels;
 
+        // Do swapping of left and right channels if requested
+        if (channelswap && sfinfo.channels == 2) {
+        	int i;
+        	for(i=0; i<samples_read; i++) {
+        		short tmp = pcmaudio[(2*i)];
+        		pcmaudio[(2*i)] = pcmaudio[(2*i)+1];
+        		pcmaudio[(2*i)+1] = tmp;
+        	}
+        }
+        
         // Encode the audio to MP2
         mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2BUFSIZE);
         
