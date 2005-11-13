@@ -158,7 +158,7 @@ twolame_options *twolame_init(void) {
 	newoptions->emphasis = TWOLAME_EMPHASIS_N;
 	newoptions->private_bit = 0;
 	newoptions->copyright = FALSE;
-	newoptions->original = FALSE;
+	newoptions->original = TRUE;
 	newoptions->error_protection = FALSE;
 	newoptions->padding = TWOLAME_PAD_NO;
 	newoptions->do_dab = FALSE;
