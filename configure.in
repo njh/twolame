@@ -11,7 +11,7 @@ AC_CONFIG_SRCDIR( libtwolame/twolame.h )
 AC_CONFIG_AUX_DIR( build )
 AC_CANONICAL_SYSTEM
 
-dnl Require automake version >= 1.7
+dnl Version 1.7 of automake is recommended
 AM_INIT_AUTOMAKE( 1.7 )
 AM_CONFIG_HEADER( build/config.h )
 
