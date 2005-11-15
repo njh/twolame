@@ -229,7 +229,7 @@ int twolame_set_verbosity(twolame_options *glopts, int verbosity);
 /** Get the verbosity of the encoder.
  *
  *  \param glopts 	pointer to twolame options pointer
- *  \return			integer indicating the verbosity of the encoder
+ *  \return			integer indicating the verbosity of the encoder (0-10)
  */
 int twolame_get_verbosity(twolame_options *glopts);
 
