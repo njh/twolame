@@ -25,7 +25,6 @@ asciidoc=asciidoc -b xhtml11 \
 doxygen=doxygen doxygen.conf
 
 build-html:
-	mkdir -p ./html
 	rm -f $(htmldir)/*.html
 	$(doxygen)
 	rm -f $(htmldir)/index.html $(htmldir)/files.html $(htmldir)/globals*.html
