@@ -1,0 +1,20 @@
+
+TWOLAME(1)
+==========
+Nicholas J Humfrey <njh@ecs.soton.ac.uk>
+
+
+NAME
+----
+twolame - an optimized MPEG Audio Layer 2 encoder
+
+
+SYNOPSIS
+--------
+'twolame' [options] <infile> [outfile]
+
+
+DESCRIPTION
+-----------
+BLAH BLAH BLAH
+

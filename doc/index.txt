@@ -4,7 +4,8 @@ TwoLAME Documentation
 TwoLAME - an optimized MPEG Audio Layer 2 encoder
 
 - link:readme.html[Read Me]
-- link:news.html[What is New]
+- link:twolame.1.html[TwoLAME(1) Manpage]
+- link:changelog.html[What is New]
 - link:todo.html[TODO]
 - link:api.html[libtwolame API Overview]
 - link:twolame_8h.html[libtwolame API Reference]
