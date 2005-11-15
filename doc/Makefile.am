@@ -61,6 +61,7 @@ pkghtml_DATA = \
 
 
 EXTRA_DIST = $(man_MANS) $(pkghtml_DATA) \
+	dist10-text \
 	api.txt \
 	asciidoc.conf \
 	doxygen.conf \
