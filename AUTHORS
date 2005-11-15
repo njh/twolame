@@ -1,19 +1,21 @@
 TwoLAME Authors
 ===============
 
-.Mike Cheng <mikecheng at NOT planckenergy.com> (remove the NOT)
- -	Author of tooLAME, which TwoLAME is based on.
-
 
 .Nicholas Humfrey - <njh at ecs.soton.ac.uk>
  -	New automake build system
  -	Added libsndfile support
  -  Reference documentation for API
  -	Lots of cleaning and improving !
+ -  New frontend
 
 
 .Christophe Massiot - <cmassiot at freebox.fr>
  -  Changes to make libtwolame thread-safe
+
+
+.Mike Cheng <mikecheng at NOT planckenergy.com> (remove the NOT)
+ -	Author of tooLAME, which TwoLAME is based on.
 
 
 .ISO Dist10 code writers

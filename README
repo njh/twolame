@@ -24,7 +24,7 @@ All changes to the ISO source are licensed under the LGPL
 INTRODUCTION
 ------------
 
-TwoLAME is an optimized MPEG Audio Layer 2 encoder. 
+TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder. 
 It is based heavily on:
 
 - tooLAME by Michael Cheng
@@ -32,134 +32,37 @@ It is based heavily on:
 - improvement to algorithms as part of the LAME project (lame.sf.net)
 - other contributors (see AUTHORS)
 
+TwoLAME should be able to be used as a drop-in replacement for 
+LAME (a MPEG Layer 3 encoder). The frontend takes very similar 
+command line options to LAME, and the backend library has a very 
+similar API to LAME.
 
 For the latest version of TwoLAME, visit the project homepage:
 http://www.twolame.org/
 
 
+MPEG Audio Layer 2 (MP2)
+------------------------
+(taken from Wikipedia article on MP2)
+
+MP2 (sometimes incorrectly named Musicam) is a short form of MPEG Audio Layer II, 
+and it is also used as a file extension for files containing audio data of this 
+type. While it has largely been superseded by MP3 for PC and Internet applications, 
+it remains a dominant standard for audio broadcasting as part of the DAB digital 
+radio and DVB digital television standards. It is also used internally within the 
+radio industry, for example in NPR's PRSS Content Depot programming distribution 
+system.
+
+
 INSTALLATION
 ------------
 
-Standard automate processs:
+Standard automake process:
 
   ./configure
   make
   make install
 
-
-USAGE
------
-
-	./twolame [options] <input> <output>
-
-Input File
-~~~~~~~~~~
-	TwoLAME parses AIFF and WAV files for file info
-	raw PCM is assumed if no header is found
-	for stdin use a -
-
-Output File
-~~~~~~~~~~~
-	file is automatically renamed from *.* to *.mp2
-	for stdout use a -
-
-
-Input Options
-~~~~~~~~~~~~~
-	-s [int]
-		if inputting raw PCM sound, you must specify the sample rate
-		default sample rate is 44.1khz.
-
-	-a	
-		downmix from stereo to mono
-		if the incoming file is stereo, combine the audio into 
-		a single channel
-
-	-x 	
-		force byte-swapping of the input.  (current endian detection is dodgy, 
-		so if twolame produces only noise, use -x )
-
-	-g
-		swap the LR channels of a stereo file
-
-
-Output Options
-~~~~~~~~~~~~~~
-
-	-m [char]
-		the encoding mode (default 'j')
-		's' stereo
-		'd' dual channel
-		'j' joint stereo
-		'm' mono
-
-	-p [int]
-		which psy model to use (default '1')
-		Different models for the psychoacoustics
-		Models: -1 to 4
-
-	-b [int]
-		the total bitrate 	
-		For 48/44.1/32kHz default = 192 
-		For 24/22.05/16kHz default = 96
-
-	-v [int]
-		Switch on VBR mode.
-		The higher the number the better the quality.
-		Useful range -10 to 10.
-		See README.VBR for details.
-
-Operation
-~~~~~~~~~
-
-	-f 	
-		fast mode turns off calculation of the psychoacoustic model.
-		Instead a set of default values are assumed
-
-	-q [int]
-		quick mode calculates the psy model every 'num' frames.
-
-	-E
-		Store peak energy information at the end of each frame
-
-Misc
-~~~~
-
-	-d emp
-		de-emphasis (default 'n')
-	-c 	
-		mark as copyright
-	-o
-		mark as original
-	-e
-		add error protection
-	-r
-		force padding bits off
-	-D [int]
-		add DAB extensions with an XPAD length as specified.
-	-t [int]
-		'talkativity' setting. 0 = no message. 3 = too much information
-
-
-EXAMPLES
---------
-
-	twolame sound.wav
-
-This will encode sound.wav to sound.mp2 using the default bitrate of 192 kbps 
-and using the default psychoacoustic model (model 3)
-
-	twolame -p 2 -v 5 sound.wav newfile.mp2
-
-Encode sound.wav to newfile.mp2 using psychoacoustic model 2 and encoding
-with variable bitrate. The high value of the "-v" argument means that 
-the encoding will tend to favour higher bitrates.
-
-
-	twolame -p 2 -v -5 sound.wav newfile.mp2
-
-Same as example above, except that the negative value of the "-v" argument
-means that the lower bitrates will be favoured over the higher ones.
 
 
 REFERENCE PAPERS

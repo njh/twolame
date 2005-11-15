@@ -1,5 +1,5 @@
-TODO
-====
+TwoLAME TODO List
+=================
 
 - not sure if encode_frame() in toolame.c is correct
     frame of mpeg1 is only 576 samples, not 1152 ?
