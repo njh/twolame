@@ -3,6 +3,10 @@ TwoLAME TODO List
 
 - not sure if encode_frame() in toolame.c is correct
     frame of mpeg1 is only 576 samples, not 1152 ?
+    
+- Add more feedback to frontend
+    - Total number of frames while encoding
+    - Duration, filesize and compression ratios in print_file_config
 
 - Add libresample support to libtoolame (toolame_set_in_samplerate etc.)
 - parameter checking in toolame.c using assert
