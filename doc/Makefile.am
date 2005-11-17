@@ -50,7 +50,7 @@ pkghtml_DATA = \
     $(htmldir)/doxygen.css \
     $(htmldir)/doxygen.png \
     $(htmldir)/index.html \
-    $(htmldir)/news.html \
+    $(htmldir)/changelog.html \
     $(htmldir)/psycho.html \
     $(htmldir)/readme.html \
     $(htmldir)/todo.html \
