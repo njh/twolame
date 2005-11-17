@@ -88,6 +88,11 @@ int twolame_get_num_channels(twolame_options* glopts)
 
 int twolame_set_scale(twolame_options* glopts, float scale)
 {
+	if (scale<0)
+	{
+		fprintf(stderr,"invalid scaling amount %f\n",scale);
+		return(-1);
+	}
     glopts->scale = scale;
     return 0;
 }
@@ -99,6 +104,11 @@ float twolame_get_scale(twolame_options* glopts)
 
 int twolame_set_scale_left(twolame_options* glopts, float scale)
 {
+	if (scale<0)
+	{
+		fprintf(stderr,"invalid scaling amount %f\n",scale);
+		return(-1);
+	}
     glopts->scale_left = scale;
     return 0;
 }
@@ -110,7 +120,12 @@ float twolame_get_scale_left(twolame_options* glopts)
 
 int twolame_set_scale_right(twolame_options* glopts, float scale)
 {
-    glopts->scale_right = scale;
+ 	if (scale<0)
+	{
+		fprintf(stderr,"invalid scaling amount %f\n",scale);
+		return(-1);
+	}
+   glopts->scale_right = scale;
     return 0;
 }
 
