@@ -101,7 +101,13 @@ const char* get_twolame_url( void );
 
 
 /** Print the library version and 
- *  encoder parameter settings to STDERR
+ *  encoder parameter settings to STDERR.
+ *
+ *  Will display differnent ammounts of information
+ *  depending on the verbosity setting.
+ *  If verbosity is set to 0 then no message will be displayed.
+ *
+ *  \param glopts 		Options pointer created by twolame_init()
  *
  */
 void twolame_print_config(twolame_options *glopts);
