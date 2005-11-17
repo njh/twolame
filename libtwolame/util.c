@@ -139,38 +139,68 @@ void twolame_print_config(twolame_options *glopts)
 {
 	FILE* fd = stderr;
 
-    fprintf(fd, "LibTwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
+    // Are we being silent ?
+    if (glopts->verbosity<=0) return; 
+    
 
-	fprintf (stderr, "---------------------------------------------------------\n");
-	fprintf (stderr, "Input : %d Hz, %d channels\n",
-				twolame_get_in_samplerate(glopts),
-				twolame_get_num_channels(glopts));
-	fprintf (stderr, "Output: %d Hz, %s\n",
-				twolame_get_out_samplerate(glopts), 
-				twolame_get_mode_name(glopts));
-	fprintf (stderr, "%d kbps ", twolame_get_bitrate(glopts) );
-	fprintf (stderr, "%s Layer II ", twolame_get_version_name(glopts));
-	fprintf (stderr, "psycho model=%d \n", twolame_get_psymodel(glopts));
+
+	// Are we being brief ?
+	if (glopts->verbosity==1) {
 	
-	fprintf (stderr, "[De-emph:%s    Copyright:%s   Original:%s]\n",
-	((twolame_get_emphasis(glopts)) ? "On " : "Off"),
-	((twolame_get_copyright(glopts)) ? "Yes" : "No "),
-	((twolame_get_original(glopts)) ? "Yes" : "No "));
+		fprintf(fd, "LibTwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
+		fprintf (fd, "Encoding as %dHz, ", twolame_get_out_samplerate(glopts));
+		fprintf (fd, "%d kbps, ", twolame_get_bitrate(glopts) );
+		if (twolame_get_VBR(glopts)) 	fprintf (fd, "VBR, " );
+		else							fprintf (fd, "CBR, " );
+		fprintf (fd, "%s Layer II\n", twolame_get_version_name(glopts));
+		
+	} else {
 	
-	fprintf (stderr, "[Padding:%s CRC:%s         DAB:%s     ]\n",
-	((twolame_get_padding(glopts)) ? "Normal" : "Off   "),
-	((twolame_get_error_protection(glopts)) ? "On " : "Off"),
-	((twolame_get_DAB(glopts)) ? "On " : "Off")); 
-	
-	if (twolame_get_VBR(glopts))
-	fprintf (stderr, "VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_q(glopts));
-	fprintf(stderr,"ATH adjustment %f\n", twolame_get_ATH_level(glopts));
-	fprintf(stderr,"Reserving %i Ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
-	
-    if (glopts->num_channels == 2 && glopts->mode == TWOLAME_MONO ) {
-		fprintf(fd, "Autoconverting from stereo to mono.\n");
-    }
-	
-	fprintf (stderr, "---------------------------------------------------------\n");
+		fprintf (fd, "---------------------------------------------------------\n");
+   		fprintf (fd, "LibTwoLame %s (%s)\n", get_twolame_version(), get_twolame_url());
+		fprintf (fd, "Input : %d Hz, %d channels\n",
+					twolame_get_in_samplerate(glopts),
+					twolame_get_num_channels(glopts));
+		fprintf (fd, "Output: %d Hz, %s\n",
+					twolame_get_out_samplerate(glopts), 
+					twolame_get_mode_name(glopts));
+		fprintf (fd, "%d kbps ", twolame_get_bitrate(glopts) );
+		if (twolame_get_VBR(glopts)) 	fprintf (fd, "VBR " );
+		else							fprintf (fd, "CBR " );
+		fprintf (fd, "%s Layer II ", twolame_get_version_name(glopts));
+		fprintf (fd, "psycho model=%d \n", twolame_get_psymodel(glopts));
+		
+		fprintf (fd, "[De-emph:%s    Copyright:%s   Original:%s]\n",
+		((twolame_get_emphasis(glopts)) ? "On " : "Off"),
+		((twolame_get_copyright(glopts)) ? "Yes" : "No "),
+		((twolame_get_original(glopts)) ? "Yes" : "No "));
+		
+		fprintf (fd, "[Padding:%s CRC:%s         DAB:%s     ]\n",
+		((twolame_get_padding(glopts)) ? "Normal" : "Off   "),
+		((twolame_get_error_protection(glopts)) ? "On " : "Off"),
+		((twolame_get_DAB(glopts)) ? "On " : "Off")); 
+		
+		if (glopts->verbosity>=3) {
+			if (twolame_get_VBR(glopts))
+				fprintf (fd, " - VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_q(glopts));
+			fprintf(fd," - ATH adjustment %f\n", twolame_get_ATH_level(glopts));
+			fprintf(fd," - Reserving %i Ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
+			
+			if (twolame_get_scale(glopts)!=1.0f)
+				fprintf(fd," - Scaling audio by %f\n", twolame_get_scale(glopts));
+			if (twolame_get_scale_left(glopts)!=1.0f)
+				fprintf(fd," - Scaling left channel by %f\n", twolame_get_scale_left(glopts));
+			if (twolame_get_scale_right(glopts)!=1.0f)
+				fprintf(fd," - Scaling right channel by %f\n", twolame_get_scale_right(glopts));
+
+			if (glopts->num_channels == 2 && glopts->mode == TWOLAME_MONO ) {
+				fprintf(fd, " - Downmixing from stereo to mono.\n");
+			}
+		}
+		
+		fprintf (fd, "---------------------------------------------------------\n");
+		
+	}
 }
+
 
