@@ -117,20 +117,30 @@ new_extension(char *filename, char *extname, char *newname)
   Display information about input and output files
 */
 static void
-print_file_config( SNDFILE *inputfile )
+print_file_config( SNDFILE *inputfile, int verbosity )
 {
     SF_FORMAT_INFO format_info;
-
+    
+    // Are we being silent ?
+    if (verbosity<=0) return; 
+	
+	// Convert 
+	if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
+	if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
+	
     format_info.format = sfinfo.format;
     sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof (format_info)) ;
 
-    fprintf(stderr, "---------------------------------------------------------\n");
-    fprintf(stderr, "Input File Name: %s\n", inputfilename );
-    fprintf(stderr, "Input File Format: %s\n", format_info.name );
-    fprintf(stderr, "Output File Name: %s\n", outputfilename );
-    fprintf(stderr, "---------------------------------------------------------\n");
-    
-    // ** FIXME: duration of input file **
+	if (verbosity==1) {
+		fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
+	} else {
+		fprintf(stderr, "---------------------------------------------------------\n");
+		fprintf(stderr, "Input File: %s\n", inputfilename );
+		fprintf(stderr, "Input Format: %s\n", format_info.name );
+		fprintf(stderr, "Output File: %s\n", outputfilename );
+	}
+	
+    // ** TODO: duration of input file **
     // Number of frames of mpeg audio to be output
     // file size of input
     // file size of output
@@ -138,6 +148,8 @@ print_file_config( SNDFILE *inputfile )
     // bitrate of output
     // compression ratio
 }
+
+
 
 
 /* 
@@ -158,7 +170,7 @@ usage_long()
     fprintf(stdout, "Both input and output filenames can be set to - to use stdin/stdout.\n");
 
     fprintf(stdout, "\nInput Options\n");
-    fprintf(stdout, "\t-r, --raw-input          input is raw pcm\n");
+    fprintf(stdout, "\t-r, --raw-input          input is raw 16-bit signed PCM audio\n");
     fprintf(stdout, "\t-x, --byte-swap          force byte-swapping of input\n");
     fprintf(stdout, "\t-s, --samplerate srate   sampling frequency of raw input (kHz)\n");
     fprintf(stdout, "\t-N, --channels nch       number of channels in raw input\n");
@@ -329,7 +341,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         
         // Input
             case 'r':
-                sfinfo.format = SF_FORMAT_RAW;
+                sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
                 break;
 
             case 'x':
@@ -382,8 +394,9 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 }
                 break;
 
-            case 'a':
+            case 'a':	// downmix
                 twolame_set_mode(encopts, TWOLAME_MONO);
+                automode = FALSE;
                 break;
                 
             case 'b':
@@ -502,10 +515,14 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         fprintf(stderr, "Missing input filename.\n");
         usage_short();
     }
-    if ( outputfilename[0] == '\0') {
+    if ( outputfilename[0] == '\0' && strcmp(inputfilename, "-")!=0 ) {
         // Create output filename from the inputfilename 
         // and change the suffix
         new_extension( inputfilename, OUTPUT_SUFFIX, outputfilename );
+    }
+    if ( outputfilename[0] == '\0') {
+        fprintf(stderr, "Missing output filename.\n");
+        usage_short();
     }
         
 }
@@ -521,24 +538,25 @@ open_input_file( char* filename )
 
     // Do they want STDIN ?
     if (strncmp( filename, "-", 1 )==0) {
-        /// *** do stuff here ***
-        // sf_open_fd()
-        // *must be raw?*
-        
+    	int fd = fileno(stdin);
+    	
         // We only support raw audio on STDIN
-        sfinfo.format = SF_FORMAT_RAW;
-        
-        fprintf(stderr, "reading from stdin does not work yet.\n");
-        exit(ERR_OPENING_INPUT);
-    }
+        sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 
+        // Open the file descriptor
+        file = sf_open_fd(fd, SFM_READ, &sfinfo, TRUE);
+        
+    } else {
     
-    // Open the input file
-    file = sf_open(filename, SFM_READ, &sfinfo);
+		// Open the input file by filename
+		file = sf_open(filename, SFM_READ, &sfinfo);
+		
+	}
     
     // Check for errors
     if (file == NULL) {
-        fprintf(stderr,"Failed to open input file.\n");
+        fprintf(stderr, "Failed to open input file (%s):\n", filename);
+        fprintf(stderr, "  %s\n", sf_strerror(NULL));
         exit(ERR_OPENING_INPUT);
     }
         
@@ -616,9 +634,7 @@ main(int argc, char **argv)
     outputfile = open_output_file( outputfilename );
     
     // display file settings
-    // *FIXME*: check verbosity
-    print_file_config( inputfile );
-
+	print_file_config( inputfile, twolame_get_verbosity(encopts) );
 
     // Set mode automatically ?
     if (automode) {
@@ -634,7 +650,7 @@ main(int argc, char **argv)
     }
 
     // display encoder settings
-    twolame_print_config( encopts );
+	twolame_print_config( encopts );
 
 
 	// Only encode a single frame of mpeg audio ?
@@ -688,11 +704,17 @@ main(int argc, char **argv)
             exit(ERR_WRITING_OUTPUT);
         }
         
+        // Only single frame ?
+        if (single_frame_mode) break;
         
         // Display Progress
         frame_count += (samples_read / 1152);
-        fprintf(stderr, "[%04i/%04i]\r", frame_count, (int)(sfinfo.frames / sfinfo.channels  / 1152));
-        fflush(stderr);
+        if (twolame_get_verbosity(encopts)>0) {
+        	fprintf(stderr, "[%04i", frame_count);
+        	//fprintf(stderr, "/%04i", (int)(sfinfo.frames / sfinfo.channels  / 1152));
+        	fprintf(stderr, "]\r");
+        	fflush(stderr);
+        }
     }
 
     //
@@ -709,15 +731,24 @@ main(int argc, char **argv)
         }
     }
     
+ 	if (twolame_get_verbosity(encopts)>1) {
+	    fprintf(stderr, "\nEncoding Finished.\n");
+	}
+
     // Close input and output files
     sf_close( inputfile );
     fclose( outputfile );
 
-    // Close the libtwolame encoder
+	// Close the libtwolame encoder
     twolame_close(&encopts);
     
+    
+	// Free up memory
+	free(pcmaudio);
+	free(mp2buffer);
 
-    fprintf(stderr, "\nEncoding Finished.\n");
+
+	
     return (ERR_NO_ERROR);
 }
 
