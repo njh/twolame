@@ -191,7 +191,7 @@ usage_long()
     fprintf(stdout, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
     
         
-    fprintf(stdout, "\nMisc Options\n");
+    fprintf(stdout, "\nMiscellaneous Options\n");
     fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
     fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
     fprintf(stdout, "\t    --original           mark as original\n");
