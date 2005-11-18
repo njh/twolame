@@ -1,13 +1,15 @@
 What is new in TwoLAME 
 ======================
 
-Version 0.3.4 (2005-08-10)
+Version 0.3.4 (2005-11-18)
 --------------------------
 
 - Checks parameters a bit better
 - Removed lots of exit() calls
+- added twolame_print_config() to libtwolame
 - Fixed twolame.h so that it works with C++ code
-- Changed frontend to (only) use libsndfile
+- Rewrote frontend and now (only) uses libsndfile
+- Changed behavior in frontend and backend for verbosity setting
 
 Version 0.3.3 (2005-04-19)
 --------------------------
