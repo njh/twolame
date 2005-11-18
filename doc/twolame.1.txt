@@ -6,7 +6,7 @@ Nicholas J Humfrey <njh@ecs.soton.ac.uk>
 
 NAME
 ----
-twolame - an optimized MPEG Audio Layer 2 encoder
+twolame - an optimized MPEG Audio Layer 2 (MP2) encoder
 
 
 SYNOPSIS
@@ -16,96 +16,122 @@ SYNOPSIS
 
 DESCRIPTION
 -----------
-BLAH BLAH BLAH
+TwoLAME is an optimised MPEG Audio Layer 2 (MP2) encoder based on tooLAME by 
+Mike Cheng, which in turn is based upon the ISO dist10 code and portions of 
+LAME.
 
+Encoding is performed by the libtwolame library backend. The twolame frontend can be used to encode audio files to MPEG Audio Layer 2 on the command line.
 
 Input File
 ~~~~~~~~~~
-	TwoLAME parses AIFF and WAV files for file info
-	raw PCM is assumed if no header is found
-	for stdin use a -
+TwoLAME uses libsndfile for reading the input sound file, so
+the input file can be in any format supported by libsndfile. 
+To read raw PCM audio from STDIN, then use - as the input filename.
+
 
 Output File
 ~~~~~~~~~~~
-	file is automatically renamed from *.* to *.mp2
-	for stdout use a -
+If no output filename is specified, then suffix of the input filename 
+is automatically changed to .mp2. To write the encoded audio to STDOUT 
+then use - as the output filename.
 
 
 Input Options
 ~~~~~~~~~~~~~
-	-s [int]
-		if inputting raw PCM sound, you must specify the sample rate
-		default sample rate is 44.1khz.
+-r, --raw-input::
+	Speicies that input is raw 16-bit signed PCM audio.
+	If audio is stereo, than audio samples are interleaved 
+	between the two channels.
 
-	-a	
-		downmix from stereo to mono
-		if the incoming file is stereo, combine the audio into 
-		a single channel
+-x, --byte-swap::
+	Force byte-swapping of the input. Endian detection is performed 
+	automatically by libsndfile, so this option shouldn't 
+	normally be needed.
 
-	-x 	
-		force byte-swapping of the input.  (current endian detection is dodgy, 
-		so if twolame produces only noise, use -x )
+-s, --samplerate <int>::
+	If inputting raw PCM sound, you must specify the sample rate of 
+	the audio in Hz. Default sample rate is 44100Hz.
 
-	-g
-		swap the LR channels of a stereo file
+-N, --channels <int>::
+	If inputting raw PCM sound, you must specify the number of channels 
+	in the input audio. Default number of channels is 2.
+
+-g, --swap-channels::
+	Swap the Left and Right channels of a stereo input file.
+
+--scale <float>::
+	Scale the input audio prior to encoding.
+	All of the input audio is multiplied by specified value.
+	Value between 0 and 1 will reduce the audio gain, and a value 
+	above 1 will increase the gain of the audio.
+
+--scale-l <float>::
+	Same as --scale, but only affects the left channel. 
+
+--scale-r <float>::
+	Same as --scale, but only affects the right channel. 
 
 
 Output Options
 ~~~~~~~~~~~~~~
 
-	-m [char]
-		the encoding mode (default 'j')
-		's' stereo
-		'd' dual channel
-		'j' joint stereo
-		'm' mono
+-m, --mode <string>
+	Choose the mode of the resulting audio. Default is auto.
+	's' stereo
+	'd' dual channel
+	'j' joint stereo
+	'm' mono
+	'a' auto - choose mode automatically based on the input
 
-	-p [int]
-		which psy model to use (default '1')
-		Different models for the psychoacoustics
-		Models: -1 to 4
+-a::
+	downmix from stereo to mono
+	if the incoming file is stereo, combine the audio into 
+	a single channel
 
-	-b [int]
-		the total bitrate 	
-		For 48/44.1/32kHz default = 192 
-		For 24/22.05/16kHz default = 96
+-p [int]
+	which psy model to use (default '1')
+	Different models for the psychoacoustics
+	Models: -1 to 4
 
-	-v [int]
-		Switch on VBR mode.
-		The higher the number the better the quality.
-		Useful range -10 to 10.
-		See README.VBR for details.
+-b [int]
+	the total bitrate 	
+	For 48/44.1/32kHz default = 192 
+	For 24/22.05/16kHz default = 96
 
-Operation
-~~~~~~~~~
+-v [int]
+	Switch on VBR mode.
+	The higher the number the better the quality.
+	Useful range -10 to 10.
+	See README.VBR for details.
 
-	-f 	
-		fast mode turns off calculation of the psychoacoustic model.
-		Instead a set of default values are assumed
+-f 	
+	fast mode turns off calculation of the psychoacoustic model.
+	Instead a set of default values are assumed
 
-	-q [int]
-		quick mode calculates the psy model every 'num' frames.
+-q [int]
+	quick mode calculates the psy model every 'num' frames.
 
-	-E
-		Store peak energy information at the end of each frame
+-E
+	Store peak energy information at the end of each frame
 
-Misc
-~~~~
 
-	-d emp
-		de-emphasis (default 'n')
-	-c 	
-		mark as copyright
-	-o
-		mark as original
-	-e
-		add error protection
-	-r
-		force padding bits off
-	-D [int]
-		add DAB extensions with an XPAD length as specified.
-	-t [int]
-		'talkativity' setting. 0 = no message. 3 = too much information
+Miscellaneous Options
+~~~~~~~~~~~~~~~~~~~~~
+
+-d emp
+	de-emphasis (default 'n')
+-c 	
+	mark as copyright
+-o
+	mark as original
+-e
+	add error protection
+-r
+	force padding bits off
+-D [int]
+	add DAB extensions with an XPAD length as specified.
+-t [int]
+	'talkativity' setting. 0 = no message. 3 = too much information
 
 
 EXAMPLES
