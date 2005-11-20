@@ -125,7 +125,7 @@ int twolame_set_scale_right(twolame_options* glopts, float scale)
 		fprintf(stderr,"invalid scaling amount %f\n",scale);
 		return(-1);
 	}
-   glopts->scale_right = scale;
+	glopts->scale_right = scale;
     return 0;
 }
 
@@ -138,7 +138,7 @@ float twolame_get_scale_right(twolame_options* glopts)
 int twolame_set_in_samplerate (twolame_options *glopts, int samplerate)
 {  
 	glopts->samplerate_in = samplerate;
-	return twolame_set_out_samplerate( glopts, samplerate );
+	return(0);
 }
 
 int twolame_get_in_samplerate (twolame_options *glopts)
@@ -148,14 +148,8 @@ int twolame_get_in_samplerate (twolame_options *glopts)
 
 int twolame_set_out_samplerate (twolame_options *glopts, int samplerate)
 {  
-	int ver = twolame_get_version_for_samplerate(samplerate);
-	if (ver<0) {
-		return -1;
-	} else {
-		glopts->samplerate_out = samplerate;
-		glopts->version = ver;
-		return(0);
-	}
+	glopts->samplerate_out = samplerate;
+	return(0);
 }
 
 int twolame_get_out_samplerate (twolame_options *glopts)
@@ -390,13 +384,7 @@ TWOLAME_MPEG_version twolame_get_version (twolame_options *glopts)
 
 const char *twolame_get_version_name(twolame_options *glopts)
 {
-	static const char *version_name[3] = { "MPEG-2 LSF", "MPEG-1", "Illegal Version" };
-	int version = glopts->version;
-	if (version==0)
-		return(version_name[0]);
-	if (version==1)
-		return(version_name[1]);
-	return(version_name[2]);
+	return twolame_mpeg_version_name( glopts->version );
 }
 
 

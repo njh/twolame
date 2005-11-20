@@ -40,6 +40,7 @@ extern "C" {
 
 /** MPEG modes */
 typedef enum {
+	TWOLAME_AUTO_MODE = -1,	/**< Choose Mode Automatically */
 	TWOLAME_STEREO = 0,		/**< Stereo */
 	TWOLAME_JOINT_STEREO,	/**< Joint Stereo */
 	TWOLAME_DUAL_CHANNEL,	/**< Dual Channel */
@@ -243,7 +244,7 @@ int twolame_get_verbosity(twolame_options *glopts);
 /** Set the MPEG Audio Mode (Mono, Stereo, etc) for 
  *  the output stream.
  *
- *	Default: TWOLAME_STEREO
+ *	Default: TWOLAME_AUTO_MODE
  *
  *  \param glopts 			pointer to twolame options pointer
  *  \param mode 			the mode to set to

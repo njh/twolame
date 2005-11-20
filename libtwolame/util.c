@@ -54,15 +54,28 @@ const char* get_twolame_url( void )
 
 /* 1: MPEG-1, 0: MPEG-2 LSF, 1995-07-11 shn */
 static const int bitrate_table[2][15] = {
-{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
-{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384}
+	{0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160},
+	{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384}
 };
 
+//
+// Returns a name string for MPEG version enumeration
+//
+const char* twolame_mpeg_version_name (int version)
+{
+	static const char *version_name[3] = { "MPEG-2 LSF", "MPEG-1", "Illegal Version" };
+	if (version==0)
+		return(version_name[0]);
+	if (version==1)
+		return(version_name[1]);
+	return(version_name[2]);
+}
 
-// *  Returns the index associated with a bitrate for
-// *  the specified version of MPEG.
-// *
-// *  Returns -1 for invalid bitrates
+
+//  Returns the index associated with a bitrate for
+//  the specified version of MPEG.
+//
+//  Returns -1 for invalid bitrates
 //
 int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 {
@@ -71,7 +84,7 @@ int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 
 	// MFC sanity check.
 	if (version!=0 && version!=1) {
-		fprintf(stderr,"twolame_get_bitrate_index error %i\n",version);
+		fprintf(stderr,"twolame_get_bitrate_index: invalid version index %i\n",version);
 		return -1;
 	}
 
@@ -85,8 +98,8 @@ int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 	if (found)  return (index);
 	else {
 		fprintf (stderr,
-			"twolame_get_bitrate_index: %d is not a legal bitrate for version %i\n",
-			bitrate, version);
+			"twolame_get_bitrate_index: %d is not a legal bitrate for version '%s'\n",
+			bitrate, twolame_mpeg_version_name(version));
 		return -1;
 	}
 }
@@ -181,8 +194,11 @@ void twolame_print_config(twolame_options *glopts)
 		((twolame_get_DAB(glopts)) ? "On " : "Off")); 
 		
 		if (glopts->verbosity>=3) {
-			if (twolame_get_VBR(glopts))
+			if (twolame_get_VBR(glopts)) {
 				fprintf (fd, " - VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_q(glopts));
+				fprintf (fd, " - VBR bitrate index limits [%i -> %i]\n", glopts->lower_index, glopts->upper_index);
+			}
+
 			fprintf(fd," - ATH adjustment %f\n", twolame_get_ATH_level(glopts));
 			fprintf(fd," - Reserving %i Ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
 			

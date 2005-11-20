@@ -57,14 +57,8 @@ static int init_header_info( twolame_options *glopts ) {
 	/* use the options to create header info structure */
 	header->lay = 2;
 	header->error_protection = glopts->error_protection;
+	header->version = glopts->version;
 	
-	// Get the MPEG version for the chosen samplerate
-	header->version = twolame_get_version_for_samplerate( glopts->samplerate_out );
-	if (header->version < 0) {
-		fprintf(stdout,"Not a valid samplerate: %i\n", glopts->samplerate_out );
-		return -1;
-	}
-
 	// Convert the sampling frequency to the required index
 	header->samplerate_idx = twolame_get_samplerate_index( glopts->samplerate_out ); 
 	if (header->samplerate_idx < 0) {
@@ -75,7 +69,8 @@ static int init_header_info( twolame_options *glopts ) {
 	// Convert the bitrate to the an index	
 	header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
 	if (header->bitrate_index < 0) {
-		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version (%i)\n", glopts->bitrate, glopts->version);
+		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate, 
+			twolame_mpeg_version_name(glopts->version));
 		return -1;
 	}
 		
@@ -141,14 +136,14 @@ twolame_options *twolame_init(void) {
 		return NULL;
 	}
 	
-	newoptions->version = TWOLAME_MPEG1; /* default to 32/44.1/48 kHz input. i.e. mpeg-1 */
+	newoptions->version = -1;
 	newoptions->num_channels = 0;
-	newoptions->samplerate_in = 44100;
+	newoptions->samplerate_in = 0;
 	newoptions->samplerate_out = 0;
 	
-	newoptions->mode = TWOLAME_STEREO;
+	newoptions->mode = TWOLAME_AUTO_MODE;	// Choose a proper mode later
 	newoptions->psymodel = 3;
-	newoptions->bitrate = 192;
+	newoptions->bitrate = -1;				// Default bitrate is set in init_params
 	newoptions->vbr = FALSE;
 	newoptions->vbrlevel = 0;
 	newoptions->athlevel = 0;
@@ -175,7 +170,7 @@ twolame_options *twolame_init(void) {
 	newoptions->num_ancillary_bits = 0;
 	
 	
-	newoptions->vbr_frame_count = 0;	/* only used for debugging */
+	newoptions->vbr_frame_count = 0;	// only used for debugging
     newoptions->tablenum = 0;	
 
 	newoptions->twolame_init = 0;
@@ -209,6 +204,69 @@ int twolame_init_params (twolame_options *glopts) {
 		return 1;
 	}
 
+	// Check the number of channels
+	if (glopts->num_channels != 1 && glopts->num_channels != 2) {
+		fprintf(stderr,"twolame_init_params(): must specify number of channels in input samples using twolame_set_num_channels().\n");
+		return -1;
+	}
+
+	
+	// If not output samplerate has been set, then set it to the input sample rate
+	if (glopts->samplerate_out < 1) {
+		glopts->samplerate_out = glopts->samplerate_in;
+	}
+	
+	// If the MPEG version has not been set, then choose automatically
+	if (glopts->version == -1) {
+		// Get the MPEG version for the chosen samplerate
+		glopts->version = twolame_get_version_for_samplerate( glopts->samplerate_out );
+		if (glopts->version < 0) {
+			fprintf(stdout,"twolame_init_params(): invalid samplerate: %i\n", glopts->samplerate_out );
+			return -1;
+		} else if (glopts->verbosity>=3) {
+			fprintf(stderr, "Chosen version '%s' for samplerate of %d Hz.\n",
+				twolame_mpeg_version_name(glopts->version), glopts->samplerate_out);
+		}
+	}
+
+	// Choose mode (if none chosen)
+	if (glopts->mode == TWOLAME_AUTO_MODE) {
+		if (glopts->num_channels == 2) glopts->mode = TWOLAME_STEREO;
+		else glopts->mode = TWOLAME_MONO;
+		if (glopts->verbosity>=3) {
+			fprintf(stderr, "Chosen mode to be '%s' because of %d input channels.\n",
+				twolame_get_mode_name(glopts), glopts->num_channels);
+		}
+	}
+
+	// Choose the bitrate (if none chosen)
+	if (glopts->bitrate <= 0) {
+		if (glopts->mode == TWOLAME_MONO) {
+			switch(glopts->samplerate_out) {
+				case 48000: glopts->bitrate = 96; break;	// (LAME=64)
+				case 44100: glopts->bitrate = 96; break;	// (LAME=64)
+				case 32000: glopts->bitrate = 80; break;	// (LAME=48)
+				case 24000: glopts->bitrate = 48; break;	// (LAME=32)
+				case 22050: glopts->bitrate = 48; break;	// (LAME=32)
+				case 16000: glopts->bitrate = 32; break;	// (LAME=24)
+			}
+		} else {
+			switch(glopts->samplerate_out) {
+				case 48000: glopts->bitrate = 192; break;	// (LAME=128)
+				case 44100: glopts->bitrate = 192; break;	// (LAME=128)
+				case 32000: glopts->bitrate = 160; break;	// (LAME=96)
+				case 24000: glopts->bitrate = 96; break;	// (LAME=64)
+				case 22050: glopts->bitrate = 96; break;	// (LAME=64)
+				case 16000: glopts->bitrate = 64; break;	// (LAME=48)
+			}
+		}
+		if (glopts->verbosity>=3) {
+			fprintf(stderr, "Chosen bitrate of %dkbps for samplerate of %d Hz.\n",
+				glopts->bitrate, glopts->samplerate_out);
+		}
+	}
+	
+	
 
 	/* Can't do DAB and energylevel extensions at the same time
 	   Because both of them think they're the only ones inserting
@@ -219,12 +277,6 @@ int twolame_init_params (twolame_options *glopts) {
 	}
 
 	
-	/* initialises bitrate allocation */
-	if (glopts->num_channels != 1 && glopts->num_channels != 2) {
-		fprintf(stderr,"twolame_init_params(): must specify number of channels in input samples using twolame_set_num_channels().\n");
-		return -1;
-	}
-
 	/* Check that if we're doing energy levels, that there's enough space 
 	   to put the information */
 	if (glopts->do_energy_levels) {
@@ -236,35 +288,6 @@ int twolame_init_params (twolame_options *glopts) {
 			fprintf(stderr,"Too few ancillary bits: %i<40\n",glopts->num_ancillary_bits);
 		glopts->num_ancillary_bits = 40;
 		}
-	}
-
-	
-	/* If not output samplerate has been set, then set it to the input sample rate */
-	if (glopts->samplerate_out < 1) {
-		glopts->samplerate_out = glopts->samplerate_in;
-	}
-	
-
-
-	/* build header from parameters */
-	if (init_header_info( glopts )<0) {
-		return -1;
-	}
-	
-	/* this will load the alloc tables and do some other stuff */
-	if (init_frame_info( glopts )<0) {
-		return -1;
-	}
-	
-	/* initialises bitrate allocation */
-	if (init_bit_allocation( glopts )<0) {
-		return -1;
-	}
-	
-	/* initialises bitrate allocation */
-	if (glopts->samplerate_out != glopts->samplerate_in) {
-		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling (yet).\n");
-		return -1;
 	}
 
 	/*
@@ -305,20 +328,44 @@ int twolame_init_params (twolame_options *glopts) {
 		}
 	
 	}
+	
 
 
-	/* Initialise */
+	// build mpeg header from parameters
+	if (init_header_info( glopts )<0) {
+		return -1;
+	}
+	
+	// load the alloc tables and do some other stuff
+	if (init_frame_info( glopts )<0) {
+		return -1;
+	}
+	
+	// initialise bitrate allocation
+	if (init_bit_allocation( glopts )<0) {
+		return -1;
+	}
+	
+	// Check input samplerate is same as output samplerate
+	if (glopts->samplerate_out != glopts->samplerate_in) {
+		fprintf(stderr,"twolame_init_params(): sorry, twolame doesn't support resampling (yet).\n");
+		return -1;
+	}
+
+
+
+	// Initialise interal variables
 	glopts->samples_in_buffer = 0;
 	glopts->psycount = 0;
 	glopts->crc = 0;
 
   
-  	/* Allocate memory to larger buffers */
+  	// Allocate memory to larger buffers 
     glopts->subband = (subband_t *) twolame_malloc (sizeof (subband_t), "subband");
 	glopts->j_sample = (jsb_sample_t *) twolame_malloc (sizeof (jsb_sample_t), "j_sample");
     glopts->sb_sample = (sb_sample_t *) twolame_malloc (sizeof (sb_sample_t), "sb_sample");
 	
-	/* clear buffers */
+	// clear buffers
     memset ((char *) glopts->buffer, 0, sizeof(glopts->buffer));
     memset ((char *) glopts->bit_alloc, 0, sizeof (glopts->bit_alloc));
     memset ((char *) glopts->scfsi, 0, sizeof (glopts->scfsi));
@@ -328,7 +375,7 @@ int twolame_init_params (twolame_options *glopts) {
     memset ((char *) glopts->smr, 0, sizeof (glopts->smr));
     memset ((char *) glopts->max_sc, 0, sizeof (glopts->max_sc));
 
-	/* Initialise subband windowfilter */
+	// Initialise subband windowfilter
     if (init_subband(&glopts->smem)<0) {
 		return -1;
 	}

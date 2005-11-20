@@ -849,10 +849,6 @@ int init_bit_allocation( twolame_options * glopts )
 	}
     
     
-	if (glopts->verbosity > 3) {
-		fprintf (stdout, "VBR bitrate index limits [%i -> %i]\n", glopts->lower_index, glopts->upper_index);
-	}
-
 	/* set up a conversion table for bitrateindex->bits for this version/sampl freq 
 	This will be used to find the best bitrate to cope with the number of bits that
 	are needed (as determined by vbr_bits_for_nonoise)
@@ -963,18 +959,18 @@ void main_bit_allocation (twolame_options * glopts,
     /* update the statistics */
     glopts->vbrstats[header->bitrate_index]++;
 
-    if (glopts->verbosity > 2) {
+    if (glopts->verbosity > 3) {
       /* print out the VBR stats every 1000th frame */
       int i;
       if ((glopts->vbr_frame_count++ % 1000) == 0) {
 	for (i = 1; i < 15; i++)
-	  fprintf (stdout, "%4i ", glopts->vbrstats[i]);
-	fprintf (stdout, "\n");
+	  fprintf (stderr, "%4i ", glopts->vbrstats[i]);
+	fprintf (stderr, "\n");
       }
 
       /* Print out *every* frames bitrateindex, bits required, and bits available at this bitrate */
-      if (glopts->verbosity > 3)
-	fprintf (stdout,
+      if (glopts->verbosity > 5)
+	fprintf (stderr,
 		 "> bitrate index %2i has %i bits available to encode the %i bits\n",
 		 header->bitrate_index, *adb,
 		 bits_for_nonoise (glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc));
@@ -1004,8 +1000,8 @@ static void vbr_maxmnr (FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimi
       if (mnr[ch][sb] < vbrlevel) {
 	*min_sb = sb;
 	*min_ch = ch;
-	//fprintf(stdout,".");
-	//fflush(stdout);
+	//fprintf(stderr,".");
+	//fflush(stderr);
 	return;
       }
 #endif
@@ -1018,7 +1014,7 @@ static void vbr_maxmnr (FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimi
 	*min_sb = sb;
 	*min_ch = ch;
       }
-  //fprintf(stdout,"Min sb: %i\n",*min_sb);
+  //fprintf(stderr,"Min sb: %i\n",*min_sb);
 }
 
 
