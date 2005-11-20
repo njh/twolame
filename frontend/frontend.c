@@ -1,7 +1,6 @@
 /*
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *  Copyright (C) 2001-2004 Michael Cheng
  *  Copyright (C) 2004-2005 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
@@ -59,7 +58,6 @@
 int single_frame_mode = FALSE;      // only encode a single frame of MPEG audio ?
 int byteswap = FALSE;               // swap endian on input audio ?
 int channelswap = FALSE;            // swap left and right channels ?
-int automode = TRUE;                // automatically set mode ?
 SF_INFO sfinfo = {0,44100,2,0,0,0};     // contains information about input file format
 
 char inputfilename[MAX_NAME_SIZE] = "\0";
@@ -210,9 +208,9 @@ usage_long()
     
     
     fprintf(stdout, "\n");
-    fprintf(stdout, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input\n");
+    fprintf(stdout, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input (MPEG-2)\n");
     fprintf(stdout, "   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160\n");
-    fprintf(stdout, "\nAllowable bitrates for 32, 44.1 and 48kHz sample input\n");
+    fprintf(stdout, "\nAllowable bitrates for 32, 44.1 and 48kHz sample input (MPEG-1)\n");
     fprintf(stdout, "  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384\n");
 
     fprintf(stdout, "\n");
@@ -377,7 +375,6 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 
         // Output
             case 'm':
-                automode = FALSE;
                 if (*optarg == 's') {
                     twolame_set_mode(encopts, TWOLAME_STEREO);
                 } else if (*optarg == 'd') {
@@ -387,7 +384,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 } else if (*optarg == 'm') {
                     twolame_set_mode(encopts, TWOLAME_MONO);
                 } else if (*optarg == 'a') {
-                    automode = TRUE;
+                    twolame_set_mode(encopts, TWOLAME_AUTO_MODE);
                 } else {
                     fprintf(stderr, "Error: mode must be a/s/d/j/m not '%s'\n\n", optarg);
                     usage_long();
@@ -396,8 +393,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 
             case 'a':	// downmix
                 twolame_set_mode(encopts, TWOLAME_MONO);
-                automode = FALSE;
-                break;
+                 break;
                 
             case 'b':
                 twolame_set_bitrate(encopts, atoi(optarg));
@@ -635,13 +631,6 @@ main(int argc, char **argv)
     
     // display file settings
 	print_file_config( inputfile, twolame_get_verbosity(encopts) );
-
-    // Set mode automatically ?
-    if (automode) {
-        if (sfinfo.channels==2) 
-             twolame_set_mode(encopts, TWOLAME_STEREO);
-        else twolame_set_mode(encopts, TWOLAME_MONO);
-    }
 
     // initialise twolame with this set of options
     if (twolame_init_params( encopts ) != 0) {
