@@ -1,15 +1,23 @@
 What is new in TwoLAME 
 ======================
 
-Version 0.3.4 (2005-11-18)
+Version 0.3.4 (2005-11-19)
 --------------------------
 
-- Checks parameters a bit better
-- Removed lots of exit() calls
-- added twolame_print_config() to libtwolame
-- Fixed twolame.h so that it works with C++ code
+- (libtwolame) Checks parameters a bit better
+- (libtwolame) Removed lots of exit() calls
+- (libtwolame) added twolame_print_config() API call
+- (libtwolame) Fixed twolame.h so that it works with C++ code
 - Rewrote frontend and now (only) uses libsndfile
 - Changed behavior in frontend and backend for verbosity setting
+- Rewrote manpage for frontend
+- (libtwolame) Fixed bug with setting MPEG version
+- (libtwolame) Removed default samplerate - must choose one
+- (libtwolame) 'Original' flag is now turned on by default
+- (libtwolame) Default bitrate is automatically chosen based on the samplerate/channels
+- (libtwolame) Default mode is automatically chosen based on the number of channels
+- Documentation improvements and corrections
+- (libtwolame) made some of VBR debugging send to stderr instead of stdout
 
 Version 0.3.3 (2005-04-19)
 --------------------------
