@@ -100,7 +100,10 @@ int main (int argc, char **argv) {
   
   
 	/* initialise twolame with this set of options */
-	twolame_init_params(encodeOptions);
+    if (twolame_init_params( encodeOptions ) != 0) {
+        fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
+        exit(99);
+    }
 
 	/* Open the output file for the encoded MP2 data */
 	if ((outfile = fopen(outputfilename, "w"))==0) {
