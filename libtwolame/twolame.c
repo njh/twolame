@@ -145,8 +145,8 @@ twolame_options *twolame_init(void) {
 	newoptions->psymodel = 3;
 	newoptions->bitrate = -1;				// Default bitrate is set in init_params
 	newoptions->vbr = FALSE;
-	newoptions->vbrlevel = 0;
-	newoptions->athlevel = 0;
+	newoptions->vbrlevel = 5.0;
+	newoptions->athlevel = 0.0;
 	
 	newoptions->quickmode = FALSE;
 	newoptions->quickcount = 10;

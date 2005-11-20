@@ -265,9 +265,9 @@ int twolame_get_VBR (twolame_options *glopts)
 	return(glopts->vbr);
 }
 
-/* VBR quality level.  - *** change to int: 0=highest  9=lowest  */
-int twolame_set_VBR_q (twolame_options *glopts, float level)
+int twolame_set_VBR_level (twolame_options *glopts, float level)
 {
+	// Limit is -50 to 50, but useful range is -10 to 10
 	if (fabs(level)>50.0)
 		return(-1);
 	else
@@ -275,10 +275,15 @@ int twolame_set_VBR_q (twolame_options *glopts, float level)
 	return(0);
 }
 
-float twolame_get_VBR_q (twolame_options *glopts)
+float twolame_get_VBR_level (twolame_options *glopts)
 {
 	return(glopts->vbrlevel);
 }
+
+// VBR quality level.  -  integer: 0=highest  9=lowest 
+//int twolame_set_VBR_q (twolame_options *glopts, int q);
+//int twolame_get_VBR_q (twolame_options *glopts);
+
 
 int twolame_set_ATH_level (twolame_options *glopts, float level)
 {

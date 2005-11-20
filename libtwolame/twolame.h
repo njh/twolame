@@ -650,14 +650,14 @@ int twolame_get_VBR(twolame_options *glopts);
  *  The level value can is a measurement of quality - the higher 
  *  the level the higher the average bitrate of the resultant file.
  *
- *	Default: 0.0
+ *	Default: 5.0
  *
  *  \param glopts 			pointer to twolame options pointer
- *  \param level			quality level (-? -> ?)
+ *  \param level			quality level (-10 to 10)
  *  \return 				0 if successful, 
  *							non-zero on failure
  */
-int twolame_set_VBR_q(twolame_options *glopts, float level);
+int twolame_set_VBR_level(twolame_options *glopts, float level);
 
 
 /** Get the level/quality of the VBR audio.
@@ -665,7 +665,7 @@ int twolame_set_VBR_q(twolame_options *glopts, float level);
  *  \param glopts 	pointer to twolame options pointer
  *  \return			quality value for VBR 
  */
-float twolame_get_VBR_q(twolame_options *glopts);
+float twolame_get_VBR_level(twolame_options *glopts);
 
 
 /** Set the adjustment (in dB) applied to the ATH for Psycho models 3 and 4.
