@@ -57,6 +57,9 @@ pkghtml_DATA = \
     $(htmldir)/twolame_8h-source.html \
     $(htmldir)/twolame_8h.html \
     $(htmldir)/twolame.1.html \
+    $(htmldir)/twolame.css \
+    $(htmldir)/twolame-manpage.css \
+    $(htmldir)/twolame-quirks.css \
     $(htmldir)/vbr.html
 
 
