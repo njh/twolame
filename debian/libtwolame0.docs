@@ -1,2 +1,4 @@
 README
-doc/html
+doc/html/*.css
+doc/html/*.html
+doc/html/*.png
