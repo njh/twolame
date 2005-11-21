@@ -63,10 +63,10 @@ pkghtml_DATA = \
 EXTRA_DIST = $(man_MANS) $(pkghtml_DATA) \
 	dist10-text \
 	api.txt \
-	asciidoc.conf \
 	doxygen.conf \
 	index.txt \
 	psycho.txt \
+	twolame.1 \
 	twolame.1.txt \
 	twolame.1.xml \
 	vbr.txt
