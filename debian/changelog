@@ -1,3 +1,10 @@
+twolame (0.3.4-1) unstable; urgency=low
+
+  * Updated for new release of twolame
+  * html documentation now included
+
+ -- Nicholas Humfrey <njh@ecs.soton.ac.uk>  Mon, 21 Nov 2005 12:08:45 -0000
+
 twolame (0.3.3-1) unstable; urgency=low
 
   * Initial Release.
