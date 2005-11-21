@@ -195,7 +195,7 @@ void twolame_print_config(twolame_options *glopts)
 		
 		if (glopts->verbosity>=3) {
 			if (twolame_get_VBR(glopts)) {
-				fprintf (fd, " - VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_q(glopts));
+				fprintf (fd, " - VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_level(glopts));
 				fprintf (fd, " - VBR bitrate index limits [%i -> %i]\n", glopts->lower_index, glopts->upper_index);
 			}
 
