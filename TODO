@@ -18,6 +18,7 @@ TwoLAME TODO List
 - sort out num_ancillary_bits issues in libtwolame (should not be in front end?)
 - better use of verbosity settings
 
+- don't allow twolame_set_* after twolame_init_params() has been called
 
 - with this VBR mode, we know the bits aren't going to run out, so we can 
   just assign them "greedily".
