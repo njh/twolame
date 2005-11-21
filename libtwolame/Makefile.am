@@ -42,7 +42,6 @@ libtwolame_la_SOURCES = \
 	psycho_n1.h \
 	subband.c \
 	subband.h \
-	twolame_global.h \
 	twolame.c \
 	util.c \
 	util.h
