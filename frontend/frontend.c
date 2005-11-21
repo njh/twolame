@@ -46,7 +46,7 @@
 #define ERR_OPENING_INPUT   (2)     // Error opening input file
 #define ERR_OPENING_OUTPUT  (4)     // Error opening output file
 #define ERR_MEM_ALLOC       (6)     // Error allocating memory
-#define ERR_INVALID_PARAM   (8)     // Error in chosen parameters
+#define ERR_INVALID_PARAM   (8)     // Error in chosen encoding parameters
 #define ERR_READING_INPUT   (10)    // Error reading input
 #define ERR_ENCODING        (12)    // Error occured during encoding
 #define ERR_WRITING_OUTPUT  (14)    // Error occured writing to output file
@@ -158,14 +158,14 @@ static void
 usage_long()
 {
     fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
-    fprintf(stdout, "MPEG Audio Layer II encoder\n");
+    fprintf(stdout, "MPEG Audio Layer II (MP2) encoder\n");
     fprintf(stdout, "Usage: \n");
     
     fprintf(stdout, "\ttwolame [options] <infile> [outfile]\n");
     fprintf(stdout, "\n");
-    fprintf(stdout, "\t<infile>       input sound file (any format supported by libsndfile)\n");
-    fprintf(stdout, "\t<outfile>      output bit stream of encoded audio\n");
     fprintf(stdout, "Both input and output filenames can be set to - to use stdin/stdout.\n");
+    fprintf(stdout, "  <infile>       input sound file (any format supported by libsndfile)\n");
+    fprintf(stdout, "  <outfile>      output bit stream of encoded audio\n");
 
     fprintf(stdout, "\nInput Options\n");
     fprintf(stdout, "\t-r, --raw-input          input is raw 16-bit signed PCM audio\n");
@@ -181,10 +181,12 @@ usage_long()
     fprintf(stdout, "\nOutput Options\n");
     fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (m)ono or (a)uto\n");
     fprintf(stdout, "\t-a, --downmix            downmix from stereo to mono file for mono encoding\n");
-    fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (default 192)\n");
-    fprintf(stdout, "\t-p, --psyc-mode psyc     psychoacoustic model 0/1/2/3 (default 3)\n");
-    fprintf(stdout, "\t-v, --vbr lev            vbr mode\n");
-    fprintf(stdout, "\t-l, --ath lev            ATH level (dflt 0)\n");
+    fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (default 192 for 44.1kHz)\n");
+    fprintf(stdout, "\t-P, --psyc-mode psyc     psychoacoustic model -1 to 3 (default 3)\n");
+    fprintf(stdout, "\t-v, --vbr                enable VBR mode\n");
+    fprintf(stdout, "\t-V, --vbr-level lev      enable VBR and set VBR level -50 to 50 (default 5)\n");
+    fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
+    fprintf(stdout, "\t-l, --ath lev            ATH level (default 0)\n");
     fprintf(stdout, "\t-q, --quick num          only calculate psy model every num frames\n");
     fprintf(stdout, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
     
@@ -192,10 +194,9 @@ usage_long()
     fprintf(stdout, "\nMiscellaneous Options\n");
     fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
     fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
-    fprintf(stdout, "\t    --original           mark as original\n");
-    fprintf(stdout, "\t-C, --crc				enable CRC error protection\n");
-    fprintf(stdout, "\t-r, --padding            force padding bit/frame on\n");
-    fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
+    fprintf(stdout, "\t    --original           mark as original (default)\n");
+    fprintf(stdout, "\t-p, --protect			enable CRC error protection\n");
+    fprintf(stdout, "\t-d, --padding            force padding bit/frame on\n");
     fprintf(stdout, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
     fprintf(stdout, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
     fprintf(stdout, "\t-E, --energy             turn on energy level extensions\n");
@@ -205,13 +206,13 @@ usage_long()
     fprintf(stdout, "\t    --quiet              same as --talkativity=0\n");
     fprintf(stdout, "\t    --brief              same as --talkativity=1\n");
     fprintf(stdout, "\t    --verbose            same as --talkativity=4\n");
-    
-    
+
+
     fprintf(stdout, "\n");
-    fprintf(stdout, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input (MPEG-2)\n");
-    fprintf(stdout, "   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160\n");
     fprintf(stdout, "\nAllowable bitrates for 32, 44.1 and 48kHz sample input (MPEG-1)\n");
     fprintf(stdout, "  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384\n");
+    fprintf(stdout, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input (MPEG-2)\n");
+    fprintf(stdout, "   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160\n");
 
     fprintf(stdout, "\n");
     exit(ERR_NO_ENCODE);
@@ -228,7 +229,7 @@ usage_short()
 {
     /* print a bit of info about the program */
     fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
-    fprintf(stderr, "MPEG Audio Layer II encoder\n\n");
+    fprintf(stderr, "MPEG Audio Layer II (MP2) encoder\n\n");
     fprintf(stderr, "Usage: twolame [options] <infile> [outfile]\n\n");
     fprintf(stderr, "Try \"twolame --help\" for more information.\n");
     exit(ERR_NO_ENCODE);
@@ -301,19 +302,20 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         { "downmix",        no_argument,            NULL,       'a' },
         { "bitrate",        required_argument,      NULL,       'b' },
         { "psyc-mode",      required_argument,      NULL,       'P' },
-        { "vbr",            required_argument,      NULL,       'v' },
+        { "vbr",            no_argument,  		    NULL,       'v' },
+        { "vbr-level",      required_argument,      NULL,       'V' },
+        { "max-bitrate",    required_argument,      NULL,       'B' },
         { "ath",            required_argument,      NULL,       'l' },
         { "quick",          required_argument,      NULL,       'q' },
         { "single-frame",   no_argument,            NULL,       'S' },
         
         // Misc
         { "copyright",      no_argument,            NULL,       'c' },
-        { "original",   	no_argument,            NULL,       1003 },
         { "non-original",   no_argument,            NULL,       'o' },
-        { "crc", 			no_argument,            NULL,       'C' },
+        { "original",   	no_argument,            NULL,       1003 },
+        { "protect", 		no_argument,            NULL,       'p' },
         { "padding",        no_argument,            NULL,       'd' },
-        { "max-bitrate",    required_argument,      NULL,       'B' },
-        { "reserve-bits",   required_argument,      NULL,       'T' },
+        { "reserve-bits",   required_argument,      NULL,       'R' },
         { "deemphasis",     required_argument,      NULL,       'e' },
         { "energy",         no_argument,            NULL,       'E' },
         
@@ -402,6 +404,28 @@ parse_args(int argc, char **argv, twolame_options * encopts )
             case 'P':
                 twolame_set_psymodel(encopts, atoi(optarg));
                 break;
+                
+            case 'v':
+                twolame_set_VBR(encopts, TRUE);
+                break;
+
+            case 'V':
+                twolame_set_VBR(encopts, TRUE);
+                twolame_set_VBR_level(encopts, atof(optarg));
+                break;
+
+            case 'B':
+                twolame_set_VBR_max_bitrate_kbps(encopts, atoi(optarg));
+                break;
+
+            case 'l':
+                twolame_set_ATH_level(encopts, atof(optarg));
+                break;
+                
+            case 'q':
+                twolame_set_quick_mode(encopts, TRUE);
+                twolame_set_quick_count(encopts, atoi(optarg));
+                break;
 
             case 'S':
                 single_frame_mode = TRUE;
@@ -418,27 +442,11 @@ parse_args(int argc, char **argv, twolame_options * encopts )
             case 1003:  // --original
                 twolame_set_original(encopts, TRUE);
                 break;
-            case 'C':
+            case 'p':
                 twolame_set_error_protection(encopts, TRUE);
                 break;
             case 'd':
                 twolame_set_padding(encopts, TWOLAME_PAD_ALL);
-                break;
-            case 'q':
-                twolame_set_quick_mode(encopts, TRUE);
-                twolame_set_quick_count(encopts, atoi(optarg));
-                break;
-
-            case 'v':
-                twolame_set_VBR(encopts, TRUE);
-                twolame_set_VBR_q(encopts, atof(optarg));
-                break;
-
-            case 'l':
-                twolame_set_ATH_level(encopts, atof(optarg));
-                break;
-            case 'u':
-                twolame_set_VBR_max_bitrate_kbps(encopts, atoi(optarg));
                 break;
             case 'R':
                 twolame_set_num_ancillary_bits(encopts, atoi(optarg));
