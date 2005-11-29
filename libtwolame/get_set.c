@@ -281,7 +281,7 @@ float twolame_get_VBR_level (twolame_options *glopts)
 }
 
 // Deprecated:
-int twolame_set_VBR_q (twolame_options *glopts, float q)
+int twolame_set_VBR_q (twolame_options *glopts, float level)
 {
 	// Limit is -50 to 50, but useful range is -10 to 10
 	if (fabs(level)>50.0)
