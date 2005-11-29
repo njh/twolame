@@ -1,6 +1,14 @@
 What is new in TwoLAME 
 ======================
 
+
+Version 0.3.4 (2005-11-29)
+--------------------------
+
+- (libtwolame) Added back twolame_get_VBR_q/twolame_set_VBR_q
+- More documentation is installed
+
+
 Version 0.3.4 (2005-11-19)
 --------------------------
 
@@ -19,12 +27,14 @@ Version 0.3.4 (2005-11-19)
 - Documentation improvements and corrections
 - (libtwolame) made some of VBR debugging send to stderr instead of stdout
 
+
 Version 0.3.3 (2005-04-19)
 --------------------------
 
 - Added Debian package description
 - Now installs documentation
 - Removed old unused tables.c and tables.h sources
+
 
 Version 0.3.2 (2005-04-10)
 --------------------------
@@ -64,3 +74,5 @@ Version 0.3.0 (2004-09-14)
 - I have broken energy levels support (sorry !) - will try and fix
 - Added LGPL header to the top of all the files
 - Added toolame_encode_buffer_interleaved
+
+
