@@ -62,14 +62,17 @@ pkghtml_DATA = \
     $(htmldir)/twolame-quirks.css \
     $(htmldir)/vbr.html
 
+pkgdoc_DATA = \
+	$(srcdir)/api.txt \
+	$(srcdir)/psycho.txt \
+	$(srcdir)/twolame.1.txt \
+	$(srcdir)/vbr.txt
 
-EXTRA_DIST = $(man_MANS) $(pkghtml_DATA) \
+EXTRA_DIST = \
+	$(man_MANS) \
+	$(pkgdoc_DATA) \
+	$(pkghtml_DATA) \
 	dist10-text/*.txt \
-	api.txt \
 	doxygen.conf \
 	index.txt \
-	psycho.txt \
-	twolame.1 \
-	twolame.1.txt \
-	twolame.1.xml \
-	vbr.txt
+	twolame.1.xml
