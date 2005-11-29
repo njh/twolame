@@ -65,7 +65,6 @@ pkghtml_DATA = \
 pkgdoc_DATA = \
 	$(srcdir)/api.txt \
 	$(srcdir)/psycho.txt \
-	$(srcdir)/twolame.1.txt \
 	$(srcdir)/vbr.txt
 
 EXTRA_DIST = \
@@ -75,4 +74,5 @@ EXTRA_DIST = \
 	dist10-text/*.txt \
 	doxygen.conf \
 	index.txt \
+	twolame.1.txt \
 	twolame.1.xml
