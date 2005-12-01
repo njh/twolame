@@ -2,7 +2,7 @@ What is new in TwoLAME
 ======================
 
 
-Version 0.3.4 (2005-11-29)
+Version 0.3.5 (2005-11-29)
 --------------------------
 
 - (libtwolame) Added back twolame_get_VBR_q/twolame_set_VBR_q
