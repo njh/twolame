@@ -7,13 +7,13 @@ dnl ############# Initialization
 
 AC_INIT([twolame], [0.3.5], [twolame-discuss@lists.sourceforge.net])
 
-AC_CONFIG_SRCDIR( libtwolame/twolame.h )
-AC_CONFIG_AUX_DIR( build )
+AC_CONFIG_SRCDIR(libtwolame/twolame.h)
+AC_CONFIG_AUX_DIR(build)
 AC_CANONICAL_SYSTEM
 
 dnl Version 1.7 of automake is recommended
 AM_INIT_AUTOMAKE( 1.7 )
-AM_CONFIG_HEADER( build/config.h )
+AM_CONFIG_HEADER(build/config.h)
 
 
 
