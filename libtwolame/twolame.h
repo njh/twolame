@@ -71,7 +71,7 @@ typedef enum {
 	TWOLAME_EMPHASIS_N = 0,	/**< No Emphasis */
 	TWOLAME_EMPHASIS_5 = 1,	/**< 50/15 ms */
 							// reserved
-	TWOLAME_EMPHASIS_C = 3,	/**< CCIT J.17 */ 
+	TWOLAME_EMPHASIS_C = 3	/**< CCIT J.17 */ 
 } TWOLAME_Emphasis;
 
 
