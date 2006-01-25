@@ -1,5 +1,5 @@
 
-AM_CFLAGS = -I ../build/ -I../libtwolame/ @SNDFILE_CFLAGS@
+AM_CFLAGS = -I$(top_srcdir)/build/ -I$(top_srcdir)/libtwolame/ @SNDFILE_CFLAGS@
 AM_LDFLAGS = @SNDFILE_LIBS@
 
 

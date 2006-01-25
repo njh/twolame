@@ -1,6 +1,12 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.6 (2006-12-25)
+--------------------------
+
+- Removed comma which was causing problems with -pedantic
+   * Thanks to Akos Maroy
+
 
 Version 0.3.5 (2005-11-29)
 --------------------------
