@@ -6,6 +6,7 @@ Version 0.3.6 (2006-12-25)
 
 - Removed comma which was causing problems with -pedantic
    * Thanks to Akos Maroy
+- (libtwolame) Added libtool library versioning
 
 
 Version 0.3.5 (2005-11-29)
