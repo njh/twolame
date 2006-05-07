@@ -1,6 +1,11 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.7 (2006-05-07)
+- (libtwolame) Added twolame_encode_buffer_float32() function
+- (libtwolame) Fix NAN bug for AMD64 processors
+
+
 Version 0.3.6 (2006-12-25)
 --------------------------
 

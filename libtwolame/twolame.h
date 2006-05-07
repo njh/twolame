@@ -140,7 +140,7 @@ twolame_options *twolame_init(void);
 int twolame_init_params(twolame_options *glopts);
 
 
-/** Encode some PCM audio to MP2.
+/** Encode some 16-bit PCM audio to MP2.
  *
  *  Takes 16-bit PCM audio samples from seperate left and right
  *  buffers and places encoded audio into mp2buffer.
@@ -163,7 +163,7 @@ int twolame_encode_buffer(
 		int mp2buffer_size );
 
 
-/** Encode some PCM audio to MP2.
+/** Encode some 16-bit PCM audio to MP2.
  *
  *  Takes interleaved 16-bit PCM audio samples from a single 
  *  buffer and places encoded audio into mp2buffer.
@@ -179,6 +179,32 @@ int twolame_encode_buffer(
 int twolame_encode_buffer_interleaved(
 		twolame_options *glopts,
 		const short int pcm[],
+		int num_samples,
+		unsigned char *mp2buffer,
+		int mp2buffer_size );
+
+
+/** Encode some 32-bit PCM audio to MP2.
+ *
+ *  Takes 32-bit floating point PCM audio samples from seperate 
+ *  left and right buffers and places encoded audio into mp2buffer.
+ *
+ *  Note: the 32-bit samples are currently scaled down to 
+ *  16-bit samples internally.
+ *  
+ *  \param glopts 			twolame options pointer
+ *  \param leftpcm			Left channel audio samples
+ *  \param rightpcm			Right channel audio samples
+ *  \param num_samples		Number of samples per channel
+ *  \param mp2buffer		Buffer to place encoded audio into
+ *  \param mp2buffer_size	Size of the output buffer
+ *  \return 				The number of bytes put in output buffer
+ *							or a negative value on error
+ */
+int twolame_encode_buffer_float32(
+		twolame_options *glopts,
+        const float     leftpcm [],
+        const float     rightpcm [],
 		int num_samples,
 		unsigned char *mp2buffer,
 		int mp2buffer_size );

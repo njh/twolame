@@ -3,6 +3,12 @@ TwoLAME TODO List
 
 - not sure if encode_frame() in toolame.c is correct
     frame of mpeg1 is only 576 samples, not 1152 ?
+
+- use Exact-width integer types (eg uint16_t)
+
+- add twolame_get_framesize()
+
+- use 32-bit floats internally where possible
     
 - Add more feedback to frontend
     - Total number of frames while encoding

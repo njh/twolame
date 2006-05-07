@@ -25,6 +25,7 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
+#include <limits.h>
 
 #include "config.h"
 
@@ -754,6 +755,93 @@ int twolame_encode_buffer_interleaved(
 	buffer_deinit( &mybs );
 	
 	
+	return(mp2_size);
+}
+
+
+static void float32_to_short(
+	const float in[],
+	short out[],
+	int num_samples)
+{
+	int n;
+	
+	for(n=0; n<num_samples; n++) {
+		int tmp = lrintf(in[n] * 32768.0f);
+		if (tmp > SHRT_MAX) {
+			out[n] = SHRT_MAX;
+		} else if (tmp < SHRT_MIN) {
+			out[n] = SHRT_MIN;
+		} else {
+			out[n] = (short) tmp;
+		}
+	}
+}
+
+
+/*
+  glopts
+  leftpcm - holds left channel (or mono channel)
+  rightpcm - d'uh
+  num_samples - the number of samples in each channel
+  mp2buffer - a pointer to the place where we want the mpeg data to be written
+  mp2buffer_size - how much space the user allocated for this buffer
+  mp2fill_size - how much mpeg data the library has put into the mp2buffer 
+*/
+
+int twolame_encode_buffer_float32(
+		twolame_options *glopts,
+		const float leftpcm[],
+		const float rightpcm[],
+		int num_samples,
+		unsigned char *mp2buffer,
+		int mp2buffer_size )
+{
+	int mp2_size=0;
+	bit_stream *mybs;
+
+	if (num_samples==0) return 0;
+
+
+	// now would be a great time to validate the size of the buffer.
+	// samples/1152 * sizeof(frame) < mp2buffer_size 
+	mybs = buffer_init( mp2buffer, mp2buffer_size );
+
+
+	// Use up all the samples in in_buffer
+	while( num_samples ) {
+	
+		// fill up glopts->buffer with as much as we can
+		int samples_to_copy = 1152 - glopts->samples_in_buffer;
+		if (num_samples < samples_to_copy) samples_to_copy = num_samples;
+
+		/* Copy across samples */
+		float32_to_short( leftpcm, &glopts->buffer[0][glopts->samples_in_buffer], samples_to_copy );
+		if (glopts->num_channels==2)
+		float32_to_short( rightpcm, &glopts->buffer[0][glopts->samples_in_buffer], samples_to_copy );
+		leftpcm+=samples_to_copy;
+		rightpcm+=samples_to_copy;		
+		
+		/* Update sample counts */
+		glopts->samples_in_buffer += samples_to_copy;
+		num_samples -= samples_to_copy;
+		
+		
+		// is there enough to encode a whole frame ?
+		if (glopts->samples_in_buffer >= 1152) {
+			int bytes = encode_frame( glopts, mybs );
+			if (bytes<=0) {
+				buffer_deinit( &mybs );
+				return bytes;
+			}
+			mp2_size += bytes;
+			glopts->samples_in_buffer -= 1152;
+		}
+	}
+
+	// free up the bit stream buffer structure
+	buffer_deinit( &mybs );
+
 	return(mp2_size);
 }
 
