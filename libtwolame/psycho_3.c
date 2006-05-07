@@ -238,14 +238,19 @@ static void psycho_3_noise_label (psycho_3_mem *mem, FLOAT power[HBLKSIZE], FLOA
       }
     }
 
-    if (sum<=DBMIN) 
+	/* MEANX, crash on AMD64 without this hack.
+	   See https://sourceforge.net/tracker/?func=detail&atid=735435&aid=1453400&group_id=136040
+	   Probably a better way to do this */
+    if (sum<=DBMIN || esum<0.00001) 
       /* If the energy sum is really small, just pretend the noise occurs 
 	 in the centre frequency line */
       centre = (cbandindex[i] + cbandindex[i+1])/2;
     else
+    {
       /* Otherwise, work out the mean position of the noise, and put it there. */
       centre = cbandindex[i] + (int)(centreweight/esum);
-
+    }
+    // /MEANX
     Xnm[centre] = sum;
     noiselabel[centre] = NOISE;
   }
