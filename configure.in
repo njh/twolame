@@ -136,7 +136,6 @@ dnl ############## Final Output
 AC_OUTPUT(
 	Makefile \
 	twolame.pc \
-	debian/Makefile \
 	doc/Makefile \
 	libtwolame/Makefile \
 	frontend/Makefile \
