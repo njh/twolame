@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -23,9 +23,7 @@
 #ifndef	_CRC_H_
 #define	_CRC_H_
 
-void crc_calc (twolame_options *glopts, unsigned int[2][SBLIMIT],
-		      unsigned int[2][SBLIMIT], unsigned int *);
-void crc_update (unsigned int data, unsigned int length, unsigned int *crc);
+void crc_writeheader( unsigned char *bitstream, int bit_count );
 
 #endif
 

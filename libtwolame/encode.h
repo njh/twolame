@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -47,11 +47,11 @@ void sf_transmission_pattern (twolame_options *glopts,
 
 void write_header (twolame_options *glopts, bit_stream * bs);
 
-int write_bit_alloc (twolame_options *glopts, 
+void write_bit_alloc (twolame_options *glopts, 
               unsigned int bit_alloc[2][SBLIMIT],
               bit_stream * bs);
 
-int write_scalefactors (twolame_options *glopts, 
+void write_scalefactors (twolame_options *glopts, 
              unsigned int bit_alloc[2][SBLIMIT],
 			 unsigned int sf_selectinfo[2][SBLIMIT],
 			 unsigned int scalar[2][3][SBLIMIT],

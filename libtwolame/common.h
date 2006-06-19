@@ -248,6 +248,7 @@ typedef struct {
 	int nch;				/* num channels in output bitstream: 1 for mono, 2 for stereo */
 	int jsbound;			/* first band of joint stereo coding */
 	int sblimit;			/* total number of sub bands */
+	
 } frame_info;
 
 
@@ -319,15 +320,15 @@ struct twolame_options_struct
 	int lower_index;
 	int upper_index;
 	int bitrateindextobits[15];
-	int vbr_frame_count;			// Used for debugging VBR
+	int vbr_frame_count;				// Used for debugging VBR
 	
 	
 	// Used by twolame_encode_frame
 	int twolame_init;
-	short int buffer[2][1152];	// Sample buffer
+	short int buffer[2][1152];			// Sample buffer
 	unsigned int samples_in_buffer;		// Number of samples currently in buffer
 	unsigned int psycount;
-	unsigned int crc;
+	unsigned int num_crc_bits;			// Number of bits CRC is calculated on
 	
 	unsigned int bit_alloc[2][SBLIMIT];
 	unsigned int scfsi[2][SBLIMIT];

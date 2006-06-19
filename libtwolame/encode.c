@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -437,59 +437,52 @@ void sf_transmission_pattern (twolame_options *glopts,
 
 void write_header (twolame_options *glopts, bit_stream * bs)
 {
-  frame_header * header = &glopts->header;
-
-  buffer_putbits (bs, 0xfff, 12);	/* syncword 12 bits */
-  buffer_put1bit (bs, header->version);	/* ID        1 bit  */
-  buffer_putbits (bs, 4 - header->lay, 2);	/* layer     2 bits */
-  buffer_put1bit (bs, !header->error_protection);	/* bit set => no err prot */
-  buffer_putbits (bs, header->bitrate_index, 4);
-  buffer_putbits (bs, header->samplerate_idx, 2);
-  buffer_put1bit (bs, header->padding);
-  buffer_put1bit (bs, header->private_bit);	/* private_bit */
-  buffer_putbits (bs, header->mode, 2);
-  buffer_putbits (bs, header->mode_ext, 2);
-  buffer_put1bit (bs, header->copyright);
-  buffer_put1bit (bs, header->original);
-  buffer_putbits (bs, header->emphasis, 2);
+	frame_header * header = &glopts->header;
+	
+	buffer_putbits (bs, 0xfff, 12);	/* syncword 12 bits */
+	buffer_put1bit (bs, header->version);	/* ID        1 bit  */
+	buffer_putbits (bs, 4 - header->lay, 2);	/* layer     2 bits */
+	buffer_put1bit (bs, !header->error_protection);	/* bit set => no err prot */
+	buffer_putbits (bs, header->bitrate_index, 4);
+	buffer_putbits (bs, header->samplerate_idx, 2);
+	buffer_put1bit (bs, header->padding);
+	buffer_put1bit (bs, header->private_bit);	/* private_bit */
+	buffer_putbits (bs, header->mode, 2);
+	buffer_putbits (bs, header->mode_ext, 2);
+	buffer_put1bit (bs, header->copyright);
+	buffer_put1bit (bs, header->original);
+	buffer_putbits (bs, header->emphasis, 2);
 }
 
 /*************************************************************************
  encode_bit_alloc (Layer II)
 
- PURPOSE:Writes bit allocation information onto bitstream
+ PURPOSE: Writes bit allocation information onto bitstream
 
  4,3,2, or 0 bits depending on the quantization table used.
 
 ************************************************************************/
-int write_bit_alloc (twolame_options *glopts,
+void write_bit_alloc (twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		bit_stream * bs)
 {
-  frame_info * frame = &glopts->frame;
-  int sb, ch;
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
-  int jsbound = frame->jsbound;
-  int nbBit=0;
-
-  for (sb = 0; sb < sblimit; sb++) 
-  {
-    if (sb < jsbound) 
-    {
-      for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++)
-      {
-	buffer_putbits (bs, bit_alloc[ch][sb], nbal[ line[glopts->tablenum][sb] ]); // (*alloc)[sb][0].bits);
-        nbBit+=nbal[ line[glopts->tablenum][sb]];
-      }
-    }
-    else
-    {
-      buffer_putbits (bs, bit_alloc[0][sb], nbal[ line[glopts->tablenum][sb] ]); //(*alloc)[sb][0].bits);
-        nbBit+=nbal[ line[glopts->tablenum][sb] ];
-    }
-  }
-  return nbBit;
+	frame_info * frame = &glopts->frame;
+	int sb, ch;
+	int nch = frame->nch;
+	int sblimit = frame->sblimit;
+	int jsbound = frame->jsbound;
+	
+	for (sb = 0; sb < sblimit; sb++) {
+		if (sb < jsbound)  {
+			for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++) {
+				buffer_putbits (bs, bit_alloc[ch][sb], nbal[ line[glopts->tablenum][sb] ]);
+				glopts->num_crc_bits+=nbal[ line[glopts->tablenum][sb]];
+			}
+		} else {
+			buffer_putbits (bs, bit_alloc[0][sb], nbal[ line[glopts->tablenum][sb] ]);
+			glopts->num_crc_bits+=nbal[ line[glopts->tablenum][sb] ];
+		}
+	}
 }
 
 /************************************************************************
@@ -504,48 +497,46 @@ int write_bit_alloc (twolame_options *glopts,
 
 ************************************************************************/
 
-int write_scalefactors ( twolame_options *glopts,
+void write_scalefactors ( twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		unsigned int sf_selectinfo[2][SBLIMIT],
 		unsigned int sf_index[2][3][SBLIMIT],
 		bit_stream * bs)
 {
-  frame_info * frame = &glopts->frame;
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
-  int sb, gr, ch;
-  int nbBit=0;
-  /* Write out the scalefactor selection information */
-  for (sb = 0; sb < sblimit; sb++)
-    for (ch = 0; ch < nch; ch++)
-      if (bit_alloc[ch][sb])
-      {
-	buffer_putbits (bs, sf_selectinfo[ch][sb], 2);
-        nbBit+=2;
-      }
-
-  for (sb = 0; sb < sblimit; sb++)
-    for (ch = 0; ch < nch; ch++)
-      if (bit_alloc[ch][sb])	/* above jsbound, bit_alloc[0][i] == ba[1][i] */
-	switch (sf_selectinfo[ch][sb]) {
-	case 0:
-	  for (gr = 0; gr < 3; gr++)
-          {
-	    buffer_putbits (bs, sf_index[ch][gr][sb], 6);
-            
-          }
-	  break;
-	case 1:
-	case 3:
-	  buffer_putbits (bs, sf_index[ch][0][sb], 6);
-	  buffer_putbits (bs, sf_index[ch][2][sb], 6);
-          
-	  break;
-	case 2:
-	  buffer_putbits (bs, sf_index[ch][0][sb], 6);
-          
+	frame_info * frame = &glopts->frame;
+	int nch = frame->nch;
+	int sblimit = frame->sblimit;
+	int sb, gr, ch;
+	
+	/* Write out the scalefactor selection information */
+	for (sb = 0; sb < sblimit; sb++)
+	for (ch = 0; ch < nch; ch++)
+	if (bit_alloc[ch][sb])
+	{
+		buffer_putbits(bs, sf_selectinfo[ch][sb], 2);
+		glopts->num_crc_bits+=2;
 	}
-  return nbBit;
+	
+	/* Write out the scalefactors */
+	for (sb = 0; sb < sblimit; sb++)
+	for (ch = 0; ch < nch; ch++)
+	if (bit_alloc[ch][sb]) // above jsbound, bit_alloc[0][i] == ba[1][i] 
+	{ 
+		switch (sf_selectinfo[ch][sb]) {
+			case 0:
+				for (gr = 0; gr < 3; gr++)
+					buffer_putbits(bs, sf_index[ch][gr][sb], 6);
+			break;
+			case 1:
+			case 3:
+				buffer_putbits(bs, sf_index[ch][0][sb], 6);
+				buffer_putbits(bs, sf_index[ch][2][sb], 6);
+			break;
+			case 2:
+				buffer_putbits(bs, sf_index[ch][0][sb], 6);
+			break;
+		}
+	}
 }
 
 
@@ -668,41 +659,44 @@ void write_samples ( twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		bit_stream * bs)
 {
-  frame_info *frame = &glopts->frame;
-  unsigned int temp;
-  unsigned int sb, j, ch, gr, x, y;
-  unsigned int nch = frame->nch;
-  unsigned int sblimit = frame->sblimit;
-  unsigned int jsbound = frame->jsbound;
-
-  for (gr = 0; gr < 3; gr++)
-    for (j = 0; j < SCALE_BLOCK; j += 3)
-      for (sb = 0; sb < sblimit; sb++)
+	frame_info *frame = &glopts->frame;
+	unsigned int temp;
+	unsigned int sb, j, ch, gr, x, y;
+	unsigned int nch = frame->nch;
+	unsigned int sblimit = frame->sblimit;
+	unsigned int jsbound = frame->jsbound;
+	
+	for (gr = 0; gr < 3; gr++)
+	for (j = 0; j < SCALE_BLOCK; j += 3)
+	for (sb = 0; sb < sblimit; sb++)
 	for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++)
+	{
+		if (bit_alloc[ch][sb]) {
+			int thisline = line[glopts->tablenum][sb];
+			int thisstep_index = step_index[thisline][bit_alloc[ch][sb]];
+			
+			/* Check how many samples per codeword */
+			if (group[thisstep_index] == 3) {
+				/* Going to send 1 sample per codeword -> 3 samples */
+				for (x = 0; x < 3; x++) {
+					buffer_putbits (bs, sbband[ch][gr][j + x][sb], bits[thisstep_index]); 
+				}
 
-	  if (bit_alloc[ch][sb]) {
-	    int thisline = line[glopts->tablenum][sb];
-	    int thisstep_index = step_index[thisline][bit_alloc[ch][sb]];
-	    /* Check how many samples per codeword */
-	    if (group[thisstep_index] == 3) {
-	      /* Going to send 1 sample per codeword -> 3 samples */
-	      for (x = 0; x < 3; x++) {
-		buffer_putbits (bs, sbband[ch][gr][j + x][sb], bits[thisstep_index]); 
-	      }
-	    } else {
-	      /* ISO11172 Sec C.1.5.2.8 
-		 If steps=3, 5 or 9, then three consecutive samples are coded
-		 as one codeword i.e. only one value (V) is transmitted for this 
-		 triplet. If the 3 subband samples are x,y,z then
-		 V = (steps*steps)*z + steps*y +x
-	      */
-	      y = steps[thisstep_index];
-	      temp =
-		sbband[ch][gr][j][sb] + sbband[ch][gr][j + 1][sb] * y +
-		sbband[ch][gr][j + 2][sb] * y * y;
-	      buffer_putbits (bs, temp, bits[thisstep_index]); 
-	    }
-	  }
+			} else {
+				/* ISO11172 Sec C.1.5.2.8 
+				If steps=3, 5 or 9, then three consecutive samples are coded
+				as one codeword i.e. only one value (V) is transmitted for this 
+				triplet. If the 3 subband samples are x,y,z then
+				V = (steps*steps)*z + steps*y +x
+				*/
+				y = steps[thisstep_index];
+				temp =
+				sbband[ch][gr][j][sb] + sbband[ch][gr][j + 1][sb] * y +
+				sbband[ch][gr][j + 2][sb] * y * y;
+				buffer_putbits (bs, temp, bits[thisstep_index]); 
+			}
+		}
+	}
 }
 
 

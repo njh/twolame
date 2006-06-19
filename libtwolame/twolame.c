@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -177,7 +177,6 @@ twolame_options *twolame_init(void) {
 	newoptions->j_sample = NULL;
 	newoptions->sb_sample = NULL;
 	newoptions->psycount = 0;
-	newoptions->crc = 0;
 
 	newoptions->p0mem = NULL;
 	newoptions->p1mem = NULL;
@@ -356,7 +355,6 @@ int twolame_init_params (twolame_options *glopts) {
 	// Initialise interal variables
 	glopts->samples_in_buffer = 0;
 	glopts->psycount = 0;
-	glopts->crc = 0;
 
   
   	// Allocate memory to larger buffers 
@@ -384,7 +382,8 @@ int twolame_init_params (twolame_options *glopts) {
 
 	return(0);
 }
-extern void crc_update (unsigned int data, unsigned int length, unsigned int *crc);
+
+
 /* Scale the samples in the frame sample buffer
    using the user specified values
    and downmix/upmix according to the number of input/output channels 
@@ -434,50 +433,6 @@ static void scale_and_mix_samples( twolame_options *glopts )
 	}
 
 }
-// MEANX
-
-static unsigned int CRC_update2(unsigned int value, unsigned int crc,unsigned int nbBit)
-{
-    int i;
-    value <<= 8;
-    for (i = 0; i < nbBit; i++) {
-	value <<= 1;
-	crc <<= 1;
-
-	if (((crc ^ value) & 0x10000))
-	    crc ^= CRC16_POLYNOMIAL;
-    }
-    return crc;
-}
-
-
-static void
-CRC_writeheader(int lenInBits, unsigned char *header)
-{
-    unsigned int crc = 0xffff; /* (jo) init crc16 for error_protection */
-    int i,top;
-    int round;
-
-    crc = CRC_update2(header[2], crc,8);
-    crc = CRC_update2(header[3], crc,8);
-    
-    top=6;
-    round=lenInBits>>3;
-
-    for(i=0;i<round;i++)
-    {
-        crc = CRC_update2(header[top++], crc,8);
-    }
-     if(lenInBits & 7)
-     {
-        crc = CRC_update2(header[top], crc,lenInBits&7);
-    }
-//     printf("%d Bits Old %02x%02x new %02x%02x\n",l,header[4],header[5],
-//         (unsigned char)(crc>>8),(unsigned char)(crc & 0xff));
-    header[4] = crc >> 8;
-    header[5] = crc & 255;
-}
-// MEANX
 
 /*
 	Encode a single frame of audio from 1152 samples
@@ -494,11 +449,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	int sb, ch, adb, i;
 	unsigned long frameBits, initial_bits;
 	short sam[2][1056];
-// MEANX
-        int head1,head2;
-        
 
-// /MEANX
 	if (!glopts->twolame_init) {
 		fprintf (stderr, "Please call twolame_init_params() before starting encoding.\n");
 		return -1;
@@ -510,8 +461,11 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	
     // Clear the saved audio buffer
     memset ((char *) sam, 0, sizeof (sam));
+	
+	// Number of bits to calculate CRC on
+	glopts->num_crc_bits=0;
 
-	/* Store the number of bits initially in the bit buffer */
+	// Store the number of bits initially in the bit buffer
 	initial_bits = buffer_sstell(bs);
 
 	adb = available_bits ( glopts );
@@ -564,8 +518,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
     scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->frame.sblimit);
     find_sf_max (glopts, glopts->scalar, glopts->max_sc);
     if (glopts->frame.actual_mode == TWOLAME_JOINT_STEREO) {
-		/* this way we calculate more mono than we need */
-		/* but it is cheap */
+		// this way we calculate more mono than we need but it is cheap 
 		combine_lr (*glopts->sb_sample, *glopts->j_sample, glopts->frame.sblimit);
 		scalefactor_calc (glopts->j_sample, &glopts->j_scale, 1, glopts->frame.sblimit);
     }
@@ -579,12 +532,12 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 			}
 		}
 	} else {
-		/* calculate the psymodel */
+		// calculate the psymodel 
 		switch (glopts->psymodel) {
 			case -1:
 				psycho_n1 (glopts, glopts->smr, nch);
 			break;
-			case 0:	/* Psy Model A */
+			case 0:	// Psy Model A
 				psycho_0 (glopts, glopts->smr, glopts->scalar);	
 			break;
 			case 1:
@@ -594,10 +547,11 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 				psycho_2 (glopts, glopts->buffer, sam, glopts->smr );	
 			break;
 			case 3:
-				/* Modified psy model 1 */
+				// Modified psy model 1
 				psycho_3 (glopts, glopts->buffer, glopts->max_sc, glopts->smr);
 			break;
 			case 4:
+				// Modified psy model 2
 				psycho_4 (glopts, glopts->buffer, sam, glopts->smr );
 			break;	
 			default:
@@ -607,7 +561,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		}
 
 		if (glopts->quickmode == TRUE) {
-			/* copy the smr values and reuse them later */
+			// copy the smr values and reuse them later 
 			for (ch = 0; ch < nch; ch++) {
 				for (sb = 0; sb < SBLIMIT; sb++) glopts->smrdef[ch][sb] = glopts->smr[ch][sb];
 			}
@@ -617,26 +571,21 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 
     sf_transmission_pattern (glopts, glopts->scalar, glopts->scfsi);
     main_bit_allocation (glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
-#if 0 //MEANX
-    if (glopts->error_protection)
-      crc_calc (glopts, glopts->bit_alloc, glopts->scfsi, &glopts->crc);
-#endif
+    
     write_header (glopts, bs);
+    
+    // Leave space for 2 bytes of CRC to be filled in later
 	if (glopts->error_protection)
-		buffer_putbits (bs, glopts->crc, 16);
+		buffer_putbits (bs, 0, 16);
     
-    head1=write_bit_alloc (glopts, glopts->bit_alloc, bs);
-
-    head2=write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
-
-
+    write_bit_alloc (glopts, glopts->bit_alloc, bs);
+    write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
     
-   //MEANX  printf("Bits: %d + %d = %d\n",head1,head2,head1+head2);
     subband_quantization (glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale, *glopts->j_sample, glopts->bit_alloc,
     			  *glopts->subband);
     write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
 
-    /* If not all the bits were used, write out a stack of zeros */
+    // If not all the bits were used, write out a stack of zeros 
     for (i = 0; i < adb; i++)	buffer_put1bit (bs, 0);
 
 
@@ -671,20 +620,18 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		return -1;
     }
 
-    //fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
-
 	// *** FIXME currently broken njh Sept 04
     if (glopts->do_energy_levels)
     	do_energy_levels(glopts, bs);
 
-  // MEANX: Recompute checksum
-  if (glopts->error_protection)
-  {
-      unsigned char *begin=(initial_bits>>3)+bs->buf;
-      int protectedBits=head1+head2;
+	// MEANX: Recompute checksum from bitstream
+	if (glopts->error_protection)
+	{
+		unsigned char *frame_ptr=bs->buf+(initial_bits>>3);
+		crc_writeheader(frame_ptr, glopts->num_crc_bits );
+	}
 
-           CRC_writeheader(protectedBits, begin);
-  }
+    //fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
 
 	return frameBits/8;
 }

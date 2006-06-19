@@ -14,6 +14,11 @@ TwoLAME Authors
  -  Changes to make libtwolame thread-safe
 
 
+.'Mean' - <mean@users.sourceforge.net>
+ -  Fix for AMD64 processors
+ -  Fix for CRC protection
+
+
 .Mike Cheng <mikecheng at NOT planckenergy.com> (remove the NOT)
  -	Author of tooLAME, which TwoLAME is based on.
 
