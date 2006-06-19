@@ -462,7 +462,7 @@ void write_header (twolame_options *glopts, bit_stream * bs)
  4,3,2, or 0 bits depending on the quantization table used.
 
 ************************************************************************/
-void write_bit_alloc (twolame_options *glopts,
+int write_bit_alloc (twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		bit_stream * bs)
 {
@@ -471,15 +471,25 @@ void write_bit_alloc (twolame_options *glopts,
   int nch = frame->nch;
   int sblimit = frame->sblimit;
   int jsbound = frame->jsbound;
+  int nbBit=0;
 
-  for (sb = 0; sb < sblimit; sb++) {
-    if (sb < jsbound) {
+  for (sb = 0; sb < sblimit; sb++) 
+  {
+    if (sb < jsbound) 
+    {
       for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++)
+      {
 	buffer_putbits (bs, bit_alloc[ch][sb], nbal[ line[glopts->tablenum][sb] ]); // (*alloc)[sb][0].bits);
+        nbBit+=nbal[ line[glopts->tablenum][sb]];
+      }
     }
     else
+    {
       buffer_putbits (bs, bit_alloc[0][sb], nbal[ line[glopts->tablenum][sb] ]); //(*alloc)[sb][0].bits);
+        nbBit+=nbal[ line[glopts->tablenum][sb] ];
+    }
   }
+  return nbBit;
 }
 
 /************************************************************************
@@ -494,7 +504,7 @@ void write_bit_alloc (twolame_options *glopts,
 
 ************************************************************************/
 
-void write_scalefactors ( twolame_options *glopts,
+int write_scalefactors ( twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		unsigned int sf_selectinfo[2][SBLIMIT],
 		unsigned int sf_index[2][3][SBLIMIT],
@@ -504,12 +514,15 @@ void write_scalefactors ( twolame_options *glopts,
   int nch = frame->nch;
   int sblimit = frame->sblimit;
   int sb, gr, ch;
-
+  int nbBit=0;
   /* Write out the scalefactor selection information */
   for (sb = 0; sb < sblimit; sb++)
     for (ch = 0; ch < nch; ch++)
       if (bit_alloc[ch][sb])
+      {
 	buffer_putbits (bs, sf_selectinfo[ch][sb], 2);
+        nbBit+=2;
+      }
 
   for (sb = 0; sb < sblimit; sb++)
     for (ch = 0; ch < nch; ch++)
@@ -517,16 +530,22 @@ void write_scalefactors ( twolame_options *glopts,
 	switch (sf_selectinfo[ch][sb]) {
 	case 0:
 	  for (gr = 0; gr < 3; gr++)
+          {
 	    buffer_putbits (bs, sf_index[ch][gr][sb], 6);
+            
+          }
 	  break;
 	case 1:
 	case 3:
 	  buffer_putbits (bs, sf_index[ch][0][sb], 6);
 	  buffer_putbits (bs, sf_index[ch][2][sb], 6);
+          
 	  break;
 	case 2:
 	  buffer_putbits (bs, sf_index[ch][0][sb], 6);
+          
 	}
+  return nbBit;
 }
 
 

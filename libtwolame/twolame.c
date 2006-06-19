@@ -48,8 +48,6 @@
 #include "util.h"
 
 
-
-
 // Returns 0 if successful
 // Returns -1 if unsuccessful
 static int init_header_info( twolame_options *glopts ) {
@@ -386,8 +384,7 @@ int twolame_init_params (twolame_options *glopts) {
 
 	return(0);
 }
-
-
+extern void crc_update (unsigned int data, unsigned int length, unsigned int *crc);
 /* Scale the samples in the frame sample buffer
    using the user specified values
    and downmix/upmix according to the number of input/output channels 
@@ -437,7 +434,50 @@ static void scale_and_mix_samples( twolame_options *glopts )
 	}
 
 }
+// MEANX
 
+static unsigned int CRC_update2(unsigned int value, unsigned int crc,unsigned int nbBit)
+{
+    int i;
+    value <<= 8;
+    for (i = 0; i < nbBit; i++) {
+	value <<= 1;
+	crc <<= 1;
+
+	if (((crc ^ value) & 0x10000))
+	    crc ^= CRC16_POLYNOMIAL;
+    }
+    return crc;
+}
+
+
+static void
+CRC_writeheader(int lenInBits, unsigned char *header)
+{
+    unsigned int crc = 0xffff; /* (jo) init crc16 for error_protection */
+    int i,top;
+    int round;
+
+    crc = CRC_update2(header[2], crc,8);
+    crc = CRC_update2(header[3], crc,8);
+    
+    top=6;
+    round=lenInBits>>3;
+
+    for(i=0;i<round;i++)
+    {
+        crc = CRC_update2(header[top++], crc,8);
+    }
+     if(lenInBits & 7)
+     {
+        crc = CRC_update2(header[top], crc,lenInBits&7);
+    }
+//     printf("%d Bits Old %02x%02x new %02x%02x\n",l,header[4],header[5],
+//         (unsigned char)(crc>>8),(unsigned char)(crc & 0xff));
+    header[4] = crc >> 8;
+    header[5] = crc & 255;
+}
+// MEANX
 
 /*
 	Encode a single frame of audio from 1152 samples
@@ -454,7 +494,11 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	int sb, ch, adb, i;
 	unsigned long frameBits, initial_bits;
 	short sam[2][1056];
-	
+// MEANX
+        int head1,head2;
+        
+
+// /MEANX
 	if (!glopts->twolame_init) {
 		fprintf (stderr, "Please call twolame_init_params() before starting encoding.\n");
 		return -1;
@@ -573,15 +617,21 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 
     sf_transmission_pattern (glopts, glopts->scalar, glopts->scfsi);
     main_bit_allocation (glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
-
+#if 0 //MEANX
     if (glopts->error_protection)
       crc_calc (glopts, glopts->bit_alloc, glopts->scfsi, &glopts->crc);
-
+#endif
     write_header (glopts, bs);
 	if (glopts->error_protection)
 		buffer_putbits (bs, glopts->crc, 16);
-    write_bit_alloc (glopts, glopts->bit_alloc, bs);
-    write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
+    
+    head1=write_bit_alloc (glopts, glopts->bit_alloc, bs);
+
+    head2=write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
+
+
+    
+   //MEANX  printf("Bits: %d + %d = %d\n",head1,head2,head1+head2);
     subband_quantization (glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale, *glopts->j_sample, glopts->bit_alloc,
     			  *glopts->subband);
     write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
@@ -626,6 +676,15 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	// *** FIXME currently broken njh Sept 04
     if (glopts->do_energy_levels)
     	do_energy_levels(glopts, bs);
+
+  // MEANX: Recompute checksum
+  if (glopts->error_protection)
+  {
+      unsigned char *begin=(initial_bits>>3)+bs->buf;
+      int protectedBits=head1+head2;
+
+           CRC_writeheader(protectedBits, begin);
+  }
 
 	return frameBits/8;
 }

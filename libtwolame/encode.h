@@ -47,11 +47,11 @@ void sf_transmission_pattern (twolame_options *glopts,
 
 void write_header (twolame_options *glopts, bit_stream * bs);
 
-void write_bit_alloc (twolame_options *glopts, 
+int write_bit_alloc (twolame_options *glopts, 
               unsigned int bit_alloc[2][SBLIMIT],
               bit_stream * bs);
 
-void write_scalefactors (twolame_options *glopts, 
+int write_scalefactors (twolame_options *glopts, 
              unsigned int bit_alloc[2][SBLIMIT],
 			 unsigned int sf_selectinfo[2][SBLIMIT],
 			 unsigned int scalar[2][3][SBLIMIT],
