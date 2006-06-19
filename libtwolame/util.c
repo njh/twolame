@@ -209,9 +209,11 @@ void twolame_print_config(twolame_options *glopts)
 			if (twolame_get_scale_right(glopts)!=1.0f)
 				fprintf(fd," - Scaling right channel by %f\n", twolame_get_scale_right(glopts));
 
-			if (glopts->num_channels == 2 && glopts->mode == TWOLAME_MONO ) {
-				fprintf(fd, " - Downmixing from stereo to mono.\n");
-			}
+			//if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1 ) {
+			//	fprintf(fd, " - Downmixing from stereo to mono.\n");
+			//} else if (glopts->num_channels_in == 1 && glopts->num_channels_out == 2 ) {
+			//	fprintf(fd, " - Upmixing from mono to stereo.\n");
+			//}
 		}
 		
 		fprintf (fd, "---------------------------------------------------------\n");

@@ -154,13 +154,26 @@ static const FLOAT SNR[18] = {
    0.00,  7.00, 11.00, 16.00, 20.84, 25.28, 31.59, 37.75, 43.84,
   49.89, 55.93, 61.96, 67.98, 74.01, 80.03, 86.05, 92.01, 98.01 };
 
+
+
+static int get_js_bound (int m_ext)
+{
+	static const int jsb_table[4] = { 4, 8, 12, 16 };
+	
+	if (m_ext < 0 || m_ext > 3) {
+		fprintf (stderr, "get_js_bound() bad modext (%d)\n", m_ext);
+		exit (1);
+	}
+	return (jsb_table[m_ext]);
+}
+
+
 void encode_init( twolame_options *glopts ) {
-	frame_info *frame = &glopts->frame;
 	frame_header *header = &glopts->header;
 	int bsp, br_per_ch, sfrq;
 	
 	bsp = header->bitrate_index;
-	br_per_ch = glopts->bitrate / frame->nch;
+	br_per_ch = glopts->bitrate / glopts->num_channels_out;
 	sfrq = (int) (glopts->samplerate_out/1000.0);
 	
 	/* decision rules refer to per-channel bitrates (kbits/sec/chan) */
@@ -178,9 +191,17 @@ void encode_init( twolame_options *glopts ) {
 		glopts->tablenum = 4;
 	}
 	
-	frame->sblimit = table_sblimit[glopts->tablenum];
-	//fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, frame->sblimit);
+	//glopts->sblimit = pick_table ( glopts );
+	/* MFC FIX this up */
+	glopts->sblimit = table_sblimit[glopts->tablenum];
+	//fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, glopts->sblimit);
 	
+	if (glopts->mode == TWOLAME_JOINT_STEREO)
+		glopts->jsbound = get_js_bound(header->mode_ext);
+	else
+		glopts->jsbound = glopts->sblimit;
+	/* alloc, tab_num set in pick_table */
+
 	
 	#define DUMPTABLESx
 	#ifdef DUMPTABLES 
@@ -214,24 +235,6 @@ void encode_init( twolame_options *glopts ) {
 }
 
 
-int get_js_bound (int m_ext)
-{
-	static const int jsb_table[4] = { 4, 8, 12, 16 };
-	
-	if (m_ext < 0 || m_ext > 3) {
-		fprintf (stderr, "get_js_bound() bad modext (%d)\n", m_ext);
-		exit (1);
-	}
-	return (jsb_table[m_ext]);
-}
-
-int get_alloc_table_bits (int tablenum, int sb, int ba)
-{
-	int thisline = line[tablenum][sb];
-	int thisstep_index = step_index[thisline][ba];
-	
-	return bits[thisstep_index];
-}
 
 /* 
    scale_factor_calc
@@ -340,11 +343,10 @@ void find_sf_max (twolame_options *glopts,
 		unsigned int sf_index[2][3][SBLIMIT],
 		FLOAT sf_max[2][SBLIMIT])
 {
-  frame_info *frame = &glopts->frame; 
   unsigned int sb, gr, ch;
   unsigned int lowest_sf_index;
-  unsigned int nch = frame->nch;
-  unsigned int sblimit = frame->sblimit;
+  unsigned int nch = glopts->num_channels_out;
+  unsigned int sblimit = glopts->sblimit;
 
   for (ch = 0; ch < nch; ch++)
     for (sb = 0; sb < sblimit; sb++) {
@@ -370,9 +372,8 @@ void sf_transmission_pattern (twolame_options *glopts,
 		unsigned int sf_index[2][3][SBLIMIT],
 		unsigned int sf_selectinfo[2][SBLIMIT] )
 {
-  frame_info *frame = &glopts->frame; 
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
+  int nch = glopts->num_channels_out;
+  int sblimit = glopts->sblimit;
   int dscf[2];
   int class[2], i, j, k;
   static const int pattern[5][5] = { {0x123, 0x122, 0x122, 0x133, 0x123},
@@ -466,11 +467,10 @@ void write_bit_alloc (twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		bit_stream * bs)
 {
-	frame_info * frame = &glopts->frame;
+	int nch = glopts->num_channels_out;
+	int sblimit = glopts->sblimit;
+	int jsbound = glopts->jsbound;
 	int sb, ch;
-	int nch = frame->nch;
-	int sblimit = frame->sblimit;
-	int jsbound = frame->jsbound;
 	
 	for (sb = 0; sb < sblimit; sb++) {
 		if (sb < jsbound)  {
@@ -503,9 +503,8 @@ void write_scalefactors ( twolame_options *glopts,
 		unsigned int sf_index[2][3][SBLIMIT],
 		bit_stream * bs)
 {
-	frame_info * frame = &glopts->frame;
-	int nch = frame->nch;
-	int sblimit = frame->sblimit;
+	int nch = glopts->num_channels_out;
+	int sblimit = glopts->sblimit;
 	int sb, gr, ch;
 	
 	/* Write out the scalefactor selection information */
@@ -581,11 +580,10 @@ subband_quantization ( twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		unsigned int sbband[2][3][SCALE_BLOCK][SBLIMIT] )
 {
-  frame_info *frame = &glopts->frame;
   int sb, j, ch, gr, qnt_coeff_index, sig;
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
-  int jsbound = frame->jsbound;
+  int nch = glopts->num_channels_out;
+  int sblimit = glopts->sblimit;
+  int jsbound = glopts->jsbound;
   FLOAT d;
 
     for (gr = 0; gr < 3; gr++)
@@ -659,12 +657,11 @@ void write_samples ( twolame_options *glopts,
 		unsigned int bit_alloc[2][SBLIMIT],
 		bit_stream * bs)
 {
-	frame_info *frame = &glopts->frame;
-	unsigned int temp;
+	unsigned int nch = glopts->num_channels_out;
+	unsigned int sblimit = glopts->sblimit;
+	unsigned int jsbound = glopts->jsbound;
 	unsigned int sb, j, ch, gr, x, y;
-	unsigned int nch = frame->nch;
-	unsigned int sblimit = frame->sblimit;
-	unsigned int jsbound = frame->jsbound;
+	unsigned int temp;
 	
 	for (gr = 0; gr < 3; gr++)
 	for (j = 0; j < SCALE_BLOCK; j += 3)
@@ -733,12 +730,11 @@ int bits_for_nonoise ( twolame_options * glopts,
 		unsigned int scfsi[2][SBLIMIT], FLOAT min_mnr,
 		unsigned int bit_alloc[2][SBLIMIT])
 {
-  frame_info *frame = &glopts->frame;
   frame_header *header = &glopts->header;
   int sb, ch, ba;
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
-  int jsbound = frame->jsbound;
+  int nch = glopts->num_channels_out;
+  int sblimit = glopts->sblimit;
+  int jsbound = glopts->jsbound;
   int req_bits = 0, bbal = 0, berr = 0, banc = 32;
   int maxAlloc, sel_bits, sc_bits, smp_bits;
   static const int sfsPerScfsi[] = { 3, 2, 1, 2 };	/* lookup # sfs per scfsi */
@@ -808,9 +804,8 @@ int bits_for_nonoise ( twolame_options * glopts,
 /* must be called before calling main_bit_allocation */
 int init_bit_allocation( twolame_options * glopts )
 {
-	frame_info *frame = &glopts->frame;
 	frame_header *header = &glopts->header;
-	int nch = frame->nch;
+	int nch = glopts->num_channels_out;
 	int brindex;
 	
 	/* these are the tables which specify the limits within which the VBR can vary 
@@ -904,26 +899,26 @@ void main_bit_allocation (twolame_options * glopts,
 		unsigned int scfsi[2][SBLIMIT],
 		unsigned int bit_alloc[2][SBLIMIT], int *adb )
 {
-  frame_info *frame = &glopts->frame;
   frame_header *header = &glopts->header;
   int noisy_sbs;
-  int mode, mode_ext, lay;
+  int mode = glopts->mode;
+  int mode_ext, lay;
   int rq_db;			/* av_db = *adb; Not Used MFC Nov 99 */
   int guessindex = 0;
 
 
-  if ((mode = frame->actual_mode) == TWOLAME_JOINT_STEREO) {
+  if (mode == TWOLAME_JOINT_STEREO) {
     header->mode = TWOLAME_STEREO;
     header->mode_ext = 0;
-    frame->jsbound = frame->sblimit;
+    glopts->jsbound = glopts->sblimit;
     if ((rq_db = bits_for_nonoise (glopts, SMR, scfsi, 0, bit_alloc)) > *adb) {
       header->mode = TWOLAME_JOINT_STEREO;
       mode_ext = 4;		/* 3 is least severe reduction */
       lay = header->lay;
       do {
 	--mode_ext;
-	frame->jsbound = get_js_bound (mode_ext);
-	rq_db = bits_for_nonoise (glopts, SMR, scfsi, 0, bit_alloc);
+	glopts->jsbound = get_js_bound(mode_ext);
+	rq_db = bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc);
       }
       while ((rq_db > *adb) && (mode_ext > 0));
       header->mode_ext = mode_ext;
@@ -1052,13 +1047,12 @@ int vbr_bit_allocation (twolame_options *glopts,
 {
 	int sb, min_ch, min_sb, oth_ch, ch, increment, scale, seli, ba;
 	int bspl, bscf, bsel, ad, bbal = 0;
-	frame_info *frame = &glopts->frame;
 	frame_header *header = &glopts->header;
 	FLOAT mnr[2][SBLIMIT];
 	char used[2][SBLIMIT];
-	int nch = frame->nch;
-	int sblimit = frame->sblimit;
-	int jsbound = frame->jsbound;
+	int nch = glopts->num_channels_out;
+	int sblimit = glopts->sblimit;
+	int jsbound = glopts->jsbound;
 	int banc, berr;
 	static const int sfsPerScfsi[] = { 3, 2, 1, 2 };	/* lookup # sfs per scfsi */
   	int thisstep_index;
@@ -1204,11 +1198,10 @@ int a_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 	int bspl, bscf, bsel, ad, bbal = 0;
 	FLOAT mnr[2][SBLIMIT];
 	char used[2][SBLIMIT];
-	frame_info *frame = &glopts->frame;
 	frame_header *header = &glopts->header;
-	int nch = frame->nch;
-	int sblimit = frame->sblimit;
-	int jsbound = frame->jsbound;
+	int nch = glopts->num_channels_out;
+	int sblimit = glopts->sblimit;
+	int jsbound = glopts->jsbound;
 	int banc, berr;
 	static const int sfsPerScfsi[] = { 3, 2, 1, 2 };	/* lookup # sfs per scfsi */
 

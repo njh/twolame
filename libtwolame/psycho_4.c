@@ -322,7 +322,7 @@ void psycho_4 (twolame_options *glopts,
   FHBLK *lthr;
   F2HBLK *r, *phi_sav;
   
-  int nch = glopts->frame.nch;
+  int nch = glopts->num_channels_out;
   int sfreq = glopts->samplerate_out;
 
   if (!glopts->p4mem) {

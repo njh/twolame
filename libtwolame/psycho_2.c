@@ -279,7 +279,7 @@ void psycho_2 (twolame_options *glopts, short int buffer[2][1152],
   F2HBLK *r, *phi_sav;
   FLOAT *absthr;
   
-  int nch = glopts->frame.nch;
+  int nch = glopts->num_channels_out;
   int sfreq = glopts->samplerate_out;
 
 

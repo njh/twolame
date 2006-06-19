@@ -48,78 +48,6 @@
 #include "util.h"
 
 
-// Returns 0 if successful
-// Returns -1 if unsuccessful
-static int init_header_info( twolame_options *glopts ) {
-	frame_header *header = &glopts->header;
-	
-	/* use the options to create header info structure */
-	header->lay = 2;
-	header->error_protection = glopts->error_protection;
-	header->version = glopts->version;
-	
-	// Convert the sampling frequency to the required index
-	header->samplerate_idx = twolame_get_samplerate_index( glopts->samplerate_out ); 
-	if (header->samplerate_idx < 0) {
-		fprintf(stdout,"Not a valid samplerate: %i\n",glopts->samplerate_out );
-		return -1;
-	}
-	
-	// Convert the bitrate to the an index	
-	header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
-	if (header->bitrate_index < 0) {
-		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate, 
-			twolame_mpeg_version_name(glopts->version));
-		return -1;
-	}
-		
-	// Convert the max VBR bitrate to the an index	
-	glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
-	if (glopts->vbr_upper_index < 0) {
-		fprintf(stdout,"Not a valid max VBR bitrate for this version: %i\n",glopts->vbr_max_bitrate);
-		return -1;
-	}
-	
-	// Copy accross the other settings	
-	header->padding = glopts->padding;
-	header->private_bit = glopts->private_bit;
-	header->mode = glopts->mode;
-	header->mode_ext = 0;
-	header->copyright = glopts->copyright;
-	header->original = glopts->original;
-	header->emphasis = glopts->emphasis;
-	
-	return 0;
-}
-
-
-
-// Returns 0 if successful
-// Returns -1 if unsuccessful
-static int init_frame_info(twolame_options *glopts)
-/* interpret data in hdr str to fields in frame */
-{
-	frame_info *frame = &glopts->frame;
-	frame_header *header = &glopts->header;
-	
-	frame->actual_mode = header->mode;
-	frame->nch = (header->mode == TWOLAME_MONO) ? 1 : 2;
-	
-	//frame->sblimit = pick_table ( glopts );
-	/* MFC FIX this up */
-	// Select table number and sblimit
-	encode_init( glopts );
-	
-	if (glopts->mode == TWOLAME_JOINT_STEREO)
-		frame->jsbound = get_js_bound(header->mode_ext);
-	else
-		frame->jsbound = frame->sblimit;
-	/* alloc, tab_num set in pick_table */
-	
-	return 0;
-}
-
-
 /*
   twolame_init
   Create a set of encoding options and return a pointer to this structure
@@ -136,7 +64,8 @@ twolame_options *twolame_init(void) {
 	}
 	
 	newoptions->version = -1;
-	newoptions->num_channels = 0;
+	newoptions->num_channels_in = 0;
+	newoptions->num_channels_out = 0;
 	newoptions->samplerate_in = 0;
 	newoptions->samplerate_out = 0;
 	
@@ -190,6 +119,54 @@ twolame_options *twolame_init(void) {
 }
 
 
+
+// Returns 0 if successful
+// Returns -1 if unsuccessful
+static int init_header_info( twolame_options *glopts ) {
+	frame_header *header = &glopts->header;
+	
+	/* use the options to create header info structure */
+	header->lay = 2;
+	header->error_protection = glopts->error_protection;
+	header->version = glopts->version;
+	
+	// Convert the sampling frequency to the required index
+	header->samplerate_idx = twolame_get_samplerate_index( glopts->samplerate_out ); 
+	if (header->samplerate_idx < 0) {
+		fprintf(stdout,"Not a valid samplerate: %i\n",glopts->samplerate_out );
+		return -1;
+	}
+	
+	// Convert the bitrate to the an index	
+	header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
+	if (header->bitrate_index < 0) {
+		fprintf(stdout,"Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate, 
+			twolame_mpeg_version_name(glopts->version));
+		return -1;
+	}
+		
+	// Convert the max VBR bitrate to the an index	
+	glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
+	if (glopts->vbr_upper_index < 0) {
+		fprintf(stdout,"Not a valid max VBR bitrate for this version: %i\n",glopts->vbr_max_bitrate);
+		return -1;
+	}
+	
+	// Copy accross the other settings	
+	header->padding = glopts->padding;
+	header->private_bit = glopts->private_bit;
+	header->mode = glopts->mode;
+	header->mode_ext = 0;
+	header->copyright = glopts->copyright;
+	header->original = glopts->original;
+	header->emphasis = glopts->emphasis;
+	
+	return 0;
+}
+
+
+
+
 /**
  * This function should actually *check* the parameters to see if they
  * make sense. 
@@ -203,8 +180,8 @@ int twolame_init_params (twolame_options *glopts) {
 	}
 
 	// Check the number of channels
-	if (glopts->num_channels != 1 && glopts->num_channels != 2) {
-		fprintf(stderr,"twolame_init_params(): must specify number of channels in input samples using twolame_set_num_channels().\n");
+	if (glopts->num_channels_in != 1 && glopts->num_channels_in != 2) {
+		fprintf(stderr,"twolame_init_params(): must specify number of input channels using twolame_set_num_channels().\n");
 		return -1;
 	}
 
@@ -229,11 +206,11 @@ int twolame_init_params (twolame_options *glopts) {
 
 	// Choose mode (if none chosen)
 	if (glopts->mode == TWOLAME_AUTO_MODE) {
-		if (glopts->num_channels == 2) glopts->mode = TWOLAME_STEREO;
+		if (glopts->num_channels_in == 2) glopts->mode = TWOLAME_STEREO;
 		else glopts->mode = TWOLAME_MONO;
 		if (glopts->verbosity>=3) {
 			fprintf(stderr, "Chosen mode to be '%s' because of %d input channels.\n",
-				twolame_get_mode_name(glopts), glopts->num_channels);
+				twolame_get_mode_name(glopts), glopts->num_channels_in);
 		}
 	}
 
@@ -305,6 +282,9 @@ int twolame_init_params (twolame_options *glopts) {
 		twolame_set_padding(glopts, FALSE);
 	}
 	
+	// Set the Number of output channels
+	glopts->num_channels_out = (glopts->mode == TWOLAME_MONO) ? 1 : 2;
+	
 	//MFC FIX:	Need to cross validate the number of ancillary_bits
 	// with the energylevel setting.
 	//
@@ -334,10 +314,8 @@ int twolame_init_params (twolame_options *glopts) {
 		return -1;
 	}
 	
-	// load the alloc tables and do some other stuff
-	if (init_frame_info( glopts )<0) {
-		return -1;
-	}
+	// Select table number and sblimit
+	encode_init( glopts );
 	
 	// initialise bitrate allocation
 	if (init_bit_allocation( glopts )<0) {
@@ -390,7 +368,6 @@ int twolame_init_params (twolame_options *glopts) {
 */
 static void scale_and_mix_samples( twolame_options *glopts )
 {
-	frame_info *frame = &glopts->frame;
 	int num_samples = glopts->samples_in_buffer;
 	int i;
 	
@@ -398,7 +375,7 @@ static void scale_and_mix_samples( twolame_options *glopts )
     if (glopts->scale != 0 && glopts->scale != 1.0) {
 		for (i=0 ; i<num_samples; ++i) {
 	    	glopts->buffer[0][i] *= glopts->scale;
-	    	if (glopts->num_channels == 2)
+	    	if (glopts->num_channels_in == 2)
 			glopts->buffer[1][i] *= glopts->scale;
 	    }
     }
@@ -418,7 +395,7 @@ static void scale_and_mix_samples( twolame_options *glopts )
 	}
 
     // Downmix to Mono if 2 channels in and 1 channel out 
-	if (glopts->num_channels == 2 && frame->nch == 1) {
+	if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1) {
 		for (i=0; i<num_samples; ++i) {
 			glopts->buffer[0][i] = ((long) glopts->buffer[0][i] + glopts->buffer[1][i]) / 2;
 			glopts->buffer[1][i] = 0;
@@ -426,7 +403,7 @@ static void scale_and_mix_samples( twolame_options *glopts )
 	}
 
    // Upmix to Stereo if 2 channels out and 1 channel in
-	if (glopts->num_channels == 1 && frame->nch == 2) {
+	if (glopts->num_channels_in == 1 && glopts->num_channels_out == 2) {
 		for (i=0; i<num_samples; ++i) {
 			glopts->buffer[1][i] = glopts->buffer[0][i];
 		}
@@ -445,7 +422,7 @@ static void scale_and_mix_samples( twolame_options *glopts )
 */
 static int encode_frame(twolame_options *glopts, bit_stream *bs)
 {
-	int nch = glopts->frame.nch;
+	int nch = glopts->num_channels_out;
 	int sb, ch, adb, i;
 	unsigned long frameBits, initial_bits;
 	short sam[2][1056];
@@ -515,12 +492,12 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 				 &(*glopts->sb_sample)[ch][gr][bl][0] );
     }
 
-    scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->frame.sblimit);
+    scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
     find_sf_max (glopts, glopts->scalar, glopts->max_sc);
-    if (glopts->frame.actual_mode == TWOLAME_JOINT_STEREO) {
+    if (glopts->mode == TWOLAME_JOINT_STEREO) {
 		// this way we calculate more mono than we need but it is cheap 
-		combine_lr (*glopts->sb_sample, *glopts->j_sample, glopts->frame.sblimit);
-		scalefactor_calc (glopts->j_sample, &glopts->j_scale, 1, glopts->frame.sblimit);
+		combine_lr (*glopts->sb_sample, *glopts->j_sample, glopts->sblimit);
+		scalefactor_calc (glopts->j_sample, &glopts->j_scale, 1, glopts->sblimit);
     }
 
     if ((glopts->quickmode == TRUE) && (++glopts->psycount % glopts->quickcount != 0)) {
@@ -678,7 +655,7 @@ int twolame_encode_buffer(
 		/* Copy across samples */
 		for(i=0; i<samples_to_copy; i++) {
 			glopts->buffer[0][glopts->samples_in_buffer+i] = *leftpcm++;
-			if (glopts->num_channels==2)
+			if (glopts->num_channels_in==2)
 			glopts->buffer[1][glopts->samples_in_buffer+i] = *rightpcm++;
 		}
 		
@@ -735,7 +712,7 @@ int twolame_encode_buffer_interleaved(
 		/* Copy across samples */
 		for(i=0; i<samples_to_copy; i++) {
 			glopts->buffer[0][glopts->samples_in_buffer+i] = *pcm++;
-			if (glopts->num_channels==2)
+			if (glopts->num_channels_in==2)
 			glopts->buffer[1][glopts->samples_in_buffer+i] = *pcm++;
 		}
 		
@@ -823,7 +800,7 @@ int twolame_encode_buffer_float32(
 
 		/* Copy across samples */
 		float32_to_short( leftpcm, &glopts->buffer[0][glopts->samples_in_buffer], samples_to_copy );
-		if (glopts->num_channels==2)
+		if (glopts->num_channels_in==2)
 		float32_to_short( rightpcm, &glopts->buffer[0][glopts->samples_in_buffer], samples_to_copy );
 		leftpcm+=samples_to_copy;
 		rightpcm+=samples_to_copy;		

@@ -26,10 +26,6 @@
 
 void encode_init(twolame_options *glopts);
 
-int get_js_bound(int m_ext);
-
-int get_alloc_table_bits (int tablenum, int sb, int ba);
-
 void scalefactor_calc (FLOAT sb_sample[][3][SCALE_BLOCK][SBLIMIT],
 			   unsigned int scalar[][3][SBLIMIT], int nch,
 			   int sblimit);

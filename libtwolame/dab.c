@@ -37,17 +37,16 @@ dab_crc_calc (twolame_options *glopts,
 	     unsigned int *crc,
 	     int packed)
 {
-  frame_info * frame = &glopts->frame;
   int i, j, k;
-  int nch = frame->nch;
+  int nch = glopts->num_channels_out;
   int nb_scalar;
   int f[5] = { 0, 4, 8, 16, 30 };
   int first, last;
 
   first = f[packed];
   last = f[packed + 1];
-  if (last > frame->sblimit)
-    last = frame->sblimit;
+  if (last > glopts->sblimit)
+    last = glopts->sblimit;
 
   nb_scalar = 0;
   *crc = 0x0;

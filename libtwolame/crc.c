@@ -72,7 +72,7 @@ void crc_calc (twolame_options *glopts, unsigned int bit_alloc[2][SBLIMIT],
 	crc_update (scfsi[k][i], 2, crc);
 }
 
-void crc_update (unsigned int data, unsigned int length, unsigned int *crc)
+static void crc_update (unsigned int data, unsigned int length, unsigned int *crc)
 {
   unsigned int masking, carry;
 
@@ -86,6 +86,16 @@ void crc_update (unsigned int data, unsigned int length, unsigned int *crc)
   }
   *crc &= 0xffff;
 }
+
+static int get_alloc_table_bits (int tablenum, int sb, int ba)
+{
+	int thisline = line[tablenum][sb];
+	int thisstep_index = step_index[thisline][ba];
+	
+	return bits[thisstep_index];
+}
+
+
 */
 
 
@@ -126,7 +136,7 @@ void crc_writeheader( unsigned char *bitstream, int bit_count )
 		crc = crc_update(bitstream[byte], crc, 8);
     }
     
-    // Calculate CRC on remainder bits
+    // Calculate CRC on remaining bits
 	if(bit_count & 7)
 	{
 		crc = crc_update(bitstream[byte], crc, bit_count&7);

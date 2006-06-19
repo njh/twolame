@@ -564,10 +564,9 @@ void psycho_1 (twolame_options *glopts, short buffer[2][1152], FLOAT scale[2][SB
 	       FLOAT ltmin[2][SBLIMIT])
 {
   psycho_1_mem *mem;
-  frame_info *frame = &glopts->frame;
   frame_header *header = &glopts->header;
-  int nch = frame->nch;
-  int sblimit = frame->sblimit;
+  int nch = glopts->num_channels_out;
+  int sblimit = glopts->sblimit;
   int k, i, tone = 0, noise = 0;
   FLOAT sample[FFT_SIZE];
   FLOAT spike[2][SBLIMIT];

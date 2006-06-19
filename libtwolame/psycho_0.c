@@ -76,7 +76,7 @@ static psycho_0_mem *psycho_0_init (twolame_options *glopts, int sfreq)
 void psycho_0(twolame_options *glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT])
 {
 	psycho_0_mem *mem;
-	int nch = glopts->frame.nch;
+	int nch = glopts->num_channels_out;
 	int sfreq = glopts->samplerate_out;
 	int ch, sb, gr;
 	unsigned int minscaleindex[2][SBLIMIT]; /* Smaller scale indexes mean bigger scalefactors */

@@ -242,14 +242,6 @@ typedef struct {
 	int emphasis;
 } frame_header;
 
-/* Parent Structure Interpreting some Frame Parameters in Header */
-typedef struct {
-	int actual_mode;		/* when writing IS, may forget if 0 chs */
-	int nch;				/* num channels in output bitstream: 1 for mono, 2 for stereo */
-	int jsbound;			/* first band of joint stereo coding */
-	int sblimit;			/* total number of sub bands */
-	
-} frame_info;
 
 
 typedef unsigned int subband_t[2][3][SCALE_BLOCK][SBLIMIT];
@@ -269,12 +261,13 @@ struct twolame_options_struct
 	int samplerate_in;	// mpeg1: 32000 [44100] 48000 
 						// mpeg2: 16000  22050  24000 
 	int samplerate_out;
-	int num_channels;		// Number of channels on the input stream
+	int num_channels_in;		// Number of channels on the input stream
+	int num_channels_out;		// Number of channels on the output stream
 	
 	// Output MP2 File Information
 	TWOLAME_MPEG_version version;     //  0 mpeg2  [1] mpeg1                                 
-	int bitrate;              //  for mpeg1:32, 48, 56, 64, 80, 96,112,128,160,[192], 224, 256, 320, 384 
-					//  for mpeg2: 8, 16, 24, 32, 40, 48, 56, 64, 80, [96], 112, 128, 144, 160 
+	int bitrate;			//  for mpeg1:32, 48, 56, 64, 80, 96,112,128,160,[192], 224, 256, 320, 384 
+							//  for mpeg2: 8, 16, 24, 32, 40, 48, 56, 64, 80, [96], 112, 128, 144, 160 
 	TWOLAME_MPEG_mode mode; 
 	TWOLAME_Padding padding;      // [PAD_NO] 
 	int do_energy_levels;      // Write energy level information into the end of the frame [FALSE]
@@ -361,11 +354,12 @@ struct twolame_options_struct
 	subband_mem smem;
 	
 	// Frame info
-	frame_info frame;
 	frame_header header;
+	int jsbound;			// first band of joint stereo coding
+	int sblimit;			// total number of sub bands
+	int tablenum;
 	
 	int vbrstats[15];
-	int tablenum;
 };
 
 #endif // _COMMON_H

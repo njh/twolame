@@ -508,8 +508,7 @@ static void psycho_3_dump(int *tonelabel, FLOAT *Xtm, int *noiselabel, FLOAT *Xn
 void psycho_3 (twolame_options *glopts, short int buffer[2][1152], FLOAT scale[2][32], FLOAT ltmin[2][32])
 {
   psycho_3_mem *mem;
-  frame_info *frame = &glopts->frame;
-  int nch = frame->nch;
+  int nch = glopts->num_channels_out;
   int k, i;
   FLOAT sample[BLKSIZE];
 

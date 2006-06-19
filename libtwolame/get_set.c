@@ -77,13 +77,13 @@ int twolame_get_psymodel (twolame_options *glopts)
 /* number of channels on the input stream */
 int twolame_set_num_channels(twolame_options* glopts, int num_channels)
 {
-	glopts->num_channels = num_channels;
+	glopts->num_channels_in = num_channels;
 	return 0;
 }
 
 int twolame_get_num_channels(twolame_options* glopts)
 {
-	return(glopts->num_channels);
+	return(glopts->num_channels_in);
 }
 
 int twolame_set_scale(twolame_options* glopts, float scale)
