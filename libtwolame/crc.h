@@ -25,7 +25,7 @@
 
 void crc_calc (twolame_options *glopts, unsigned int[2][SBLIMIT],
 		      unsigned int[2][SBLIMIT], unsigned int *);
-void crc_update (unsigned int, unsigned int, unsigned int *);
+void crc_update (unsigned int data, unsigned int length, unsigned int *crc);
 
 #endif
 
