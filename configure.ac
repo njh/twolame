@@ -123,7 +123,7 @@ dnl ############## Only compile frontend if sndfile is available
 TWOLAME_BIN=""
 if test "$HAVE_SNDFILE" = "yes"; then
 	if test "$HAVE_GETOPT_H" = "yes"; then
-		TWOLAME_BIN="$TWOLAME_BIN twolame"
+		TWOLAME_BIN="twolame${EXEEXT}"
 	else
 		AC_MSG_WARN([Not building twolame frontend because getopt.h is missing.])
 	fi
@@ -131,7 +131,6 @@ else
 	AC_MSG_WARN([Not building twolame frontend because libsndfile is missing.])
 fi
 AC_SUBST( TWOLAME_BIN )
-
 
 
 dnl ############## Final Output
