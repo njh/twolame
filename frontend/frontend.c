@@ -542,13 +542,12 @@ open_input_file( char* filename )
 
     // Do they want STDIN ?
     if (strncmp( filename, "-", 1 )==0) {
-    	int fd = fileno(stdin);
-    	
+
         // We only support raw audio on STDIN
         sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 
         // Open the file descriptor
-        file = sf_open_fd(fd, SFM_READ, &sfinfo, TRUE);
+        file = sf_open_fd(STDIN_FILENO, SFM_READ, &sfinfo, TRUE);
         
     } else {
     
