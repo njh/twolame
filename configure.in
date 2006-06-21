@@ -79,6 +79,7 @@ fi
 dnl ############## Library Checks
 
 AC_CHECK_LIB([m], [sqrt])
+AC_CHECK_LIB([m], [lrintf])
 AC_CHECK_LIB([mx], [powf])
 
 PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
@@ -104,13 +105,15 @@ AC_CHECK_HEADER(getopt.h,
 
 dnl ############## Compiler and Linker Flags
 
-# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
-CFLAGS="$CFLAGS -O3 -Wunused -Wall"
+CFLAGS="$CFLAGS -std=c99 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
 # If debugging is enabled then make warnings errors
 if test "$Debugging" = "Enabled"; then
 	CFLAGS="$CFLAGS -g -Werror"
+else
+	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
+	CFLAGS="$CFLAGS -O3"
 fi
 
 
