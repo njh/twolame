@@ -53,10 +53,10 @@ AC_C_INLINE
 dnl ############# Configure Arguments
 
 AC_ARG_ENABLE(debug,
-              [--enable-debug=[no/yes] turn on debugging],
-              [ Debugging="Enabled" 
-                AC_DEFINE(DEBUG, 1, [ Define if debugging is enabled. ]) ],
-              [ Debugging="Disabled" ]
+	  [--enable-debug=[no/yes] turn on debugging],
+	  [ Debugging="Enabled" 
+		AC_DEFINE(DEBUG, 1, [ Define if debugging is enabled. ]) ],
+	  [ Debugging="Disabled" ]
 )
 
 
@@ -83,11 +83,19 @@ AC_CHECK_LIB([m], [lrintf])
 AC_CHECK_LIB([mx], [powf])
 
 PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
-	[ HAVE_SNDFILE="yes" 
-	  AC_DEFINE_UNQUOTED([HAVE_SNDFILE],1,[Set to 1 if you have libsndfile.]) ],
-	[ HAVE_SNDFILE="no" 
-	  AC_MSG_WARN([library libsndfile is unavailable on your system]) ]
+	[ HAVE_SNDFILE="yes" ],
+	[ AC_CHECK_LIB( [sndfile], [sf_command],
+		[ AC_CHECK_HEADER( [sndfile.h],
+			[ HAVE_SNDFILE="yes"
+			  SNDFILE_CFLAGS="" 
+			  SNDFILE_LIBS="-lsndfile" ],
+			[ AC_MSG_WARN([Can't find sndfile.h on your system]) ] ) ],
+		[ AC_MSG_WARN([Can't find libsndfile library on your system]) ]
+	) ]
 )
+			
+AC_SUBST( SNDFILE_CFLAGS )
+AC_SUBST( SNDFILE_LIBS )
 
 
 
@@ -121,7 +129,7 @@ fi
 dnl ############## Only compile frontend if sndfile is available
 
 TWOLAME_BIN=""
-if test "$HAVE_SNDFILE" = "yes"; then
+if test "x$HAVE_SNDFILE" = "xyes"; then
 	if test "$HAVE_GETOPT_H" = "yes"; then
 		TWOLAME_BIN="twolame${EXEEXT}"
 	else
