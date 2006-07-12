@@ -118,6 +118,7 @@ static void
 print_file_config( SNDFILE *inputfile, int verbosity )
 {
     SF_FORMAT_INFO format_info;
+    SF_FORMAT_INFO subformat_info;
     
     // Are we being silent ?
     if (verbosity<=0) return; 
@@ -126,15 +127,21 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 	if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
 	if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
 	
-    format_info.format = sfinfo.format;
-    sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof (format_info)) ;
+	// Get the format
+    format_info.format = sfinfo.format & SF_FORMAT_TYPEMASK;
+    sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
 
+	// Get the sub-format info
+    subformat_info.format = sfinfo.format & SF_FORMAT_SUBMASK;
+    sf_command (inputfile, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
+	
+	
 	if (verbosity==1) {
 		fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
 	} else {
 		fprintf(stderr, "---------------------------------------------------------\n");
 		fprintf(stderr, "Input File: %s\n", inputfilename );
-		fprintf(stderr, "Input Format: %s\n", format_info.name );
+		fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name );
 		fprintf(stderr, "Output File: %s\n", outputfilename );
 	}
 	
@@ -168,9 +175,10 @@ usage_long()
     fprintf(stdout, "  <outfile>      output bit stream of encoded audio\n");
 
     fprintf(stdout, "\nInput Options\n");
-    fprintf(stdout, "\t-r, --raw-input          input is raw 16-bit signed PCM audio\n");
+    fprintf(stdout, "\t-r, --raw-input          input is raw signed PCM audio\n");
     fprintf(stdout, "\t-x, --byte-swap          force byte-swapping of input\n");
-    fprintf(stdout, "\t-s, --samplerate srate   sampling frequency of raw input (kHz)\n");
+    fprintf(stdout, "\t-s, --samplerate srate   sampling frequency of raw input (Hz)\n");
+    fprintf(stdout, "\t    --samplesize bits    size of raw input samples in bits (default 16-bit)\n");
     fprintf(stdout, "\t-N, --channels nch       number of channels in raw input\n");
     fprintf(stdout, "\t-g, --swap-channels      swap channels of input file\n");
     fprintf(stdout, "\t    --scale value        scale input (multiply PCM data)\n");
@@ -179,14 +187,14 @@ usage_long()
 
     
     fprintf(stdout, "\nOutput Options\n");
-    fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (m)ono or (a)uto\n");
+    fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (d)ual, (m)ono or (a)uto\n");
     fprintf(stdout, "\t-a, --downmix            downmix from stereo to mono file for mono encoding\n");
     fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (default 192 for 44.1kHz)\n");
-    fprintf(stdout, "\t-P, --psyc-mode psyc     psychoacoustic model -1 to 3 (default 3)\n");
+    fprintf(stdout, "\t-P, --psyc-mode psyc     psychoacoustic model -1 to 4 (default 3)\n");
     fprintf(stdout, "\t-v, --vbr                enable VBR mode\n");
     fprintf(stdout, "\t-V, --vbr-level lev      enable VBR and set VBR level -50 to 50 (default 5)\n");
     fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
-    fprintf(stdout, "\t-l, --ath lev            ATH level (default 0)\n");
+    fprintf(stdout, "\t-l, --ath lev            ATH level (default 0.0)\n");
     fprintf(stdout, "\t-q, --quick num          only calculate psy model every num frames\n");
     fprintf(stdout, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
     
@@ -291,11 +299,12 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         { "raw-input",      no_argument,            NULL,       'r' },
         { "byte-swap",      no_argument,            NULL,       'x' },
         { "samplerate",     required_argument,      NULL,       's' },
+        { "samplesize",     required_argument,      NULL,       1000 },
         { "channels",       required_argument,      NULL,       'N' },
         { "swap-channels",  no_argument,            NULL,       'g' },
-        { "scale",          required_argument,      NULL,       1000 },
-        { "scale-l",        required_argument,      NULL,       1001 },
-        { "scale-r",        required_argument,      NULL,       1002 },
+        { "scale",          required_argument,      NULL,       1001 },
+        { "scale-l",        required_argument,      NULL,       1002 },
+        { "scale-r",        required_argument,      NULL,       1003 },
         
         // Output
         { "mode",           required_argument,      NULL,       'm' },
@@ -312,7 +321,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         // Misc
         { "copyright",      no_argument,            NULL,       'c' },
         { "non-original",   no_argument,            NULL,       'o' },
-        { "original",   	no_argument,            NULL,       1003 },
+        { "original",   	no_argument,            NULL,       1004 },
         { "protect", 		no_argument,            NULL,       'p' },
         { "padding",        no_argument,            NULL,       'd' },
         { "reserve-bits",   required_argument,      NULL,       'R' },
@@ -321,9 +330,9 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         
         // Verbosity
         { "talkativity",    required_argument,      NULL,       't' },
-        { "quiet",          no_argument,            NULL,       1004 },
-        { "brief",          no_argument,            NULL,       1005 },
-        { "verbose",        no_argument,            NULL,       1006 },
+        { "quiet",          no_argument,            NULL,       1005 },
+        { "brief",          no_argument,            NULL,       1006 },
+        { "verbose",        no_argument,            NULL,       1007 },
         { "help",           no_argument,            NULL,       'h' },
         
         { NULL,             0,                      NULL,       0 }
@@ -334,14 +343,13 @@ parse_args(int argc, char **argv, twolame_options * encopts )
     char* shortopts = build_shortopt_string( longopts );
     //printf("shortopts: %s\n", shortopts);
     
-    
     while( (ch = getopt_long( argc, argv,  shortopts, longopts, NULL )) != -1) 
     {
         switch(ch) {
         
         // Input
             case 'r':
-                sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+				sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
                 break;
 
             case 'x':
@@ -352,6 +360,24 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 twolame_set_out_samplerate(encopts, atoi(optarg));
                 sfinfo.samplerate = atoi(optarg);
                 break;
+                
+            case 1000:  // --samplesize
+            
+            	// Mask off the sub-format
+            	sfinfo.format &= SF_FORMAT_TYPEMASK;
+            
+				// Set the new sub-format
+				switch(atoi(optarg)) {
+					case 8:  sfinfo.format |= SF_FORMAT_PCM_S8; break;
+					case 16: sfinfo.format |= SF_FORMAT_PCM_16; break;
+					case 24: sfinfo.format |= SF_FORMAT_PCM_24; break;
+					case 32: sfinfo.format |= SF_FORMAT_PCM_32; break;
+					default:
+						fprintf(stderr, "Error: invalid sample size: %d bit\n\n", atoi(optarg));
+						usage_long();
+					break;
+				}
+				break;
 
             case 'N':
                 sfinfo.channels = atoi(optarg);
@@ -361,15 +387,15 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 channelswap = TRUE;
                 break;
                 
-            case 1000:  // --scale
+            case 1001:  // --scale
                 twolame_set_scale( encopts, atof(optarg) );
                 break;
 
-            case 1001:  // --scale-l
+            case 1002:  // --scale-l
                 twolame_set_scale_left( encopts, atof(optarg) );
                 break;
 
-            case 1002:  // --scale-r
+            case 1003:  // --scale-r
                 twolame_set_scale_right( encopts, atof(optarg) );
                 break;
 
@@ -439,7 +465,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
             case 'o':	// --non-original
                 twolame_set_original(encopts, FALSE);
                 break;
-            case 1003:  // --original
+            case 1004:  // --original
                 twolame_set_original(encopts, TRUE);
                 break;
             case 'p':
@@ -473,15 +499,15 @@ parse_args(int argc, char **argv, twolame_options * encopts )
                 twolame_set_verbosity(encopts, atoi(optarg));
                 break;
 
-            case 1004:  // --quiet
+            case 1005:  // --quiet
                 twolame_set_verbosity(encopts, 0);
                 break;
                 
-            case 1005: // --brief
+            case 1006: // --brief
                 twolame_set_verbosity(encopts, 1);
                 break;
                 
-            case 1006: // --verbose
+            case 1007: // --verbose
                 twolame_set_verbosity(encopts, 4);
                 break;
                 
@@ -495,6 +521,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         }
     }
     
+     
 
     // Look for the input and output file names
     argc -= optind;
@@ -528,7 +555,12 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         fprintf(stderr, "Missing output filename.\n");
         usage_short();
     }
-        
+
+    // Check -r is supplied when reading from STDIN
+    if ( strcmp(inputfilename, "-")==0 && !(sfinfo.format&SF_FORMAT_RAW) ) {
+        fprintf(stderr, "Error: please use RAW audio '-r' switch when reading from STDIN.\n");
+        usage_short();
+    }
 }
 
 
@@ -539,23 +571,9 @@ open_input_file( char* filename )
 {
     SNDFILE* file = NULL;
 
+	// Open the input file by filename
+	file = sf_open(filename, SFM_READ, &sfinfo);
 
-    // Do they want STDIN ?
-    if (strncmp( filename, "-", 1 )==0) {
-
-        // We only support raw audio on STDIN
-        sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
-
-        // Open the file descriptor
-        file = sf_open_fd(STDIN_FILENO, SFM_READ, &sfinfo, TRUE);
-        
-    } else {
-    
-		// Open the input file by filename
-		file = sf_open(filename, SFM_READ, &sfinfo);
-		
-	}
-    
     // Check for errors
     if (file == NULL) {
         fprintf(stderr, "Failed to open input file (%s):\n", filename);
