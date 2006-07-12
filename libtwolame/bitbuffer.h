@@ -37,7 +37,7 @@ typedef struct bit_stream_struc {
 
 
 bit_stream * buffer_init( unsigned char *buffer, int buffer_size );
-void buffer_deinit( bit_stream ** bs );
+void buffer_deinit( bit_stream **bs );
 
 void buffer_put1bit (bit_stream *, int);
 inline void buffer_putbits (bit_stream *, unsigned int, int);

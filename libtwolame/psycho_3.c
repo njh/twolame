@@ -397,7 +397,7 @@ static psycho_3_mem *psycho_3_init( twolame_options *glopts ) {
   int cbands=0;
   int *cbandindex;
 
-  mem = (psycho_3_mem *)twolame_malloc(sizeof(psycho_3_mem), "psycho_3_mem");
+  mem = (psycho_3_mem *)TWOLAME_MALLOC(sizeof(psycho_3_mem));
   mem->off[0]=mem->off[1]=256;
   freq_subset = mem->freq_subset;
   bark = mem->bark;
@@ -557,5 +557,8 @@ void psycho_3 (twolame_options *glopts, short int buffer[2][1152], FLOAT scale[2
 
 
 void psycho_3_deinit(psycho_3_mem **mem) {
-  twolame_free( (void **) mem );
+
+	if (mem==NULL||*mem==NULL) return;
+
+	TWOLAME_FREE( *mem );
 }

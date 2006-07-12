@@ -53,7 +53,7 @@
 static psycho_0_mem *psycho_0_init (twolame_options *glopts, int sfreq)
 {
 	FLOAT freqperline = (FLOAT)sfreq/1024.0;
-	psycho_0_mem *mem = (psycho_0_mem *)twolame_malloc(sizeof(psycho_0_mem), "psycho_0_mem");
+	psycho_0_mem *mem = (psycho_0_mem *)TWOLAME_MALLOC(sizeof(psycho_0_mem));
 	int sb, i;
 	
 	for (sb=0;sb<SBLIMIT;sb++) {
@@ -119,7 +119,10 @@ void psycho_0(twolame_options *glopts, FLOAT SMR[2][SBLIMIT], unsigned int scala
 
 
 void psycho_0_deinit(psycho_0_mem **mem) {
-	twolame_free( (void **)mem);
+
+	if (mem==NULL||*mem==NULL) return;
+
+	TWOLAME_FREE( *mem );
 }
 
 

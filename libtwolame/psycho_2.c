@@ -94,14 +94,14 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
   int sfreq_idx;
 
   {
-    mem = (psycho_2_mem *)twolame_malloc(sizeof(psycho_2_mem), "psycho_2_mem");
+    mem = (psycho_2_mem *)TWOLAME_MALLOC(sizeof(psycho_2_mem));
 	if (!mem) return NULL;
 	
-    mem->tmn = (FLOAT *) twolame_malloc (sizeof (DCB), "tmn");
-    mem->s = (FCB *) twolame_malloc (sizeof (FCBCB), "s");
-    mem->lthr = (FHBLK *) twolame_malloc (sizeof (F2HBLK), "lthr");
-    mem->r = (F2HBLK *) twolame_malloc (sizeof (F22HBLK), "r");
-    mem->phi_sav = (F2HBLK *) twolame_malloc (sizeof (F22HBLK), "phi_sav");
+    mem->tmn = (FLOAT *) TWOLAME_MALLOC(sizeof (DCB));
+    mem->s = (FCB *) TWOLAME_MALLOC(sizeof (FCBCB));
+    mem->lthr = (FHBLK *) TWOLAME_MALLOC(sizeof (F2HBLK));
+    mem->r = (F2HBLK *) TWOLAME_MALLOC(sizeof (F22HBLK));
+    mem->phi_sav = (F2HBLK *) TWOLAME_MALLOC(sizeof (F22HBLK));
 
     //static int new = 0, old = 1, oldest = 0;
     mem->new=0;
@@ -522,12 +522,15 @@ void psycho_2 (twolame_options *glopts, short int buffer[2][1152],
 }
 
 void psycho_2_deinit(psycho_2_mem **mem) {
-  twolame_free( (void **) &(*mem)->tmn );
-  twolame_free( (void **) &(*mem)->s );
-  twolame_free( (void **) &(*mem)->lthr );
-  twolame_free( (void **) &(*mem)->r );
-  twolame_free( (void **) &(*mem)->phi_sav );
 
-  twolame_free ( (void **) mem );
+	if (mem==NULL||*mem==NULL) return;
+
+	TWOLAME_FREE( (*mem)->tmn );
+	TWOLAME_FREE( (*mem)->s );
+	TWOLAME_FREE( (*mem)->lthr );
+	TWOLAME_FREE( (*mem)->r );
+	TWOLAME_FREE( (*mem)->phi_sav );
+	
+	TWOLAME_FREE( (*mem) );
 }
 

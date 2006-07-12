@@ -24,7 +24,6 @@
 #define	_PSYCHO_0_H_
 
 void psycho_0(twolame_options *glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT]);
-
 void psycho_0_deinit(psycho_0_mem **mem);
 
 #endif

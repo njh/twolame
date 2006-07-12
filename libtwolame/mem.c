@@ -21,29 +21,25 @@
  */
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "mem.h"
 
+
+
 /*******************************************************************************
 *
-*  Allocate number of bytes of memory equal to "block".
+*  Allocate number of bytes of memory equal to "size".
 *
 *******************************************************************************/
 
-void *twolame_malloc (unsigned long block, char *item)
+void *twolame_malloc (size_t size, int line, char *file)
 {
-	
-	void *ptr;
-	
-	ptr = (void *) malloc (block);
+	void *ptr = (void *)malloc(size);
 	
 	if (ptr != NULL) {
-		memset (ptr, 0, block);
+		memset (ptr, 0, size);
 	} else {
-		fprintf (stderr, "Unable to allocate %ld bytes for %s\n", block, item);
+		fprintf (stderr, "Unable to allocate %d bytes at line %d of %s\n", (int)size, line, file);
 		return NULL;
 	}
 	
@@ -51,17 +47,3 @@ void *twolame_malloc (unsigned long block, char *item)
 }
 
 
-/****************************************************************************
-*
-*  Free memory pointed to by "*ptr_addr".
-*
-*****************************************************************************/
-
-void twolame_free (void **ptr_addr)
-{
-
-	if (*ptr_addr != NULL) {
-		free (*ptr_addr);
-		*ptr_addr = NULL;
-	}
-}

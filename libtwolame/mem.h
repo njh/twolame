@@ -20,12 +20,33 @@
  *  
  */
 
-
 #ifndef _MEM_H
 #define _MEM_H
 
-void *twolame_malloc (unsigned long, char *);
-void twolame_free (void **);
+
+#include "config.h"
+
+#ifdef HAVE_STDLIB_H
+#include <stdlib.h>
+#endif
+
+#ifdef HAVE_STRING_H
+#include <string.h>
+#endif
+
+#ifdef HAVE_MALLOC_H
+#include <malloc.h>
+#endif
+
+#include <stdio.h>
+
+
+// Macros
+#define TWOLAME_MALLOC(size) twolame_malloc( size, __LINE__, __FILE__ )
+#define TWOLAME_FREE(ptr) if(ptr!=NULL) { free(ptr); ptr=NULL; }
+
+// Functions
+void *twolame_malloc (size_t size, int line,  char *file);
 
 #endif
 

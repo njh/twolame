@@ -5,7 +5,7 @@ AC_PREREQ(2.57)
 
 dnl ############# Initialization
 
-AC_INIT([twolame], [0.3.8], [twolame-discuss@lists.sourceforge.net])
+AC_INIT([twolame], [0.3.9], [twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build)
@@ -102,7 +102,7 @@ AC_SUBST( SNDFILE_LIBS )
 dnl ############## Header Checks
 
 AC_HEADER_STDC
-AC_CHECK_HEADERS(assert.h unistd.h inttypes.h)
+AC_CHECK_HEADERS(malloc.h assert.h unistd.h inttypes.h)
 AC_CHECK_HEADER(getopt.h, 
 	[ HAVE_GETOPT_H="yes" ],
 	[ HAVE_GETOPT_H="no"

@@ -24,7 +24,6 @@
 #define	_PSYCHO_2_H_
 
 void psycho_2 (twolame_options *glopts, short int buffer[2][1152], short int savebuf[2][1056], FLOAT smr[2][32]);
-
 void psycho_2_deinit(psycho_2_mem **mem);
 
 #endif

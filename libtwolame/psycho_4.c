@@ -30,6 +30,7 @@
 #include "mem.h"
 #include "fft.h"
 #include "ath.h"
+#include "psycho_2.h"
 #include "psycho_4.h"
 
 /****************************************************************
@@ -173,13 +174,13 @@ static psycho_4_mem *psycho_4_init (twolame_options *glopts, int sfreq)
   int i, j;
 
   {
-    mem = (psycho_4_mem *)twolame_malloc(sizeof(psycho_4_mem), "psycho_4_mem");
+    mem = (psycho_4_mem *)TWOLAME_MALLOC(sizeof(psycho_4_mem));
 
-    mem->tmn = (FLOAT *) twolame_malloc (sizeof (DCB), "tmn");
-    mem->s = (FCB *) twolame_malloc (sizeof (FCBCB), "s");
-    mem->lthr = (FHBLK *) twolame_malloc (sizeof (F2HBLK), "lthr");
-    mem->r = (F2HBLK *) twolame_malloc (sizeof (F22HBLK), "r");
-    mem->phi_sav = (F2HBLK *) twolame_malloc (sizeof (F22HBLK), "phi_sav");
+    mem->tmn = (FLOAT *) TWOLAME_MALLOC (sizeof (DCB));
+    mem->s = (FCB *) TWOLAME_MALLOC (sizeof (FCBCB));
+    mem->lthr = (FHBLK *) TWOLAME_MALLOC (sizeof (F2HBLK));
+    mem->r = (F2HBLK *) TWOLAME_MALLOC (sizeof (F22HBLK));
+    mem->phi_sav = (F2HBLK *) TWOLAME_MALLOC (sizeof (F22HBLK));
 
     mem->new=0;
     mem->old=1;
@@ -560,13 +561,16 @@ void psycho_4 (twolame_options *glopts,
 
 
 void psycho_4_deinit(psycho_4_mem **mem) {
-    twolame_free( (void **) &(*mem)->tmn );
-    twolame_free( (void **) &(*mem)->s );
-    twolame_free( (void **) &(*mem)->lthr );
-    twolame_free( (void **) &(*mem)->r );
-    twolame_free( (void **) &(*mem)->phi_sav );
 
-    twolame_free( (void **) mem);
-};
+	if (mem==NULL||*mem==NULL) return;
+
+    TWOLAME_FREE( (*mem)->tmn );
+    TWOLAME_FREE( (*mem)->s );
+    TWOLAME_FREE( (*mem)->lthr );
+    TWOLAME_FREE( (*mem)->r );
+    TWOLAME_FREE( (*mem)->phi_sav );
+
+    TWOLAME_FREE( (*mem) );
+}
 
 

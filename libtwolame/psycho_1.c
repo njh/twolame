@@ -59,7 +59,7 @@ static int *psycho_1_read_cbound (int lay, int freq, int *crit_band)
   }
 
   *crit_band = SecondCriticalBand[freq][0];
-  cbound = (int *) twolame_malloc (sizeof (int) * *crit_band, "cbound");
+  cbound = (int *) TWOLAME_MALLOC(sizeof (int) * *crit_band);
   for (i = 0; i < *crit_band; i++) {
     k = SecondCriticalBand[freq][i + 1];
     if (k != 0) {
@@ -87,7 +87,7 @@ static void psycho_1_read_freq_band (g_ptr *ltg, int lay, int freq, int *sub_siz
   /* read input for freq. subbands */
 
   *sub_size = SecondFreqEntries[freq] + 1;
-  *ltg = (g_ptr) twolame_malloc (sizeof (g_thres) * *sub_size, "ltg");
+  *ltg = (g_ptr) TWOLAME_MALLOC(sizeof (g_thres) * *sub_size);
   (*ltg)[0].line = 0;		/* initialize global masking threshold */
   (*ltg)[0].bark = 0.0;
   (*ltg)[0].hear = 0.0;
@@ -575,9 +575,9 @@ void psycho_1 (twolame_options *glopts, short buffer[2][1152], FLOAT scale[2][SB
 
   /* call functions for critical boundaries, freq. */
   if (!glopts->p1mem) {			/* bands, bark values, and mapping */
-    mem = (psycho_1_mem *)twolame_malloc(sizeof(psycho_1_mem), "psycho_1_mem");
+    mem = (psycho_1_mem *)TWOLAME_MALLOC(sizeof(psycho_1_mem));
 
-    mem->power = (mask_ptr) twolame_malloc (sizeof (mask) * HAN_SIZE, "power");
+    mem->power = (mask_ptr)TWOLAME_MALLOC(sizeof (mask) * HAN_SIZE);
     if (header->version == TWOLAME_MPEG1) {
       mem->cbound = psycho_1_read_cbound (header->lay, header->samplerate_idx, &mem->crit_band);
       psycho_1_read_freq_band (&mem->ltg, header->lay, header->samplerate_idx, &mem->sub_size);
@@ -636,8 +636,11 @@ void psycho_1 (twolame_options *glopts, short buffer[2][1152], FLOAT scale[2][SB
 }
 
 void psycho_1_deinit(psycho_1_mem **mem) {
-  twolame_free( (void **) &(*mem)->cbound);
-  twolame_free( (void **) &(*mem)->ltg);
-  twolame_free( (void **) &(*mem)->power);
-  twolame_free( (void **) mem);
+
+	if (mem==NULL||*mem==NULL) return;
+
+	TWOLAME_FREE( (*mem)->cbound );
+	TWOLAME_FREE( (*mem)->ltg );
+	TWOLAME_FREE( (*mem)->power );
+	TWOLAME_FREE( (*mem) );
 }

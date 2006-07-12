@@ -58,7 +58,7 @@
 twolame_options *twolame_init(void) {
 	twolame_options *newoptions = NULL;  
 	
-	newoptions = (twolame_options *)twolame_malloc(sizeof(twolame_options), "twolame_options");
+	newoptions = (twolame_options *)TWOLAME_MALLOC(sizeof(twolame_options));
 	if (newoptions==NULL) {
 		return NULL;
 	}
@@ -336,9 +336,9 @@ int twolame_init_params (twolame_options *glopts) {
 
   
   	// Allocate memory to larger buffers 
-    glopts->subband = (subband_t *) twolame_malloc (sizeof (subband_t), "subband");
-	glopts->j_sample = (jsb_sample_t *) twolame_malloc (sizeof (jsb_sample_t), "j_sample");
-    glopts->sb_sample = (sb_sample_t *) twolame_malloc (sizeof (sb_sample_t), "sb_sample");
+    glopts->subband = (subband_t *) TWOLAME_MALLOC(sizeof (subband_t));
+	glopts->j_sample = (jsb_sample_t *) TWOLAME_MALLOC(sizeof (jsb_sample_t));
+    glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof (sb_sample_t));
 	
 	// clear buffers
     memset ((char *) glopts->buffer, 0, sizeof(glopts->buffer));
@@ -870,16 +870,16 @@ void twolame_close(twolame_options **glopts) {
 	if (opts==NULL) return;
 
 	// free mem
-	if (opts->p4mem) psycho_4_deinit( &opts->p4mem );
-	if (opts->p3mem) psycho_3_deinit( &opts->p3mem );
-	if (opts->p2mem) psycho_2_deinit( &opts->p2mem );
-	if (opts->p1mem) psycho_1_deinit( &opts->p1mem );
-	if (opts->p0mem) psycho_0_deinit( &opts->p0mem );
+	psycho_4_deinit( &opts->p4mem );
+	psycho_3_deinit( &opts->p3mem );
+	psycho_2_deinit( &opts->p2mem );
+	psycho_1_deinit( &opts->p1mem );
+	psycho_0_deinit( &opts->p0mem );
 	
-	if (opts->subband) twolame_free( (void **) &opts->subband );
-	if (opts->j_sample) twolame_free( (void **) &opts->j_sample );
-	if (opts->sb_sample) twolame_free( (void **) &opts->sb_sample );
+	TWOLAME_FREE( opts->subband );
+	TWOLAME_FREE( opts->j_sample );
+	TWOLAME_FREE( opts->sb_sample );
 	
 	// Free the memory and zero the pointer
-	twolame_free ( (void **)glopts );
+	TWOLAME_FREE( opts );
 }
