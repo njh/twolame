@@ -58,7 +58,7 @@
 int single_frame_mode = FALSE;      // only encode a single frame of MPEG audio ?
 int byteswap = FALSE;               // swap endian on input audio ?
 int channelswap = FALSE;            // swap left and right channels ?
-SF_INFO sfinfo = {0,44100,2,0,0,0};     // contains information about input file format
+SF_INFO sfinfo;  				    // contains information about input file format
 
 char inputfilename[MAX_NAME_SIZE] = "\0";
 char outputfilename[MAX_NAME_SIZE] = "\0";
@@ -343,6 +343,15 @@ parse_args(int argc, char **argv, twolame_options * encopts )
     char* shortopts = build_shortopt_string( longopts );
     //printf("shortopts: %s\n", shortopts);
     
+    
+    // Input format defaults
+    memset( &sfinfo, 0, sizeof(sfinfo) );
+    sfinfo.format = 0;
+    sfinfo.samplerate = 44100;
+    sfinfo.channels = 2;
+    sfinfo.frames = 0;
+
+
     while( (ch = getopt_long( argc, argv,  shortopts, longopts, NULL )) != -1) 
     {
         switch(ch) {
