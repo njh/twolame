@@ -40,7 +40,7 @@ then use - as the output filename.
 Input Options
 ~~~~~~~~~~~~~
 -r, --raw-input::
-	Specifies that input is raw 16-bit signed PCM audio.
+	Specifies that input is raw signed PCM audio.
 	If audio is stereo, than audio samples are interleaved 
 	between the two channels.
 
@@ -54,6 +54,11 @@ Input Options
 	the audio in Hz.
 	Valid sample rates: 16000, 22050, 24000, 32000, 44100, 48000Hz.
 	Default sample rate is 44100Hz. 
+
+--samplesize <int>::
+	Specifies the sample size (in bits) of the raw PCM audio.
+	Valid sample sizes: 8, 16, 24, 32.
+	Default sample size is 16-bit. 
 
 -N, --channels <int>::
 	If inputting raw PCM sound, you must specify the number of channels 
