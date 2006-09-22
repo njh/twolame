@@ -30,7 +30,6 @@
 #include "mem.h"
 #include "fft.h"
 #include "ath.h"
-#include "psycho_2.h"
 #include "psycho_4.h"
 
 /****************************************************************
