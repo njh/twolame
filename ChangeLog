@@ -1,6 +1,13 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.9 (2006-??-??)
+--------------------------
+
+- Fix for Windows in simple frontend: open files in binary mode
+   * thanks to Kurien Mathew
+
+
 Version 0.3.8 (2006-06-19)
 --------------------------
 

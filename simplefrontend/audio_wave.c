@@ -119,7 +119,7 @@ wave_info_t *wave_init (char *inPath)
   wave_info_t *wave_info = NULL;
   FILE *file;
 
-  if ( (file = fopen(inPath, "r"))==NULL) {
+  if ( (file = fopen(inPath, "rb"))==NULL) {
     fprintf(stdout,"WAV: cannot open input file: %s\n", inPath);
     return(NULL);
   }

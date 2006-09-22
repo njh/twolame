@@ -106,7 +106,7 @@ int main (int argc, char **argv) {
     }
 
 	/* Open the output file for the encoded MP2 data */
-	if ((outfile = fopen(outputfilename, "w"))==0) {
+	if ((outfile = fopen(outputfilename, "wb"))==0) {
 		fprintf(stdout,"error opening output file %s\n",outputfilename);
 		exit(99);
 	}
