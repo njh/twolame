@@ -30,7 +30,6 @@
 #include "mem.h"
 #include "fft.h"
 #include "ath.h"
-#define OLDTHRESHx
 #include "psycho_3.h"
 
 /* This is a reimplementation of psy model 1 using the ISO11172 standard.
@@ -93,6 +92,7 @@ static void psycho_3_fft(FLOAT sample[BLKSIZE], FLOAT energy[BLKSIZE])
   psycho_1_fft (x_real, energy, BLKSIZE);
 }
 
+
 /* Sect D.1 Step 1 - convert the energies into dB */
 static void psycho_3_powerdensityspectrum(FLOAT energy[BLKSIZE], FLOAT power[HBLKSIZE]) {
   int i;
@@ -104,6 +104,7 @@ static void psycho_3_powerdensityspectrum(FLOAT energy[BLKSIZE], FLOAT power[HBL
   }
 }
 
+
 /* Sect D.1 Step 2 - Determine the sound pressure level in each subband */
 static void psycho_3_spl(FLOAT *Lsb, FLOAT *power, FLOAT *scale) {
   int i;
@@ -114,7 +115,7 @@ static void psycho_3_spl(FLOAT *Lsb, FLOAT *power, FLOAT *scale) {
   }
   /* Find the maximum SPL in the power spectrum */
   for (i=1;i<HBLKSIZE;i++) {
-    int index = i>>4;
+    int index = (i - 1) >>4;
     if (Xmax[index] < power[i])
       Xmax[index] = power[i];
   }
@@ -126,6 +127,8 @@ static void psycho_3_spl(FLOAT *Lsb, FLOAT *power, FLOAT *scale) {
     Lsb[i] = MAX(Xmax[i], val);
   }  
 }
+
+
 /* Sect D.1 Step4b 
    A tone within the range (start -> end), must be 7.0 dB greater than
    all it's neighbours within +/- srange. Don't count its immediate neighbours. */
@@ -154,6 +157,7 @@ static void psycho_3_tonal_label_range(psycho_3_mem *mem, FLOAT *power, int *ton
       }
     }
 }
+
 
 /* Sect D.1 Step 4 Label the Tonal Components */
 static void psycho_3_tonal_label (psycho_3_mem *mem, FLOAT power[HBLKSIZE], int *tonelabel, FLOAT Xtm[HBLKSIZE])
@@ -201,6 +205,7 @@ static void psycho_3_init_add_db (psycho_3_mem *mem)
     mem->dbtable[i] = 10 * log10 (1 + pow (10.0, x / 10.0)) - x;
   }
 }
+
 
 /* D.1 Step 4.c Labelling non-tonal (noise) components 
    Sum the energies in each critical band (the tone energies have been removed 
@@ -256,6 +261,7 @@ static void psycho_3_noise_label (psycho_3_mem *mem, FLOAT power[HBLKSIZE], FLOA
   }
 }
 
+
 /* ISO11172 D.1 Step 5
    Get rid of noise/tones that aren't greater than the ATH
    If two tones are within 0.5bark, then delete the tone with the lower energy */
@@ -282,6 +288,7 @@ static void psycho_3_decimation(FLOAT *ath, int *tonelabel, FLOAT *Xtm, int *noi
   /* MFC FIXME Feb 2003: haven't done this yet */
 
 }
+
 
 /* ISO11172 Sect D.1 Step 6
    Calculation of individual masking thresholds
@@ -358,7 +365,8 @@ static void psycho_3_threshold(psycho_3_mem *mem, FLOAT *LTg, int *tonelabel, FL
   }
 }
 
-  /* Find the minimum LTg for each subband. ISO11172 Sec D.1 Step 8 */
+
+/* Find the minimum LTg for each subband. ISO11172 Sec D.1 Step 8 */
 static void psycho_3_minimummasking(FLOAT *LTg, FLOAT *LTmin, int *freq_subset) {
   int i;
 
@@ -373,6 +381,7 @@ static void psycho_3_minimummasking(FLOAT *LTg, FLOAT *LTmin, int *freq_subset) 
   }
 }
 
+
 /* ISO11172 Sect D.1 Step 9
    Calculate the signal-to-mask ratio 
    MFC FIXME Feb 2003 for better calling from
@@ -383,6 +392,7 @@ static void psycho_3_smr(FLOAT *LTmin, FLOAT *Lsb) {
     LTmin[i] = Lsb[i] - LTmin[i];
   }
 }
+
 
 static psycho_3_mem *psycho_3_init( twolame_options *glopts ) {
   int i;
@@ -489,6 +499,7 @@ static psycho_3_mem *psycho_3_init( twolame_options *glopts ) {
   return(mem);
 }
 
+
 static void psycho_3_dump(int *tonelabel, FLOAT *Xtm, int *noiselabel, FLOAT *Xnm) {
   int i;
   fprintf(stdout,"3 Ton:");
@@ -505,6 +516,8 @@ static void psycho_3_dump(int *tonelabel, FLOAT *Xtm, int *noiselabel, FLOAT *Xn
   }
   fprintf(stdout,"\n");
 }
+
+
 void psycho_3 (twolame_options *glopts, short int buffer[2][1152], FLOAT scale[2][32], FLOAT ltmin[2][32])
 {
   psycho_3_mem *mem;
