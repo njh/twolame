@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -76,7 +76,7 @@ void buffer_put1bit (bit_stream * bs, int bit)
 }
 
 /*write N bits into the bit stream */
-inline void buffer_putbits (bit_stream * bs, unsigned int val, int N)
+NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 {
 	static const int putmask[9] = { 0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
 	register int j = N;

@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,22 @@
 
 #ifndef	_COMMON_H
 #define	_COMMON_H
+
+#ifdef _WIN32
+#include "../win32/configwin.h"
+/*
+ * When building as a Win32 DLL, some functions are not allowed to be inlined,
+ * otherwise the Microsoft Visual Studio 2005 linker will complain
+ */
+#define NO_DLL_INLINE
+#else
+#include "config.h"
+#define NO_DLL_INLINE inline
+#endif
+
+
+#include "twolame.h"
+
 
 
 /***************************************************************************************

@@ -27,8 +27,6 @@
 #include <assert.h>
 #include <limits.h>
 
-#include "config.h"
-
 #include "twolame.h"
 #include "common.h"
 #include "bitbuffer.h"
