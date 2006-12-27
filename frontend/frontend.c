@@ -34,7 +34,7 @@
 */
 #define MP2BUFSIZE      (16384)
 #define AUDIOBUFSIZE    (9210)
-#define MAX_NAME_SIZE   (256)
+#define MAX_NAME_SIZE   (1024)
 #define OUTPUT_SUFFIX   ".mp2"
 
 
@@ -58,7 +58,7 @@
 int single_frame_mode = FALSE;      // only encode a single frame of MPEG audio ?
 int byteswap = FALSE;               // swap endian on input audio ?
 int channelswap = FALSE;            // swap left and right channels ?
-SF_INFO sfinfo;  				    // contains information about input file format
+SF_INFO sfinfo;                     // contains information about input file format
 
 char inputfilename[MAX_NAME_SIZE] = "\0";
 char outputfilename[MAX_NAME_SIZE] = "\0";
@@ -77,7 +77,7 @@ new_extension(char *filename, char *extname, char *newname)
 {
     int found, dotpos;
 
-    /* First, strip the extension */
+    // First, strip the old extension
     dotpos = strlen(filename);
     found = 0;
     do {
@@ -105,7 +105,12 @@ new_extension(char *filename, char *extname, char *newname)
         strncpy(newname, filename, dotpos);
         newname[dotpos] = '\0';
     }
-    strcat(newname, extname);
+    
+    // Make sure there is room in the string for the 
+    // new filename and the extension
+    if (strlen(newname)+strlen(extname)+1<MAX_NAME_SIZE) {
+        strcat(newname, extname);
+    }
 }
 
 
@@ -119,27 +124,32 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 {
     SF_FORMAT_INFO format_info;
     SF_FORMAT_INFO subformat_info;
+    char sndlibver[128];
     
     // Are we being silent ?
     if (verbosity<=0) return; 
-	
-	// Convert 
-	if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
-	if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
-	
-	// Get the format
+
+    // Convert 
+    if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
+    if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
+
+    // Get the format
     format_info.format = sfinfo.format & SF_FORMAT_TYPEMASK;
     sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
 
-	// Get the sub-format info
+    // Get the sub-format info
     subformat_info.format = sfinfo.format & SF_FORMAT_SUBMASK;
     sf_command (inputfile, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
-	
-	
-	if (verbosity==1) {
-		fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
+
+    // Get the version of libsndfile
+    sf_command (NULL, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
+
+
+    if (verbosity==1) {
+        fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
 	} else {
 		fprintf(stderr, "---------------------------------------------------------\n");
+        fprintf(stdout, "%s (http://www.mega-nerd.com/libsndfile/)\n", sndlibver);
 		fprintf(stderr, "Input File: %s\n", inputfilename );
 		fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name );
 		fprintf(stderr, "Output File: %s\n", outputfilename );
@@ -164,6 +174,7 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 static void
 usage_long()
 {
+
     fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
     fprintf(stdout, "MPEG Audio Layer II (MP2) encoder\n");
     fprintf(stdout, "Usage: \n");
@@ -203,7 +214,7 @@ usage_long()
     fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
     fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
     fprintf(stdout, "\t    --original           mark as original (default)\n");
-    fprintf(stdout, "\t-p, --protect			enable CRC error protection\n");
+    fprintf(stdout, "\t-p, --protect            enable CRC error protection\n");
     fprintf(stdout, "\t-d, --padding            force padding bit/frame on\n");
     fprintf(stdout, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
     fprintf(stdout, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
@@ -555,7 +566,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
         fprintf(stderr, "Missing input filename.\n");
         usage_short();
     }
-    if ( outputfilename[0] == '\0' && strcmp(inputfilename, "-")!=0 ) {
+    if ( outputfilename[0] == '\0' && strcmp(inputfilename, "-") !=0 ) {
         // Create output filename from the inputfilename 
         // and change the suffix
         new_extension( inputfilename, OUTPUT_SUFFIX, outputfilename );
@@ -739,6 +750,12 @@ main(int argc, char **argv)
         	fflush(stderr);
         }
     }
+
+
+	// Was there an error reading the audio?
+	if (sf_error(inputfile) != SF_ERR_NO_ERROR) {
+		fprintf(stderr, "Error reading from input file: %s\n", sf_strerror( inputfile ) );
+	}
 
     //
     // flush any remaining audio. (don't send any new audio data) There
