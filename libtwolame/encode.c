@@ -168,7 +168,7 @@ static int get_js_bound (int m_ext)
 }
 
 
-void encode_init( twolame_options *glopts ) {
+int encode_init( twolame_options *glopts ) {
 	frame_header *header = &glopts->header;
 	int bsp, br_per_ch, sfrq;
 	
@@ -232,6 +232,8 @@ void encode_init( twolame_options *glopts ) {
 	}
 	#endif
 
+	// Success
+	return 0;
 }
 
 

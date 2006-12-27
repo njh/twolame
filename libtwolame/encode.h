@@ -24,7 +24,7 @@
 #ifndef	_ENCODE_H_
 #define	_ENCODE_H_
 
-void encode_init(twolame_options *glopts);
+int encode_init(twolame_options *glopts);
 
 void scalefactor_calc (FLOAT sb_sample[][3][SCALE_BLOCK][SBLIMIT],
 			   unsigned int scalar[][3][SBLIMIT], int nch,

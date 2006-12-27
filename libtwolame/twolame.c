@@ -245,7 +245,7 @@ int twolame_init_params (twolame_options *glopts) {
 	   Because both of them think they're the only ones inserting
 	   information into the ancillary section of the frame */
 	if (glopts->do_dab && glopts->do_energy_levels) {
-		fprintf(stderr,"Can't do DAB and Energy Levels at the same time\n");
+		fprintf(stderr,"Error: Can't do DAB and Energy Levels at the same time\n");
 		return -1;
 	}
 
@@ -254,8 +254,8 @@ int twolame_init_params (twolame_options *glopts) {
 	if (glopts->do_energy_levels) {
 		int required = get_required_energy_bits(glopts);
 		if (glopts->num_ancillary_bits < required) {
-			fprintf(stderr,"Warning: Too few ancillary bits to store energy levels: %i<%i (correcting)\n",glopts->num_ancillary_bits, required);
-			glopts->num_ancillary_bits = required;
+			fprintf(stderr,"Warning: Too few ancillary bits to store energy levels: %i<%i\n",glopts->num_ancillary_bits, required);
+			return -1;
 		}
 	}
 
@@ -267,13 +267,16 @@ int twolame_init_params (twolame_options *glopts) {
 	 * bits_for_nonoise in vbr mode
 	 */
 	if (glopts->vbr && glopts->mode==TWOLAME_JOINT_STEREO) {
+		fprintf(stderr,"Warning: Can't do Joint Stereo with VBR, switching to normal stereo.\n");
+
 		// force stereo mode
 		twolame_set_mode(glopts, TWOLAME_STEREO);
 	}
 
-	/* don't use padding for VBR */
-	if (glopts->vbr) {
-		twolame_set_padding(glopts, FALSE);
+	/* Can't do padding and VBR at same time */
+	if (glopts->vbr && glopts->padding == TRUE) {
+		fprintf(stderr,"Error: Can't do padding and VBR at same time\n");
+		return -1;
 	}
 	
 	// Set the Number of output channels
@@ -287,7 +290,9 @@ int twolame_init_params (twolame_options *glopts) {
 	}
 	
 	// Select table number and sblimit
-	encode_init( glopts );
+	if (encode_init( glopts )<0) {
+		return -1;
+	}
 	
 	// initialise bitrate allocation
 	if (init_bit_allocation( glopts )<0) {
