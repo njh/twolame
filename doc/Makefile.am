@@ -2,16 +2,27 @@
 ## Man Page
 man_MANS = twolame.1
 
-twolame.1.xml: twolame.1.txt
-	asciidoc -d manpage -b docbook -o twolame.1.xml twolame.1.txt
 
-twolame.1: twolame.1.xml
+## The documentation is distributed with the package
+## and only needs to be rebuilt if it is modified or
+## when building from subversion
+
+doc: build-man build-html
+
+
+## Building the manpage requires:
+##    asciidoc:	http://www.methods.co.nz/asciidoc/
+##    xmlto:	http://cyberelk.net/tim/xmlto/
+##
+
+build-man:
+	rm -f twolame.1.xml twolame.1
+	asciidoc -d manpage -b docbook -o twolame.1.xml twolame.1.txt
 	xmlto man twolame.1.xml
 
 
 
-
-## Building HTML documentation Requires:
+## Building HTML documentation requires:
 ##    asciidoc:	http://www.methods.co.nz/asciidoc/
 ##    doxygen:	http://www.doxygen.org
 ##
@@ -23,6 +34,7 @@ asciidoc=asciidoc -b xhtml11 \
 	-a linkcss \
 	-a stylesdir=. 
 doxygen=doxygen doxygen.conf
+
 
 build-html:
 	rm -f $(htmldir)/*.html
@@ -76,3 +88,4 @@ EXTRA_DIST = \
 	index.txt \
 	twolame.1.txt \
 	twolame.1.xml
+
