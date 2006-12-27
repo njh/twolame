@@ -552,10 +552,18 @@ DLL_EXPORT TWOLAME_Padding twolame_get_padding(twolame_options *glopts);
 
 /** Enable/Disable Energy Level Extension.
  *
+ *  Enable writing the peak PCM level (energy level) at the end of each
+ *  MPEG audio frame (in the ancillary bits). This function will
+ *  automatically call twolame_set_num_ancillary_bits() to set the required
+ *  number of ancillary bits for this feature.
+ *
+ *  The energy level extension is commonly used in the broadcast industry 
+ *  for visualising the audio in editing applications without decoding.
+ *
  *	Default: FALSE
  *
  *  \param glopts 			pointer to twolame options pointer
- *  \param energylevels	 	energy level extension state
+ *  \param energylevels	 	energy level extension state (TRUE/FALSE)
  *  \return 				0 if successful, 
  *							non-zero on failure
  */
@@ -801,6 +809,17 @@ DLL_EXPORT int twolame_set_quick_count(twolame_options *glopts, int quickcount )
  *  \return			number of frames between calculations
  */
 DLL_EXPORT int twolame_get_quick_count(twolame_options *glopts);
+
+
+
+
+
+
+
+/* WARNING: DAB support is currently broken */
+
+
+
 
 
 /** Enable/Disable the Eureka 147 DAB extensions for MP2.

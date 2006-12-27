@@ -250,16 +250,12 @@ int twolame_init_params (twolame_options *glopts) {
 	}
 
 	
-	/* Check that if we're doing energy levels, that there's enough space 
-	   to put the information */
+	/* Check that if we're doing energy levels, that there's enough space to put the information */
 	if (glopts->do_energy_levels) {
-		if ((glopts->mode==TWOLAME_MONO)&&(glopts->num_ancillary_bits<16)) {
-			fprintf(stderr,"Too few ancillary bits: %i<16\n",glopts->num_ancillary_bits);
-			glopts->num_ancillary_bits = 16;
-		}    
-		if ((glopts->mode!=TWOLAME_MONO)&&(glopts->num_ancillary_bits<40)) {
-			fprintf(stderr,"Too few ancillary bits: %i<40\n",glopts->num_ancillary_bits);
-		glopts->num_ancillary_bits = 40;
+		int required = get_required_energy_bits(glopts);
+		if (glopts->num_ancillary_bits < required) {
+			fprintf(stderr,"Warning: Too few ancillary bits to store energy levels: %i<%i (correcting)\n",glopts->num_ancillary_bits, required);
+			glopts->num_ancillary_bits = required;
 		}
 	}
 
@@ -282,28 +278,6 @@ int twolame_init_params (twolame_options *glopts) {
 	
 	// Set the Number of output channels
 	glopts->num_channels_out = (glopts->mode == TWOLAME_MONO) ? 1 : 2;
-	
-	//MFC FIX:	Need to cross validate the number of ancillary_bits
-	// with the energylevel setting.
-	//
-	// energylevel:
-	// MFC FIX:		This option must be mutually exclusive with the
-	// reservebits(-R) option *UNLESS * the number
-	// of explicitly reserved bits > 5 bytes.
-
-
-	// If energy information is required, see if we're in MONO mode in
-	// which case, we only need 16 bits of ancillary data
-	if (glopts->do_energy_levels) {
-		if (glopts->mode==TWOLAME_MONO) {
-			// only 2 bytes needed for energy level for mono channel
-			twolame_set_num_ancillary_bits(glopts, 16);
-		} else {
-			// 5 bytes for the stereo energy info
-			twolame_set_num_ancillary_bits(glopts, 40);
-		}
-	
-	}
 	
 
 
@@ -595,7 +569,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		return -1;
     }
 
-	// *** FIXME currently broken njh Sept 04
+	// Store the energy levels at the end of the frame
     if (glopts->do_energy_levels)
     	do_energy_levels(glopts, bs);
 

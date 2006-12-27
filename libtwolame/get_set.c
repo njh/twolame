@@ -27,9 +27,11 @@
 #include <assert.h>
 
 #include "twolame.h"
+#include "bitbuffer.h"
 #include "common.h"
 #include "mem.h"
 #include "util.h"
+#include "energy.h"
 
 
 
@@ -375,12 +377,18 @@ int twolame_get_num_ancillary_bits (twolame_options *glopts)
 
 int twolame_set_energy_levels (twolame_options *glopts, int energylevels )
 {
-	if (energylevels)
-		glopts->do_energy_levels = TRUE;    
-	else
+	if (energylevels) {
+		glopts->do_energy_levels = TRUE;
+		twolame_set_num_ancillary_bits(glopts, get_required_energy_bits( glopts ) );
+	} else {
 		glopts->do_energy_levels = FALSE;
+		twolame_set_num_ancillary_bits(glopts, get_required_energy_bits( glopts ) );
+	}
+	
 	return(0);
 }
+
+
 int twolame_get_energy_levels (twolame_options *glopts)
 {
 	return(glopts->do_energy_levels);
@@ -405,8 +413,17 @@ const char *twolame_get_version_name(twolame_options *glopts)
 }
 
 
+
+
+
+
+/* WARNING: DAB support is currently broken */
+
 int twolame_set_DAB (twolame_options *glopts, int dab)
 {
+		
+	fprintf(stderr,"Warning: DAB support is currently broken in this version of TwoLAME.\n");
+
 	if (dab)
 		glopts->do_dab = TRUE;
 	else

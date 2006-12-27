@@ -143,7 +143,6 @@ int twolame_get_version_for_samplerate (long sample_rate)
 }
 
 
-
 // Print the library version and 
 //  encoder parameter settings to STDERR
 void twolame_print_config(twolame_options *glopts)
@@ -186,10 +185,10 @@ void twolame_print_config(twolame_options *glopts)
 		((twolame_get_copyright(glopts)) ? "Yes" : "No "),
 		((twolame_get_original(glopts)) ? "Yes" : "No "));
 		
-		fprintf (fd, "[Padding:%s CRC:%s         DAB:%s     ]\n",
+		fprintf (fd, "[Padding:%s CRC:%s         Energy:%s  ]\n",
 		((twolame_get_padding(glopts)) ? "Normal" : "Off   "),
 		((twolame_get_error_protection(glopts)) ? "On " : "Off"),
-		((twolame_get_DAB(glopts)) ? "On " : "Off")); 
+		((twolame_get_energy_levels(glopts)) ? "On " : "Off")); 
 		
 		if (glopts->verbosity>=3) {
 			if (twolame_get_VBR(glopts)) {
@@ -198,7 +197,8 @@ void twolame_print_config(twolame_options *glopts)
 			}
 
 			fprintf(fd," - ATH adjustment %f\n", twolame_get_ATH_level(glopts));
-			fprintf(fd," - Reserving %i Ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
+			if (twolame_get_num_ancillary_bits(glopts)) 
+				fprintf(fd," - Reserving %i ancillary bits\n", twolame_get_num_ancillary_bits(glopts));
 			
 			if (twolame_get_scale(glopts)!=1.0f)
 				fprintf(fd," - Scaling audio by %f\n", twolame_get_scale(glopts));
