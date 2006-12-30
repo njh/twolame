@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -122,7 +122,7 @@ int main (int argc, char **argv) {
 		fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outfile);
 		
 		// Display the number of MPEG audio frames we have encoded
-		frames += (num_samples/1152);
+		frames += (num_samples/TWOLAME_SAMPLES_PER_FRAME);
 		fprintf(stdout,"[%04i]\r", frames);
 		fflush(stdout);
 	}
