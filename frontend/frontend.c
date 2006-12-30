@@ -1,7 +1,7 @@
 /*
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -113,6 +113,60 @@ new_extension(char *filename, char *extname, char *newname)
     }
 }
 
+/* 
+  format_duration_string() 
+  Create human readable duration string from libsndfile info
+*/
+static char*
+format_duration_string( SF_INFO *sfinfo )
+{
+	float seconds;
+	int minutes;
+	char * string;
+	
+	if (sfinfo->frames==0 || sfinfo->samplerate==0)
+		return strdup("Unknown");
+	
+	// Calculate the number of minutes and seconds
+	seconds = sfinfo->frames / sfinfo->samplerate;
+	minutes = (seconds / 60 );
+	seconds -= (minutes * 60);
+
+	// Create a string out of it
+	string = malloc( MAX_NAME_SIZE );
+	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
+
+	return string;
+}
+
+
+static char*
+format_filesize_string( int filesize )
+{
+	static const int constKB = 1024;          		// Kilobyte
+	static const int constMB = 1024 * 1024;   		// Megabyte
+	static const int constGB = 1024 * 1024 * 1024;  // Gigabyte
+	char* string = malloc( MAX_NAME_SIZE );
+
+	if (filesize < constKB)
+	{
+		snprintf(string, MAX_NAME_SIZE, "%d bytes", filesize);
+	}
+	else if (filesize < constMB)
+    {
+		snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float)filesize/constKB);
+    }
+	else if (filesize < constGB)
+    {
+		snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float)filesize/constMB);
+    }
+    else
+    {
+		snprintf(string, MAX_NAME_SIZE, "%2.2f GB", (float)filesize/constGB);
+    }
+
+	return string;
+}
 
 
 /* 
@@ -125,6 +179,7 @@ print_file_config( SNDFILE *inputfile, int verbosity )
     SF_FORMAT_INFO format_info;
     SF_FORMAT_INFO subformat_info;
     char sndlibver[128];
+    char *duration = NULL;
     
     // Are we being silent ?
     if (verbosity<=0) return; 
@@ -144,6 +199,8 @@ print_file_config( SNDFILE *inputfile, int verbosity )
     // Get the version of libsndfile
     sf_command (NULL, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
 
+	// Get human readable duration of the input file
+	duration = format_duration_string( &sfinfo );
 
     if (verbosity==1) {
         fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
@@ -152,16 +209,12 @@ print_file_config( SNDFILE *inputfile, int verbosity )
         fprintf(stdout, "%s (http://www.mega-nerd.com/libsndfile/)\n", sndlibver);
 		fprintf(stderr, "Input File: %s\n", inputfilename );
 		fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name );
+		fprintf(stderr, "Input Duration: %s\n", duration );
 		fprintf(stderr, "Output File: %s\n", outputfilename );
 	}
 	
-    // ** TODO: duration of input file **
-    // Number of frames of mpeg audio to be output
-    // file size of input
-    // file size of output
-    // bitrate of input
-    // bitrate of output
-    // compression ratio
+	
+	free( duration );
 }
 
 
@@ -600,7 +653,7 @@ open_input_file( char* filename )
         fprintf(stderr, "  %s\n", sf_strerror(NULL));
         exit(ERR_OPENING_INPUT);
     }
-        
+
     return file;
 }
 
@@ -635,21 +688,24 @@ main(int argc, char **argv)
     SNDFILE         *inputfile = NULL;
     FILE            *outputfile = NULL;
     short int       *pcmaudio = NULL;
-    int             samples_read = 0;
+    unsigned int    samples_read = 0;
     unsigned int    frame_count = 0;
+    unsigned int	total_frames = 0;
+    unsigned int	frame_len = 0;
+    unsigned int	total_bytes = 0;
     unsigned char   *mp2buffer = NULL;
     int             mp2fill_size = 0;
     int             audioReadSize = 0;
 
 
     // Allocate memory for the PCM audio data
-    if ((pcmaudio = (short int *) calloc(AUDIOBUFSIZE, sizeof(short int))) == NULL) {
+    if ((pcmaudio = (short int *) calloc(AUDIO_BUF_SIZE, sizeof(short int))) == NULL) {
         fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
         exit(ERR_MEM_ALLOC);
     }
     
     // Allocate memory for the encoded MP2 audio data
-    if ((mp2buffer = (unsigned char *) calloc(MP2BUFSIZE, sizeof(unsigned char))) == NULL) {
+    if ((mp2buffer = (unsigned char *) calloc(MP2_BUF_SIZE, sizeof(unsigned char))) == NULL) {
         fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
         exit(ERR_MEM_ALLOC);
     }
@@ -688,8 +744,12 @@ main(int argc, char **argv)
 
 
 	// Only encode a single frame of mpeg audio ?
-    if (single_frame_mode) audioReadSize = 1152;
-    else audioReadSize = AUDIOBUFSIZE;
+    if (single_frame_mode) audioReadSize = TWOLAME_SAMPLES_PER_FRAME;
+    else audioReadSize = AUDIO_BUF_SIZE;
+
+	// Calculate the size and number of frames we are going to encode
+	frame_len = twolame_get_framelength( encopts );
+	if (sfinfo.frames) total_frames = sfinfo.frames / TWOLAME_SAMPLES_PER_FRAME;
 
 
     // Now do the reading/encoding/writing
@@ -722,35 +782,43 @@ main(int argc, char **argv)
         }
         
         // Encode the audio to MP2
-        mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2BUFSIZE);
+        mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2_BUF_SIZE);
         
         // Stop if we don't have any bytes (probably don't have enough audio for a full frame of mpeg audio)
         if (mp2fill_size==0) break;
         if (mp2fill_size<0) {
             fprintf(stderr,"error while encoding audio: %d\n", mp2fill_size);
-            exit(ERR_WRITING_OUTPUT);
+            exit(ERR_ENCODING);
         }
+
+		// Check that a whole number of frame was written
+		//if (mp2fill_size % frame_len != 0) {
+        //    fprintf(stderr,"error while encoding audio: non-whole number of frames written\n");
+        //    exit(ERR_ENCODING);
+		//}
 
         // Write the encoded audio out
         bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
-        if (bytes_out<=0) {
+        if (bytes_out != mp2fill_size) {
             perror("error while writing to output file");
             exit(ERR_WRITING_OUTPUT);
         }
+        total_bytes += bytes_out;
         
         // Only single frame ?
         if (single_frame_mode) break;
         
+
         // Display Progress
-        frame_count += (samples_read / 1152);
+		frame_count += (mp2fill_size / frame_len);
         if (twolame_get_verbosity(encopts)>0) {
-        	fprintf(stderr, "[%04i", frame_count);
-        	//fprintf(stderr, "/%04i", (int)(sfinfo.frames / sfinfo.channels  / 1152));
-        	fprintf(stderr, "]\r");
+        	fprintf(stderr, "\rEncoding frame: %i", frame_count );
+        	if (total_frames) {
+				fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count*100)/total_frames);
+         	}
         	fflush(stderr);
         }
     }
-
 
 	// Was there an error reading the audio?
 	if (sf_error(inputfile) != SF_ERR_NO_ERROR) {
@@ -762,17 +830,22 @@ main(int argc, char **argv)
     // should only ever be a max of 1 frame on a flush. There may be zero
     // frames if the audio data was an exact multiple of 1152
     //
-    mp2fill_size = twolame_encode_flush( encopts, mp2buffer, MP2BUFSIZE);
+    mp2fill_size = twolame_encode_flush( encopts, mp2buffer, MP2_BUF_SIZE);
     if (mp2fill_size>0) {
+        frame_count++;
         int bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
         if (bytes_out<=0) {
             perror("error while writing to output file");
             exit(ERR_WRITING_OUTPUT);
         }
+        total_bytes += bytes_out;
     }
     
  	if (twolame_get_verbosity(encopts)>1) {
+ 		char* filesize = format_filesize_string( total_bytes );
 	    fprintf(stderr, "\nEncoding Finished.\n");
+	    fprintf(stderr, "Total bytes written: %s.\n",filesize);
+	    free(filesize);
 	}
 
     // Close input and output files
@@ -786,7 +859,6 @@ main(int argc, char **argv)
 	// Free up memory
 	free(pcmaudio);
 	free(mp2buffer);
-
 
 	
     return (ERR_NO_ERROR);
