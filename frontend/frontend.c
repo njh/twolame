@@ -32,10 +32,10 @@
 /*
   Constants
 */
-#define MP2BUFSIZE      (16384)
-#define AUDIOBUFSIZE    (9210)
-#define MAX_NAME_SIZE   (1024)
-#define OUTPUT_SUFFIX   ".mp2"
+#define MP2_BUF_SIZE	(16384)
+#define AUDIO_BUF_SIZE	(9210)
+#define MAX_NAME_SIZE	(1024)
+#define OUTPUT_SUFFIX	".mp2"
 
 
 /*
