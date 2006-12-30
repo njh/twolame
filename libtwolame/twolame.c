@@ -553,8 +553,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
        Write an extra byte for 16/24/32/48 input when padding is on.
        Something must be going astray with the frame size calcs.
        This fudge works fine for the moment */
-//    if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
-    if (glopts->padding) // i.e. not a 44.1 or 22kHz input file
+    if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
 		buffer_putbits (bs, 0, 8);
 
     if (glopts->do_dab) {
