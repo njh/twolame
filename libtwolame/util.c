@@ -143,6 +143,19 @@ int twolame_get_version_for_samplerate (long sample_rate)
 }
 
 
+// Get the number of bytes per frame, for current settings
+int twolame_get_framelength( twolame_options *glopts )
+{
+	int bytes = 144 * (glopts->bitrate*1000) / glopts->samplerate_out;
+	
+	if (glopts->padding)
+		bytes++;
+		
+	return bytes;
+}
+
+
+
 // Print the library version and 
 //  encoder parameter settings to STDERR
 void twolame_print_config(twolame_options *glopts)
@@ -195,7 +208,7 @@ void twolame_print_config(twolame_options *glopts)
 				fprintf (fd, " - VBR Enabled. Using MNR boost of %f\n", twolame_get_VBR_level(glopts));
 				fprintf (fd, " - VBR bitrate index limits [%i -> %i]\n", glopts->lower_index, glopts->upper_index);
 			}
-
+			
 			fprintf(fd," - ATH adjustment %f\n", twolame_get_ATH_level(glopts));
 			if (twolame_get_num_ancillary_bits(glopts)) 
 				fprintf(fd," - Reserving %i ancillary bits\n", twolame_get_num_ancillary_bits(glopts));

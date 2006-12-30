@@ -77,7 +77,7 @@ void do_energy_levels(twolame_options *glopts, bit_stream *bs)
 
 	// find the maximum in the left and right channels
 	leftMax = rightMax = -1;
-	for (i=0; i<1152;i++) { 
+	for (i=0; i<TWOLAME_SAMPLES_PER_FRAME; i++) { 
 		if (abs(leftpcm[i])>leftMax)
 			leftMax = abs(leftpcm[i]);
 		if (abs(rightpcm[i])>rightMax)

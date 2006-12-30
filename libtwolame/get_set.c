@@ -379,10 +379,8 @@ int twolame_set_energy_levels (twolame_options *glopts, int energylevels )
 {
 	if (energylevels) {
 		glopts->do_energy_levels = TRUE;
-		twolame_set_num_ancillary_bits(glopts, get_required_energy_bits( glopts ) );
 	} else {
 		glopts->do_energy_levels = FALSE;
-		twolame_set_num_ancillary_bits(glopts, get_required_energy_bits( glopts ) );
 	}
 	
 	return(0);

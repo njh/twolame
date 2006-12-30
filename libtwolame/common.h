@@ -74,7 +74,6 @@
 #define         SBLIMIT                 32
 #define         SSLIMIT                 18
 #define         FFT_SIZE                1024
-#define         SPF                     1152
 #define         HAN_SIZE                512
 #define         SCALE_BLOCK             12
 #define         SCALE_RANGE             64
@@ -334,10 +333,10 @@ struct twolame_options_struct
 	
 	// Used by twolame_encode_frame
 	int twolame_init;
-	short int buffer[2][1152];			// Sample buffer
-	unsigned int samples_in_buffer;		// Number of samples currently in buffer
+	short int buffer[2][TWOLAME_SAMPLES_PER_FRAME];	// Sample buffer
+	unsigned int samples_in_buffer;					// Number of samples currently in buffer
 	unsigned int psycount;
-	unsigned int num_crc_bits;			// Number of bits CRC is calculated on
+	unsigned int num_crc_bits;						// Number of bits CRC is calculated on
 	
 	unsigned int bit_alloc[2][SBLIMIT];
 	unsigned int scfsi[2][SBLIMIT];

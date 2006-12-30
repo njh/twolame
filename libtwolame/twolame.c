@@ -93,7 +93,7 @@ twolame_options *twolame_init(void) {
 	newoptions->scale_right = 1.0;		// scaling disabled
 	
 	newoptions->do_energy_levels = FALSE;
-	newoptions->num_ancillary_bits = 0;
+	newoptions->num_ancillary_bits = -1;
 	
 	
 	newoptions->vbr_frame_count = 0;	// only used for debugging
@@ -238,8 +238,6 @@ int twolame_init_params (twolame_options *glopts) {
 				glopts->bitrate, glopts->samplerate_out);
 		}
 	}
-	
-	
 
 	/* Can't do DAB and energylevel extensions at the same time
 	   Because both of them think they're the only ones inserting
@@ -249,6 +247,14 @@ int twolame_init_params (twolame_options *glopts) {
 		return -1;
 	}
 
+	/* Set the number of ancillary bits automatically, if none set */
+	if (glopts->num_ancillary_bits < 0) {
+		if (glopts->do_energy_levels) {
+			glopts->num_ancillary_bits = get_required_energy_bits( glopts );
+		} else {
+			glopts->num_ancillary_bits = 0;
+		}
+	}
 	
 	/* Check that if we're doing energy levels, that there's enough space to put the information */
 	if (glopts->do_energy_levels) {
@@ -543,11 +549,12 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
     for (i = 0; i < adb; i++)	buffer_put1bit (bs, 0);
 
 
-    /* MFC July 03 
+    /* MFC July 03 FIXME
        Write an extra byte for 16/24/32/48 input when padding is on.
        Something must be going astray with the frame size calcs.
        This fudge works fine for the moment */
-    if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
+//    if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
+    if (glopts->padding) // i.e. not a 44.1 or 22kHz input file
 		buffer_putbits (bs, 0, 8);
 
     if (glopts->do_dab) {
@@ -626,7 +633,7 @@ int twolame_encode_buffer(
 	while( num_samples ) {
 	
 		// fill up glopts->buffer with as much as we can
-		int samples_to_copy = 1152 - glopts->samples_in_buffer;
+		int samples_to_copy = TWOLAME_SAMPLES_PER_FRAME - glopts->samples_in_buffer;
 		if (num_samples < samples_to_copy) samples_to_copy = num_samples;
 
 		/* Copy across samples */
@@ -643,14 +650,14 @@ int twolame_encode_buffer(
 		
 		
 		// is there enough to encode a whole frame ?
-		if (glopts->samples_in_buffer >= 1152) {
+		if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
 			int bytes = encode_frame( glopts, mybs );
 			if (bytes<=0) {
 				buffer_deinit( &mybs );
 				return bytes;
 			}
 			mp2_size += bytes;
-			glopts->samples_in_buffer -= 1152;
+			glopts->samples_in_buffer -= TWOLAME_SAMPLES_PER_FRAME;
 		}
 	}
 
@@ -683,7 +690,7 @@ int twolame_encode_buffer_interleaved(
 	while( num_samples ) {
 	
 		// fill up glopts->buffer with as much as we can
-		int samples_to_copy = 1152 - glopts->samples_in_buffer;
+		int samples_to_copy = TWOLAME_SAMPLES_PER_FRAME - glopts->samples_in_buffer;
 		if (num_samples < samples_to_copy) samples_to_copy = num_samples;
 
 		/* Copy across samples */
@@ -700,14 +707,14 @@ int twolame_encode_buffer_interleaved(
 		
 		
 		// is there enough to encode a whole frame ?
-		if (glopts->samples_in_buffer >= 1152) {
+		if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
 			int bytes = encode_frame( glopts, mybs );
 			if (bytes<=0) {
 				buffer_deinit( &mybs );
 				return bytes;
 			}
 			mp2_size += bytes;
-			glopts->samples_in_buffer -= 1152;
+			glopts->samples_in_buffer -= TWOLAME_SAMPLES_PER_FRAME;
 		}
 	}
 
@@ -772,7 +779,7 @@ int twolame_encode_buffer_float32(
 	while( num_samples ) {
 	
 		// fill up glopts->buffer with as much as we can
-		int samples_to_copy = 1152 - glopts->samples_in_buffer;
+		int samples_to_copy = TWOLAME_SAMPLES_PER_FRAME - glopts->samples_in_buffer;
 		if (num_samples < samples_to_copy) samples_to_copy = num_samples;
 
 		/* Copy across samples */
@@ -788,14 +795,14 @@ int twolame_encode_buffer_float32(
 		
 		
 		// is there enough to encode a whole frame ?
-		if (glopts->samples_in_buffer >= 1152) {
+		if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
 			int bytes = encode_frame( glopts, mybs );
 			if (bytes<=0) {
 				buffer_deinit( &mybs );
 				return bytes;
 			}
 			mp2_size += bytes;
-			glopts->samples_in_buffer -= 1152;
+			glopts->samples_in_buffer -= TWOLAME_SAMPLES_PER_FRAME;
 		}
 	}
 
@@ -821,7 +828,7 @@ int twolame_encode_flush(twolame_options *glopts, unsigned char *mp2buffer, int 
 	mybs = buffer_init( mp2buffer, mp2buffer_size );
 
 	// Pad out the PCM buffers with 0 and encode the frame
-	for (i=glopts->samples_in_buffer; i< 1152; i++) {
+	for (i=glopts->samples_in_buffer; i< TWOLAME_SAMPLES_PER_FRAME; i++) {
 		glopts->buffer[0][i] = glopts->buffer[1][i] = 0;
 	}
 

@@ -19,7 +19,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *  
  */
- 
 
 #ifndef	__TWOLAME_H__
 #define	__TWOLAME_H__
@@ -27,6 +26,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/** \file twolame.h */
 
 /*
  * ATTENTION WIN32 USERS!
@@ -95,6 +96,10 @@ typedef enum {
 							// reserved
 	TWOLAME_EMPHASIS_C = 3	/**< CCIT J.17 */ 
 } TWOLAME_Emphasis;
+
+
+/** Number of samples per frame of Layer 2 MPEG Audio */
+#define TWOLAME_SAMPLES_PER_FRAME		1152
 
 
 /** Opaque structure for the twolame encoder options. */
@@ -344,6 +349,15 @@ DLL_EXPORT TWOLAME_MPEG_version twolame_get_version(twolame_options *glopts);
  *  \return			the name of the MPEG version as a string
  */
 DLL_EXPORT const char *twolame_get_version_name( twolame_options *glopts );
+
+
+/** Get the number of bytes per MPEG audio frame, for current settings
+ *
+ *  \param glopts 			pointer to twolame options pointer
+ *  \return 				the number of bytes per frame
+ *
+ */
+DLL_EXPORT int twolame_get_framelength( twolame_options *glopts );
 
 
 /** Set the Psychoacoustic Model used to encode the audio.
