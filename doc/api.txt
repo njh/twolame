@@ -46,6 +46,7 @@ Steps to encode PCM to MP2
          int *mp2fill_size);
 		
    This function returns the number of bytes written into mp2buffer by the library MPEG.
+   One frame of MPEG audio will be returned for every 1152 samples of PCM audio.
    Multiple calls can be made to this function. 
    It is the users responsibility to:
 
