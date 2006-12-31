@@ -122,10 +122,12 @@ format_duration_string( SF_INFO *sfinfo )
 {
 	float seconds;
 	int minutes;
-	char * string;
+	char * string = malloc( MAX_NAME_SIZE );
 	
-	if (sfinfo->frames==0 || sfinfo->samplerate==0)
-		return strdup("Unknown");
+	if (sfinfo->frames==0 || sfinfo->samplerate==0) {
+		snprintf( string, MAX_NAME_SIZE, "Unknown" );
+		return string;
+	}
 	
 	// Calculate the number of minutes and seconds
 	seconds = sfinfo->frames / sfinfo->samplerate;
@@ -133,7 +135,6 @@ format_duration_string( SF_INFO *sfinfo )
 	seconds -= (minutes * 60);
 
 	// Create a string out of it
-	string = malloc( MAX_NAME_SIZE );
 	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
 
 	return string;
