@@ -27,3 +27,5 @@ void crc_writeheader( unsigned char *bitstream, int bit_count );
 
 #endif
 
+
+// vim:ts=4:sw=4:nowrap:

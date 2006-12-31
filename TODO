@@ -1,40 +1,32 @@
 TwoLAME TODO List
 =================
 
-- not sure if encode_frame() in toolame.c is correct
-    frame of mpeg1 is only 576 samples, not 1152 ?
+- Fix bug with Padding and framesizes with samplerate of 44.1 and 22kHz
+
+
 
 - use Exact-width integer types (eg uint16_t)
 
-- add twolame_get_framesize()
-
-- use 32-bit floats internally where possible
-    
-- Add more feedback to frontend
-    - Total number of frames while encoding
-    - Duration, filesize and compression ratios in print_file_config
-
 - Add libresample support to libtoolame (toolame_set_in_samplerate etc.)
 - parameter checking in toolame.c using assert
-- full options sanity checking/verification in toolame_init_params
 - Create a new toolame.spec (be sure to include twolame.pc)
 - quite a lot of duplicated code between toolame_encode_buffer_interleaved
   and toolame_encode_buffer
 - sort out changing parameter for toolame_set_VBR_q from FLOAT to int (like LAME)
-- sort out num_ancillary_bits issues in libtwolame (should not be in front end?)
+
 - better use of verbosity settings
+
+- full options sanity checking/verification in toolame_init_params
 
 - don't allow twolame_set_* after twolame_init_params() has been called
 
+- Fix broken DAB support
+
 - with this VBR mode, we know the bits aren't going to run out, so we can 
   just assign them "greedily".
-- VBR_a_bit_allocation() is yet to be written :)
 
-- Sort out tab size / space mixture in source files
-  (my preference is to use spaces - where a tab is 4 spaces)
+- VBR_a_bit_allocation() is yet to be written :)
 
 - Add a layer 2 decoder ? mpglib ?
 
-- Fix broken energy level support
-- Fix broken DAB support
-- Possible buffer overrun in new_extension() ?
+- use 32-bit floats internally where possible

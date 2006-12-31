@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -571,7 +571,7 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 
 	{0, 0.0, 0.0}}, 
 
-    /* 2th2, 132 entries */ 
+	/* 2th2, 132 entries */ 
 
   {{1, 0.309, 58.23}, 
 
@@ -838,9 +838,8 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 /* 2th3, 0 entries (all dummies) */ 
 
   {{0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0},
-   
+
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0},
-   
 
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0,
 								  0.0}, 
@@ -877,9 +876,8 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 								  0.0}, {0,
 									 0.0,
 									 0.0},
-   
+
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0},
-   
 
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0,
 								  0.0}, 
@@ -916,9 +914,9 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 								  0.0}, {0,
 									 0.0,
 									 0.0},
-   
+
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0},
-   
+
 
 {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0, 0.0}, {0, 0.0,
 								  0.0}, 
@@ -1463,7 +1461,7 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 	{456, 22.724, 13.59}, 
 
 	{464, 22.799, 14.53}, 
-   
+
 	{472, 22.871, 15.51}, 
 {480, 22.941, 16.54}}, 
 
@@ -1728,7 +1726,7 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 	{456, 20.616, 3.33}, 
 
 	{464, 20.717, 3.51}, 
-   
+
 	{472, 20.815, 3.69}, 
 	
 	{480, 20.912, 3.89}
@@ -1739,3 +1737,5 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 
 #endif
 
+
+// vim:ts=4:sw=4:nowrap:

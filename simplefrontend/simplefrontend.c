@@ -1,23 +1,23 @@
 /*
- *  TwoLAME: an optimized MPEG Audio Layer Two encoder
+ *	TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2006 The TwoLAME Project
+ *	Copyright (C) 2001-2004 Michael Cheng
+ *	Copyright (C) 2004-2006 The TwoLAME Project
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
+ *	This library is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU Lesser General Public
+ *	License as published by the Free Software Foundation; either
+ *	version 2.1 of the License, or (at your option) any later version.
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ *	This library is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *	Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *	You should have received a copy of the GNU Lesser General Public
+ *	License along with this library; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *	
  */
 
 #include <stdio.h>
@@ -33,7 +33,7 @@
 
 
 
-void usage (void) {			       
+void usage (void) {
 	fprintf(stdout,"stwolame <input wavefile> <output mp2 file>\n");
 	exit (1);
 }
@@ -100,10 +100,10 @@ int main (int argc, char **argv) {
   
   
 	/* initialise twolame with this set of options */
-    if (twolame_init_params( encodeOptions ) != 0) {
-        fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
-        exit(99);
-    }
+	if (twolame_init_params( encodeOptions ) != 0) {
+		fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
+		exit(99);
+	}
 
 	/* Open the output file for the encoded MP2 data */
 	if ((outfile = fopen(outputfilename, "wb"))==0) {
@@ -112,7 +112,7 @@ int main (int argc, char **argv) {
 	}
   
 
-	// Read num_samples of  audio data *per channel* from the input file
+	// Read num_samples of	audio data *per channel* from the input file
 	while ( (num_samples = wave_get_samples(wave_info, pcmaudio, AUDIOBUFSIZE)) != 0 ) { 
 		
 		// Encode the audio!
@@ -144,3 +144,5 @@ int main (int argc, char **argv) {
 	return(0);
 }
 
+
+// vim:ts=4:sw=4:nowrap:

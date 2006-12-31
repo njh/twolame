@@ -1,23 +1,23 @@
 /*
- *  TwoLAME: an optimized MPEG Audio Layer Two encoder
+ *	TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2006 The TwoLAME Project
+ *	Copyright (C) 2001-2004 Michael Cheng
+ *	Copyright (C) 2004-2006 The TwoLAME Project
  *
- *  This library is free software; you can redistribute it and/or
- *  modify it under the terms of the GNU Lesser General Public
- *  License as published by the Free Software Foundation; either
- *  version 2.1 of the License, or (at your option) any later version.
+ *	This library is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU Lesser General Public
+ *	License as published by the Free Software Foundation; either
+ *	version 2.1 of the License, or (at your option) any later version.
  *
- *  This library is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *  Lesser General Public License for more details.
+ *	This library is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *	Lesser General Public License for more details.
  *
- *  You should have received a copy of the GNU Lesser General Public
- *  License along with this library; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *	You should have received a copy of the GNU Lesser General Public
+ *	License along with this library; if not, write to the Free Software
+ *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *	
  */
 
 #include <stdio.h>
@@ -54,7 +54,7 @@
   Otherwise returns pointer to memory block
 */
 twolame_options *twolame_init(void) {
-	twolame_options *newoptions = NULL;  
+	twolame_options *newoptions = NULL;	 
 	
 	newoptions = (twolame_options *)TWOLAME_MALLOC(sizeof(twolame_options));
 	if (newoptions==NULL) {
@@ -97,7 +97,7 @@ twolame_options *twolame_init(void) {
 	
 	
 	newoptions->vbr_frame_count = 0;	// only used for debugging
-    newoptions->tablenum = 0;	
+	newoptions->tablenum = 0;	
 
 	newoptions->twolame_init = 0;
 	newoptions->subband = NULL;
@@ -111,7 +111,7 @@ twolame_options *twolame_init(void) {
 	newoptions->p3mem = NULL;
 	newoptions->p4mem = NULL;
 
-    memset(newoptions->vbrstats, 0, sizeof(newoptions->vbrstats));
+	memset(newoptions->vbrstats, 0, sizeof(newoptions->vbrstats));
 	
 	return(newoptions);
 }
@@ -318,23 +318,23 @@ int twolame_init_params (twolame_options *glopts) {
 	glopts->psycount = 0;
 
   
-  	// Allocate memory to larger buffers 
-    glopts->subband = (subband_t *) TWOLAME_MALLOC(sizeof (subband_t));
+	// Allocate memory to larger buffers 
+	glopts->subband = (subband_t *) TWOLAME_MALLOC(sizeof (subband_t));
 	glopts->j_sample = (jsb_sample_t *) TWOLAME_MALLOC(sizeof (jsb_sample_t));
-    glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof (sb_sample_t));
+	glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof (sb_sample_t));
 	
 	// clear buffers
-    memset ((char *) glopts->buffer, 0, sizeof(glopts->buffer));
-    memset ((char *) glopts->bit_alloc, 0, sizeof (glopts->bit_alloc));
-    memset ((char *) glopts->scfsi, 0, sizeof (glopts->scfsi));
-    memset ((char *) glopts->scalar, 0, sizeof (glopts->scalar));
-    memset ((char *) glopts->j_scale, 0, sizeof (glopts->j_scale));
-    memset ((char *) glopts->smrdef, 0, sizeof (glopts->smrdef));
-    memset ((char *) glopts->smr, 0, sizeof (glopts->smr));
-    memset ((char *) glopts->max_sc, 0, sizeof (glopts->max_sc));
+	memset ((char *) glopts->buffer, 0, sizeof(glopts->buffer));
+	memset ((char *) glopts->bit_alloc, 0, sizeof (glopts->bit_alloc));
+	memset ((char *) glopts->scfsi, 0, sizeof (glopts->scfsi));
+	memset ((char *) glopts->scalar, 0, sizeof (glopts->scalar));
+	memset ((char *) glopts->j_scale, 0, sizeof (glopts->j_scale));
+	memset ((char *) glopts->smrdef, 0, sizeof (glopts->smrdef));
+	memset ((char *) glopts->smr, 0, sizeof (glopts->smr));
+	memset ((char *) glopts->max_sc, 0, sizeof (glopts->max_sc));
 
 	// Initialise subband windowfilter
-    if (init_subband(&glopts->smem)<0) {
+	if (init_subband(&glopts->smem)<0) {
 		return -1;
 	}
 
@@ -355,29 +355,29 @@ static void scale_and_mix_samples( twolame_options *glopts )
 	int i;
 	
 	// apply scaling to both channels 
-    if (glopts->scale != 0 && glopts->scale != 1.0) {
+	if (glopts->scale != 0 && glopts->scale != 1.0) {
 		for (i=0 ; i<num_samples; ++i) {
-	    	glopts->buffer[0][i] *= glopts->scale;
-	    	if (glopts->num_channels_in == 2)
+			glopts->buffer[0][i] *= glopts->scale;
+			if (glopts->num_channels_in == 2)
 			glopts->buffer[1][i] *= glopts->scale;
-	    }
-    }
-
-    // apply scaling to channel 0 (left) 
-    if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
-		for (i=0 ; i<num_samples; ++i) {
-			glopts->buffer[0][i] *= glopts->scale_left;
-	    }
-    }
-
-    // apply scaling to channel 1 (right) 
-	if (glopts->scale_right != 0 && glopts->scale_right != 1.0) {
-	    for (i=0 ; i<num_samples; ++i) {
-			glopts->buffer[1][i] *= glopts->scale_right;
-	    }
+		}
 	}
 
-    // Downmix to Mono if 2 channels in and 1 channel out 
+	// apply scaling to channel 0 (left) 
+	if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
+		for (i=0 ; i<num_samples; ++i) {
+			glopts->buffer[0][i] *= glopts->scale_left;
+		}
+	}
+
+	// apply scaling to channel 1 (right) 
+	if (glopts->scale_right != 0 && glopts->scale_right != 1.0) {
+		for (i=0 ; i<num_samples; ++i) {
+			glopts->buffer[1][i] *= glopts->scale_right;
+		}
+	}
+
+	// Downmix to Mono if 2 channels in and 1 channel out 
 	if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1) {
 		for (i=0; i<num_samples; ++i) {
 			glopts->buffer[0][i] = ((long) glopts->buffer[0][i] + glopts->buffer[1][i]) / 2;
@@ -419,8 +419,8 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	scale_and_mix_samples( glopts );
 	
 	
-    // Clear the saved audio buffer
-    memset ((char *) sam, 0, sizeof (sam));
+	// Clear the saved audio buffer
+	memset ((char *) sam, 0, sizeof (sam));
 	
 	// Number of bits to calculate CRC on
 	glopts->num_crc_bits=0;
@@ -430,10 +430,10 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 
 	adb = available_bits ( glopts );
 
-    /* allow the user to reserve some space at the end of the frame
-       This will however leave fewer bits for the audio.
-       Need to do a sanity check here to see that there are *some* 
-       bits left. */
+	/* allow the user to reserve some space at the end of the frame
+	   This will however leave fewer bits for the audio.
+	   Need to do a sanity check here to see that there are *some* 
+	   bits left. */
 	if (glopts->num_ancillary_bits > 0.6*adb) {
 		/* Trying to reserve more than 60% of the frame.
 		   0.6 is arbitrary. but since most applications
@@ -441,30 +441,30 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		   Typical frame size is about 800bytes */
 		fprintf(stderr,"You're trying to reserve more than 60%% of the mpeg frame for ancillary data\n");
 		fprintf(stderr,"This is probably an error. But I'll keep going anyway...\n");
-    } 
+	} 
 
 	adb -= glopts->num_ancillary_bits;
 
 
-    /* MFC 26 July 2003
-       Doing DAB became a bit harder in the reorganisation of the code.
-       Now there is no guarantee that there is more than one frame in the bitbuffer.
-       But DAB requires that the CRC for the *current* frame be written at the end 
-       of the *previous* frame.
-       Workaround: Users (Nicholas?) wanting to implement DAB will have to do some work
-       in the frontend.
-            First: Reserve some bits for yourself (options->num_ancillary_bits)
-	    Second: Put the encoder into "single frame mode" i.e. only read 1152 samples
-	            per channel. (frontendoptions->singleFrameMode)
-	    Third: When you receive each mp2 frame back from the library, you'll have to insert
-	           the options->dabCrc[i] values into the end of the frame yourself. (DAB crc calc is 
+	/* MFC 26 July 2003
+	   Doing DAB became a bit harder in the reorganisation of the code.
+	   Now there is no guarantee that there is more than one frame in the bitbuffer.
+	   But DAB requires that the CRC for the *current* frame be written at the end 
+	   of the *previous* frame.
+	   Workaround: Users (Nicholas?) wanting to implement DAB will have to do some work
+	   in the frontend.
+			First: Reserve some bits for yourself (options->num_ancillary_bits)
+		Second: Put the encoder into "single frame mode" i.e. only read 1152 samples
+				per channel. (frontendoptions->singleFrameMode)
+		Third: When you receive each mp2 frame back from the library, you'll have to insert
+			   the options->dabCrc[i] values into the end of the frame yourself. (DAB crc calc is 
 		   done below)
-       The frontend will have to keep the previous frame in memory. 
-       As of 26July all that needs to be done is for the frontend to buffer one frame in memory, such that
-       the CRC for the next frame can be written in at the end of it.
-    */
+	   The frontend will have to keep the previous frame in memory. 
+	   As of 26July all that needs to be done is for the frontend to buffer one frame in memory, such that
+	   the CRC for the next frame can be written in at the end of it.
+	*/
 
-    {
+	{
 		int gr, bl, ch;
 		/* New polyphase filter
 		 Combines windowing and filtering. Ricardo Feb'03 */
@@ -473,17 +473,17 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		for ( ch = 0; ch < nch; ch++ )
 			window_filter_subband( &glopts->smem, &glopts->buffer[ch][gr * 12 * 32 + 32 * bl], ch,
 				 &(*glopts->sb_sample)[ch][gr][bl][0] );
-    }
+	}
 
-    scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
-    find_sf_max (glopts, glopts->scalar, glopts->max_sc);
-    if (glopts->mode == TWOLAME_JOINT_STEREO) {
+	scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
+	find_sf_max (glopts, glopts->scalar, glopts->max_sc);
+	if (glopts->mode == TWOLAME_JOINT_STEREO) {
 		// this way we calculate more mono than we need but it is cheap 
 		combine_lr (*glopts->sb_sample, *glopts->j_sample, glopts->sblimit);
 		scalefactor_calc (glopts->j_sample, &glopts->j_scale, 1, glopts->sblimit);
-    }
+	}
 
-    if ((glopts->quickmode == TRUE) && (++glopts->psycount % glopts->quickcount != 0)) {
+	if ((glopts->quickmode == TRUE) && (++glopts->psycount % glopts->quickcount != 0)) {
 		/* We're using quick mode, so we're only calculating the model every
 		 'quickcount' frames. Otherwise, just copy the old ones across */
 		for (ch = 0; ch < nch; ch++) {
@@ -497,8 +497,8 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 			case -1:
 				psycho_n1 (glopts, glopts->smr, nch);
 			break;
-			case 0:	// Psy Model A
-				psycho_0 (glopts, glopts->smr, glopts->scalar);	
+			case 0: // Psy Model A
+				psycho_0 (glopts, glopts->smr, glopts->scalar); 
 			break;
 			case 1:
 				psycho_1 (glopts, glopts->buffer, glopts->max_sc, glopts->smr);
@@ -529,41 +529,41 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 	}
 
 
-    sf_transmission_pattern (glopts, glopts->scalar, glopts->scfsi);
-    main_bit_allocation (glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
-    
-    write_header (glopts, bs);
-    
-    // Leave space for 2 bytes of CRC to be filled in later
+	sf_transmission_pattern (glopts, glopts->scalar, glopts->scfsi);
+	main_bit_allocation (glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
+	
+	write_header (glopts, bs);
+	
+	// Leave space for 2 bytes of CRC to be filled in later
 	if (glopts->error_protection)
 		buffer_putbits (bs, 0, 16);
-    
-    write_bit_alloc (glopts, glopts->bit_alloc, bs);
-    write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
-    
-    subband_quantization (glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale, *glopts->j_sample, glopts->bit_alloc,
-    			  *glopts->subband);
-    write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
+	
+	write_bit_alloc (glopts, glopts->bit_alloc, bs);
+	write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
+	
+	subband_quantization (glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale, *glopts->j_sample, glopts->bit_alloc,
+				  *glopts->subband);
+	write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
 
-    // If not all the bits were used, write out a stack of zeros 
-    for (i = 0; i < adb; i++)	buffer_put1bit (bs, 0);
+	// If not all the bits were used, write out a stack of zeros 
+	for (i = 0; i < adb; i++)	buffer_put1bit (bs, 0);
 
 
-    /* MFC July 03 FIXME
-       Write an extra byte for 16/24/32/48 input when padding is on.
-       Something must be going astray with the frame size calcs.
-       This fudge works fine for the moment */
-    if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
+	/* MFC July 03 FIXME
+	   Write an extra byte for 16/24/32/48 input when padding is on.
+	   Something must be going astray with the frame size calcs.
+	   This fudge works fine for the moment */
+	if ((glopts->header.samplerate_idx != 0) && (glopts->padding)) // i.e. not a 44.1 or 22kHz input file
 		buffer_putbits (bs, 0, 8);
 
-    if (glopts->do_dab) {
+	if (glopts->do_dab) {
 		// Do the CRC calc for DAB stuff if required.
 		// It will be up to the frontend to insert it into the end of the 
 		// previous frame.
 		for (i=glopts->dab_crc_len-1; i>=0; i--) {
 			dab_crc_calc (glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, &glopts->dab_crc[i], i);
 		}
-    }
+	}
 
 
 	// Allocate space for the reserved ancillary bits
@@ -572,17 +572,17 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 
 
 	// Calulate the number of bits in this frame
-    frameBits = buffer_sstell(bs) - initial_bits;
-    if (frameBits % 8) {	/* a program failure */
+	frameBits = buffer_sstell(bs) - initial_bits;
+	if (frameBits % 8) {	/* a program failure */
 		fprintf (stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits/8, frameBits%8);
 		fprintf (stderr, "If you are reading this, the program is broken\n");
 		fprintf (stderr, "email %s with the command line arguments and other info\n", PACKAGE_BUGREPORT);
 		return -1;
-    }
+	}
 
 	// Store the energy levels at the end of the frame
-    if (glopts->do_energy_levels)
-    	do_energy_levels(glopts, bs);
+	if (glopts->do_energy_levels)
+		do_energy_levels(glopts, bs);
 
 	// MEANX: Recompute checksum from bitstream
 	if (glopts->error_protection)
@@ -591,7 +591,7 @@ static int encode_frame(twolame_options *glopts, bit_stream *bs)
 		crc_writeheader(frame_ptr, glopts->num_crc_bits );
 	}
 
-    //fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
+	//fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
 
 	return frameBits/8;
 }
@@ -866,3 +866,5 @@ void twolame_close(twolame_options **glopts) {
 	// Free the memory and zero the pointer
 	TWOLAME_FREE( opts );
 }
+
+// vim:ts=4:sw=4:nowrap:

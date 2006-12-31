@@ -50,3 +50,5 @@ void *twolame_malloc (size_t size, int line,  char *file);
 
 #endif
 
+
+// vim:ts=4:sw=4:nowrap:
