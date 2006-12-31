@@ -2,7 +2,7 @@
  *  TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
  *  Copyright (C) 2001-2004 Michael Cheng
- *  Copyright (C) 2004-2005 The TwoLAME Project
+ *  Copyright (C) 2004-2006 The TwoLAME Project
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -27,3 +27,6 @@ void psycho_3 (twolame_options *glopts, short int buffer[2][1152], FLOAT scale[2
 void psycho_3_deinit(psycho_3_mem **mem);
 
 #endif
+
+
+// vim:ts=4:sw=4:nowrap:

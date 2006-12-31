@@ -95,8 +95,8 @@ int twolame_set_scale(twolame_options* glopts, float scale)
 		fprintf(stderr,"invalid scaling amount %f\n",scale);
 		return(-1);
 	}
-    glopts->scale = scale;
-    return 0;
+	glopts->scale = scale;
+	return 0;
 }
 
 float twolame_get_scale(twolame_options* glopts)
@@ -111,8 +111,8 @@ int twolame_set_scale_left(twolame_options* glopts, float scale)
 		fprintf(stderr,"invalid scaling amount %f\n",scale);
 		return(-1);
 	}
-    glopts->scale_left = scale;
-    return 0;
+	glopts->scale_left = scale;
+	return 0;
 }
 
 float twolame_get_scale_left(twolame_options* glopts)
@@ -128,7 +128,7 @@ int twolame_set_scale_right(twolame_options* glopts, float scale)
 		return(-1);
 	}
 	glopts->scale_right = scale;
-    return 0;
+	return 0;
 }
 
 float twolame_get_scale_right(twolame_options* glopts)
@@ -187,8 +187,8 @@ int twolame_get_bitrate (twolame_options *glopts)
 int twolame_set_emphasis (twolame_options *glopts, TWOLAME_Emphasis emphasis)
 {
 	if (emphasis!=TWOLAME_EMPHASIS_N &&
-	    emphasis!=TWOLAME_EMPHASIS_5 &&
-	    emphasis!=TWOLAME_EMPHASIS_C)     return(-1);
+		emphasis!=TWOLAME_EMPHASIS_5 &&
+		emphasis!=TWOLAME_EMPHASIS_C)	return(-1);
 	glopts->emphasis = emphasis;
 	return(0);
 }
@@ -244,7 +244,7 @@ int twolame_set_padding (twolame_options *glopts, TWOLAME_Padding padding)
 		glopts->padding = TRUE;
 	else
 		glopts->padding = FALSE;
-      
+  
 	return(0);
 }
 
@@ -451,7 +451,7 @@ int twolame_set_DAB_crc_length (twolame_options *glopts, int length)
 	if (length<0)
 		return(-1);
 	else
-    	glopts->dab_crc_len = length;
+		glopts->dab_crc_len = length;
 	return(0);
 }
 
@@ -460,3 +460,5 @@ int twolame_get_DAB_crc_length (twolame_options *glopts)
 	return(glopts->dab_crc_len);
 }
 
+
+// vim:ts=4:sw=4:nowrap:

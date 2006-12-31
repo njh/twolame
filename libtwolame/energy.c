@@ -119,3 +119,5 @@ void do_energy_levels(twolame_options *glopts, bit_stream *bs)
 }
 
 
+// vim:ts=4:sw=4:nowrap:
+
