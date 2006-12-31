@@ -3,6 +3,7 @@ TwoLAME Authors
 
 
 .Nicholas Humfrey - <njh at ecs.soton.ac.uk>
+ -  Current Maintainer
  -	New automake build system
  -	Added libsndfile support
  -  Reference documentation for API
