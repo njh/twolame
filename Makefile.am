@@ -14,5 +14,5 @@ EXTRA_DIST = \
 	win32/libtwolame_dll.sln \
 	win32/libtwolame_dll.vcproj \
 	win32/libtwolame_static.sln \
-	win32/libtwolame_static.vcproj 
-	
+	win32/libtwolame_static.vcproj \
+	win32/winutil.h
