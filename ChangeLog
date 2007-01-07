@@ -1,6 +1,14 @@
 What is new in TwoLAME 
 ======================
 
+
+Version 0.3.10 (2007-?-?)
+-------------------------
+
+- Added win32/winutil.h to tarball - fixes bug #1629945
+- Fixed presentation of --enable-debug in configure script
+
+
 Version 0.3.9 (2006-12-31)
 --------------------------
 

@@ -5,14 +5,14 @@ AC_PREREQ(2.57)
 
 dnl ############# Initialization
 
-AC_INIT([twolame], [0.3.9], [twolame-discuss@lists.sourceforge.net])
+AC_INIT([twolame], [0.3.10], [twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build)
 AC_CANONICAL_SYSTEM
 
 dnl Version 1.7 of automake is recommended
-AM_INIT_AUTOMAKE( 1.7 )
+AM_INIT_AUTOMAKE(1.7)
 AM_CONFIG_HEADER(build/config.h)
 
 
@@ -53,7 +53,7 @@ AC_C_INLINE
 dnl ############# Configure Arguments
 
 AC_ARG_ENABLE(debug,
-	  [--enable-debug=[no/yes] turn on debugging],
+	  [  --enable-debug=[no/yes]   turn on debugging],
 	  [ Debugging="Enabled" 
 		AC_DEFINE(DEBUG, 1, [ Define if debugging is enabled. ]) ],
 	  [ Debugging="Disabled" ]
