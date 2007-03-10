@@ -237,6 +237,27 @@ DLL_EXPORT int twolame_encode_buffer_float32(
 		int mp2buffer_size );
 
 
+/** Encode some 32-bit PCM audio to MP2.
+ *
+ *	Takes 32-bit floating point PCM audio samples from a single 
+ *	buffer and places encoded audio into mp2buffer.
+ *	
+ *	\param glopts			twolame options pointer
+ *	\param pcm				Audio samples for left AND right channels
+ *	\param num_samples		Number of samples per channel
+ *	\param mp2buffer		Buffer to place encoded audio into
+ *	\param mp2buffer_size	Size of the output buffer
+ *	\return					The number of bytes put in output buffer
+ *							or a negative value on error
+ */
+int twolame_encode_buffer_float32_interleaved(
+		twolame_options *glopts,
+		const float pcm[],
+		int num_samples,
+		unsigned char *mp2buffer,
+		int mp2buffer_size );
+
+
 /** Encode any remains buffered PCM audio to MP2.
  *
  *	Encodes any remaining audio samples in the libtwolame
