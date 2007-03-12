@@ -39,7 +39,7 @@
 
 int twolame_set_mode (twolame_options *glopts, TWOLAME_MPEG_mode mode)
 {
-	if (mode<0 || mode>3)
+	if (mode<TWOLAME_AUTO_MODE || mode>TWOLAME_MONO)
 	{
 		fprintf(stderr,"invalid mode %i\n",mode);
 		return(-1);
@@ -55,12 +55,12 @@ TWOLAME_MPEG_mode twolame_get_mode (twolame_options *glopts)
 
 const char *twolame_get_mode_name(twolame_options *glopts)
 {
-	static const char *mode_name[5] = { "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode"};
+	static const char *mode_name[6] = { "Auto", "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode"};
 	int mode = glopts->mode;
-	if (mode>=0 && mode<4)
-		return (mode_name[mode]);
+	if (mode>=TWOLAME_AUTO_MODE && mode<=TWOLAME_MONO)
+		return (mode_name[mode-1]);
 	else 
-		return (mode_name[4]);
+		return (mode_name[5]);
 }
 
 
