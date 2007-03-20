@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -127,7 +127,7 @@ static void psycho_1_init_add_db (psycho_1_mem *mem)
   }
 }
 
-static inline FLOAT add_db (psycho_1_mem *mem, FLOAT a, FLOAT b)
+static FLOAT add_db (psycho_1_mem *mem, FLOAT a, FLOAT b)
 {
   /* MFC - if the difference between a and b is large (>99), then just return the
 	 largest one. (about 10% of the time)
@@ -628,7 +628,7 @@ void psycho_1 (twolame_options *glopts, short buffer[2][1152], FLOAT scale[2][SB
 	psycho_1_hann_fft_pickmax (sample, mem->power, &spike[k][0], energy);
 	psycho_1_tonal_label (mem, &tone);
 	psycho_1_noise_label (mem, &noise, energy);
-	//psycho_1_dump(power, &tone, &noise) ;
+	/* psycho_1_dump(power, &tone, &noise) ; */
 	psycho_1_subsampling (mem->power, mem->ltg, &tone, &noise);
 	psycho_1_threshold (mem, &tone, &noise, glopts->bitrate / nch);
 	psycho_1_minimum_mask (mem->sub_size, mem->ltg, &ltmin[k][0], sblimit);

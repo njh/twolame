@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -32,7 +32,7 @@
 #include "mem.h"
 
 
-/*create bit buffer*/
+/* Create bit buffer */
 bit_stream* buffer_init( unsigned char *buffer, int buffer_size )
 {
 	bit_stream* bs = (bit_stream *)TWOLAME_MALLOC( sizeof(bit_stream) );
@@ -58,7 +58,7 @@ void buffer_deinit( bit_stream **bs )
 }
 
 
-/*write 1 bit from the bit stream */
+/* Write 1 bit from the bit stream */
 void buffer_put1bit (bit_stream * bs, int bit)
 {
 	bs->totbit++;
@@ -69,7 +69,7 @@ void buffer_put1bit (bit_stream * bs, int bit)
 		bs->buf_bit_idx = 8;
 		bs->buf_byte_idx++;
 		if (bs->buf_byte_idx >= bs->buf_size) {
-			//empty_buffer (bs, minimum);
+			/* empty_buffer (bs, minimum); */
 			fprintf(stdout,"buffer_put1bit: error. bit_stream buffer needs to be bigger\n");
 			exit(99);
 		}
@@ -77,8 +77,8 @@ void buffer_put1bit (bit_stream * bs, int bit)
 	}
 }
 
-/*write N bits into the bit stream */
-NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
+/* Write N bits into the bit stream */
+void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 {
 	static const int putmask[9] = { 0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
 	register int j = N;
@@ -94,7 +94,7 @@ NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 			bs->buf_bit_idx = 8;
 			bs->buf_byte_idx++;
 			if (bs->buf_byte_idx >= bs->buf_size) {
-				//empty_buffer (bs, minimum);
+				/* empty_buffer (bs, minimum); */
 				fprintf(stdout,"buffer_putbits: error. bit_stream buffer needs to be bigger\n");
 				exit(99);	
 			}
@@ -104,7 +104,7 @@ NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 	}
 }
 
-/*return the current bit stream length (in bits)*/
+/* Return the current bit stream length (in bits) */
 unsigned long buffer_sstell (bit_stream * bs)
 {
 	return (bs->totbit);

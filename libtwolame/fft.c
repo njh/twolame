@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -364,7 +364,7 @@ static void atan_table_init(void) {
 		atan_t[i] = atan((FLOAT)i/ATANSCALE);
 }
 
-#endif //NEWATAN
+#endif /* NEWATAN */
 
 /* For variations on psycho model 2:
    N always equals 1024

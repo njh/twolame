@@ -18,15 +18,16 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
 #ifndef _MEM_H
 #define _MEM_H
 
-
-#include "common.h"
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -40,14 +41,12 @@
 #include <malloc.h>
 #endif
 
-#include <stdio.h>
 
-
-// Macros
+/*  Macros */
 #define TWOLAME_MALLOC(size) twolame_malloc( size, __LINE__, __FILE__ )
 #define TWOLAME_FREE(ptr) if(ptr!=NULL) { free(ptr); ptr=NULL; }
 
-// Functions
+/*  Functions */
 void *twolame_malloc (size_t size, int line,  char *file);
 
 #endif

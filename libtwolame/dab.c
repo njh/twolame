@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -91,7 +91,7 @@ void dab_crc_update (unsigned int data, unsigned int length, unsigned int *crc)
 
 
 #ifdef OLD_BROKEN_DAB_STUFF
-// Leaving these here while DAB is reimplemented properly
+/*  Leaving these here while DAB is reimplemented properly */
 
 #define		MINIMUM			4   /* Minimum size of the buffer in bytes */
 #define		MAX_LENGTH		32  /* Maximum length of word written */

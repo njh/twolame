@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -51,13 +51,13 @@ int available_bits ( twolame_options * glopts )
 		(1152.0/ ((FLOAT)glopts->samplerate_out/1000.0) )
 		* ((FLOAT)glopts->bitrate / 8.0);
 	
-	//fprintf(stdout,"availbits says: sampling freq is %i. version %i. bitrateindex %i slots %f\n",header->sampling_frequency, header->version, header->bitrate_index, slots.average);
+	/* fprintf(stdout,"availbits says: sampling freq is %i. version %i. bitrateindex %i slots %f\n",header->sampling_frequency, header->version, header->bitrate_index, slots.average); */
 	
 	slots.whole = (int) slots.average;
 	slots.frac = slots.average - (FLOAT) slots.whole;
 	
 	/* never allow padding for a VBR frame. 
-	Don't ask me why, I've forgotten why I set this */
+	   Don't ask me why, I've forgotten why I set this */
 	if (slots.frac != 0 && glopts->padding && glopts->vbr == FALSE) {
 		if (slots.lag > (slots.frac - 1.0)) {	/* no padding for this frame */
 			slots.lag -= slots.frac;

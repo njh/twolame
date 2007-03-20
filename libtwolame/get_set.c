@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -271,7 +271,7 @@ int twolame_get_VBR (twolame_options *glopts)
 
 int twolame_set_VBR_level (twolame_options *glopts, float level)
 {
-	// Limit is -50 to 50, but useful range is -10 to 10
+	/*  Limit is -50 to 50, but useful range is -10 to 10 */
 	if (fabs(level)>50.0)
 		return(-1);
 	else
@@ -284,10 +284,10 @@ float twolame_get_VBR_level (twolame_options *glopts)
 	return(glopts->vbrlevel);
 }
 
-// Deprecated:
+/*  Deprecated: */
 int twolame_set_VBR_q (twolame_options *glopts, float level)
 {
-	// Limit is -50 to 50, but useful range is -10 to 10
+	/*  Limit is -50 to 50, but useful range is -10 to 10 */
 	if (fabs(level)>50.0)
 		return(-1);
 	else
@@ -295,7 +295,7 @@ int twolame_set_VBR_q (twolame_options *glopts, float level)
 	return(0);
 }
 
-// Deprecated:
+/*  Deprecated: */
 float twolame_get_VBR_q (twolame_options *glopts)
 {
 	return(glopts->vbrlevel);

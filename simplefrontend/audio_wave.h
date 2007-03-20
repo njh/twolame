@@ -18,18 +18,18 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
 typedef struct wave_info_struct
 {
 	FILE *soundfile;
-	short channels;				// 1 - mono . 2 - stereo. d'uh.
-	unsigned long num_samples;	// total number of samples/channel if available
-	short samplesize;			// 8 bit or 16bit. could probably just auto scale. but i think
-								// we'll just ignore 8bit sound. MFC May03
-	int samplerate;				// in Hz
+	short channels;				/*  1 - mono . 2 - stereo. d'uh. */
+	unsigned long num_samples;	/*  total number of samples/channel if available */
+	short samplesize;			/*  8 bit or 16bit. could probably just auto scale. but i think */
+								/*  we'll just ignore 8bit sound. MFC May03 */
+	int samplerate;				/*  in Hz */
 	int byteswap;
 }
 wave_info_t;

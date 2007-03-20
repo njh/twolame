@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -43,7 +43,7 @@ bit_stream * buffer_init( unsigned char *buffer, int buffer_size );
 void buffer_deinit( bit_stream **bs );
 
 void buffer_put1bit (bit_stream *, int);
-NO_DLL_INLINE void buffer_putbits (bit_stream *, unsigned int, int);
+void buffer_putbits (bit_stream *, unsigned int, int);
 unsigned long buffer_sstell (bit_stream *);
 
 #endif

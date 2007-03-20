@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -102,19 +102,22 @@ static void psycho_4_trigtable_init(psycho_4_mem *p4mem) {
   }
 }
 
-static inline FLOAT psycho_4_cos(psycho_4_mem *p4mem, FLOAT phi) {
+/* Unused function:
+static FLOAT psycho_4_cos(psycho_4_mem *p4mem, FLOAT phi) {
   int index;
   int sign=1;
 
   index = (int)(fabs(phi) * TRIGTABLESCALE);
   while (index>=TRIGTABLESIZE) {
-	/* If we're larger than PI, then subtract PI until we aren't
-	   each time the sign will flip - Year 11 trig again. MFC March 2003 */
+	// If we're larger than PI, then subtract PI until we aren't
+	//  each time the sign will flip - Year 11 trig again. MFC March 2003
 	index -= TRIGTABLESIZE;
 	sign*=-1;
   }
   return(sign * p4mem->cos_table[index]);
 }
+*/
+
 /* The spreading function.	Values returned in units of energy
    Argument 'bark' is the difference in bark values between the
    centre of two partitions.
@@ -192,7 +195,7 @@ static psycho_4_mem *psycho_4_init (twolame_options *glopts, int sfreq)
 	cbval = mem->cbval;
 	rnorm = mem->rnorm;
 	window = mem->window;
-	//bark = mem->bark;
+	/* bark = mem->bark; */
 	ath = mem->ath;
 	numlines = mem->numlines;
 	partition = mem->numlines;
@@ -224,7 +227,7 @@ static psycho_4_mem *psycho_4_init (twolame_options *glopts, int sfreq)
 	   they seem to start with index 0 corresponding to (sampling freq)/1024.
 	   When in doubt, i'm going to assume that the dist10 code is wrong. MFC Feb2003  */
 	ath[i] = ath_energy(freq,glopts->athlevel);
-	//fprintf(stderr,"%.2f ",ath[i]);
+	/* fprintf(stderr,"%.2f ",ath[i]); */
   }	 
  
 
@@ -556,7 +559,7 @@ void psycho_4 (twolame_options *glopts,
   for (i = 0; i < 32; i++) 
 	smr[ch][i] = MAX(snrtmp[0][i], snrtmp[1][i]);
 
-  } // now do other channel
+  } /*  now do other channel */
   
 }
 

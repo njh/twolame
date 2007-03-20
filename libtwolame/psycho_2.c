@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -105,7 +105,7 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
 	mem->r = (F2HBLK *) TWOLAME_MALLOC(sizeof (F22HBLK));
 	mem->phi_sav = (F2HBLK *) TWOLAME_MALLOC(sizeof (F22HBLK));
 
-	//static int new = 0, old = 1, oldest = 0;
+	/* static int new = 0, old = 1, oldest = 0; */
 	mem->new=0;
 	mem->old=1;
 	mem->oldest=0;
@@ -382,8 +382,8 @@ void psycho_2 (twolame_options *glopts, short int buffer[2][1152],
 	phi_sav[ch][new][j] = phi[j];
 #ifdef SINCOS
 	{
-	  // 12% faster
-	  //#warning "Use __sincos"
+	  /*  12% faster */
+	  /* #warning "Use __sincos" */
 	  FLOAT sphi, cphi, sprime, cprime;
 	  __sincos ((FLOAT) phi[j], &sphi, &cphi);
 	  __sincos ((FLOAT) phi_prime, &sprime, &cprime);
@@ -519,7 +519,7 @@ void psycho_2 (twolame_options *glopts, short int buffer[2][1152],
 	  smr[ch][i] = (snrtmp[0][i] > snrtmp[1][i]) ? snrtmp[0][i] : snrtmp[1][i];
 	}
 
-  } // next channel
+  } /*  next channel */
 
 }
 

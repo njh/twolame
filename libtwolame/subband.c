@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -81,7 +81,7 @@ void window_filter_subband (subband_mem *smem, short *pBuffer, int ch, FLOAT s[S
 	for (i = 0; i < 32; i++)
 	dp[(31 - i) * 8] = (FLOAT) pBuffer[i] / SCALE;
 	
-	// looks like "school example" but does faster ...
+	/*  looks like "school example" but does faster ... */
 	dp = (smem->x[ch] + smem->half[ch] * 256);
 	pa = smem->off[ch];
 	pb = (pa + 1) % 8;
@@ -106,7 +106,7 @@ void window_filter_subband (subband_mem *smem, short *pBuffer, int ch, FLOAT s[S
 		y[i] = t;
 	}
 	
-	yprime[0] = y[16];		// Michael Chen's dct filter
+	yprime[0] = y[16];		/*  Michael Chen's dct filter */
 	
 	dp = smem->half[ch] ? smem->x[ch] : (smem->x[ch] + 256);
 	pa = smem->half[ch] ? (smem->off[ch] + 1) & 7 : smem->off[ch];
@@ -130,12 +130,12 @@ void window_filter_subband (subband_mem *smem, short *pBuffer, int ch, FLOAT s[S
 		t += dp2[pg] * pEnw[384];
 		t += dp2[ph] * pEnw[448];
 		y[i + 32] = t;
-		// 1st pass on Michael Chen's dct filter
+		/*  1st pass on Michael Chen's dct filter */
 		if (i > 0 && i < 17)
 			yprime[i] = y[i + 16] + y[16 - i];
 	}
 	
-	// 2nd pass on Michael Chen's dct filter
+	/*  2nd pass on Michael Chen's dct filter */
 	for (i = 17; i < 32; i++)
 		yprime[i] = y[i + 16] - y[80 - i];
 	

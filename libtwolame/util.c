@@ -33,8 +33,7 @@
 #include "util.h"
 
 
-// Return string containg version number
-// of this library
+/* Return string containg version number of this library */
 const char* get_twolame_version( void )
 {
 	const char* str = PACKAGE_VERSION;
@@ -42,8 +41,7 @@ const char* get_twolame_version( void )
 	return str;
 }
 
-// Return string containg version number
-// of this library
+/* Return string containg version number of this library */
 const char* get_twolame_url( void )
 {
 	const char* str = "http://www.twolame.org";
@@ -58,9 +56,7 @@ static const int bitrate_table[2][15] = {
 	{0, 32, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 384}
 };
 
-//
-// Returns a name string for MPEG version enumeration
-//
+/* Returns a name string for MPEG version enumeration */
 const char* twolame_mpeg_version_name (int version)
 {
 	static const char *version_name[3] = { "MPEG-2 LSF", "MPEG-1", "Illegal Version" };
@@ -72,17 +68,17 @@ const char* twolame_mpeg_version_name (int version)
 }
 
 
-//	Returns the index associated with a bitrate for
-//	the specified version of MPEG.
-//
-//	Returns -1 for invalid bitrates
-//
+/*	Returns the index associated with a bitrate for
+    the specified version of MPEG.
+
+    Returns -1 for invalid bitrates
+*/
 int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 {
 	int index = 0;
 	int found = 0;
 
-	// MFC sanity check.
+	/* MFC sanity check. */
 	if (version!=0 && version!=1) {
 		fprintf(stderr,"twolame_get_bitrate_index: invalid version index %i\n",version);
 		return -1;
@@ -104,9 +100,9 @@ int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 	}
 }
 
-// convert samp frq in Hz to index
-// legal rates 16000, 22050, 24000, 32000, 44100, 48000
-//	-1 is returned for invalid samplerates
+/* convert samp frq in Hz to index
+   legal rates 16000, 22050, 24000, 32000, 44100, 48000
+   -1 is returned for invalid samplerates */
 int twolame_get_samplerate_index (long sample_rate)
 {
 
@@ -119,14 +115,14 @@ int twolame_get_samplerate_index (long sample_rate)
 		case 16000L: return 2;
 	}
 
-	// Invalid choice of samplerate 
+	/* Invalid choice of samplerate */
 	fprintf (stderr, "twolame_get_samplerate_index: %ld is not a legal sample rate\n", sample_rate);
 	return -1;
 }
 
 
-// Return the MPEG Version to use for the specified samplerate
-//	-1 is returned for invalid samplerates
+/* Return the MPEG Version to use for the specified samplerate
+   -1 is returned for invalid samplerates */
 int twolame_get_version_for_samplerate (long sample_rate)
 {
 
@@ -139,13 +135,13 @@ int twolame_get_version_for_samplerate (long sample_rate)
 		case 16000L: return TWOLAME_MPEG2;
 	}
 
-	// Invalid choice of samplerate 
+	/* Invalid choice of samplerate */
 	fprintf (stderr, "twolame_get_version_for_samplerate: %ld is not a legal sample rate\n", sample_rate);
 	return -1;
 }
 
 
-// Get the number of bytes per frame, for current settings
+/* Get the number of bytes per frame, for current settings */
 int twolame_get_framelength( twolame_options *glopts )
 {
 	int bytes = 144 * (glopts->bitrate*1000) / glopts->samplerate_out;
@@ -158,18 +154,18 @@ int twolame_get_framelength( twolame_options *glopts )
 
 
 
-// Print the library version and 
-//	encoder parameter settings to STDERR
+/* Print the library version and 
+   encoder parameter settings to STDERR */
 void twolame_print_config(twolame_options *glopts)
 {
 	FILE* fd = stderr;
 
-	// Are we being silent ?
+	/* Are we being silent ? */
 	if (glopts->verbosity<=0) return; 
 	
 
 
-	// Are we being brief ?
+	/* Are we being brief ? */
 	if (glopts->verbosity==1) {
 	
 		fprintf(fd, "LibTwoLame version %s (%s)\n", get_twolame_version(), get_twolame_url());
@@ -222,11 +218,11 @@ void twolame_print_config(twolame_options *glopts)
 			if (twolame_get_scale_right(glopts)!=1.0f)
 				fprintf(fd," - Scaling right channel by %f\n", twolame_get_scale_right(glopts));
 
-			//if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1 ) {
-			//	fprintf(fd, " - Downmixing from stereo to mono.\n");
-			//} else if (glopts->num_channels_in == 1 && glopts->num_channels_out == 2 ) {
-			//	fprintf(fd, " - Upmixing from mono to stereo.\n");
-			//}
+			/*if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1 ) {
+				fprintf(fd, " - Downmixing from stereo to mono.\n");
+			} else if (glopts->num_channels_in == 1 && glopts->num_channels_out == 2 ) {
+				fprintf(fd, " - Upmixing from mono to stereo.\n");
+			}*/
 		}
 		
 		fprintf (fd, "---------------------------------------------------------\n");
@@ -235,5 +231,5 @@ void twolame_print_config(twolame_options *glopts)
 }
 
 
-// vim:ts=4:sw=4:nowrap:
+/* vim:ts=4:sw=4:nowrap: */
 

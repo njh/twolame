@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -26,7 +26,7 @@
 #ifndef	_FFT_H_
 #define	_FFT_H_
 
-//void fft (FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], int);
+/* void fft (FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], int); */
 
 void psycho_2_fft (FLOAT * x_real, FLOAT * energy, FLOAT * phi);
 void psycho_1_fft (FLOAT * x_real, FLOAT * energy, int N);

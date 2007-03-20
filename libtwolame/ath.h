@@ -32,4 +32,4 @@ FLOAT ath_freq2bark(FLOAT freq);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap:
+/* vim:ts=4:sw=4:nowrap: */

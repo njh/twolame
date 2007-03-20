@@ -17,7 +17,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -43,24 +43,24 @@
 /*
   Result codes
 */
-#define ERR_NO_ERROR		(0)	 // No Error (encoded ok)
-#define ERR_NO_ENCODE	   (1)	 // No Error (no encoding performed)
-#define ERR_OPENING_INPUT	(2)	 // Error opening input file
-#define ERR_OPENING_OUTPUT	(4)	 // Error opening output file
-#define ERR_MEM_ALLOC	   (6)	 // Error allocating memory
-#define ERR_INVALID_PARAM	(8)	 // Error in chosen encoding parameters
-#define ERR_READING_INPUT	(10)	// Error reading input
-#define ERR_ENCODING		(12)	// Error occured during encoding
-#define ERR_WRITING_OUTPUT	(14)	// Error occured writing to output file
+#define ERR_NO_ERROR		(0)		/* No Error (encoded ok) */
+#define ERR_NO_ENCODE		(1)		/* No Error (no encoding performed) */
+#define ERR_OPENING_INPUT	(2)		/* Error opening input file */
+#define ERR_OPENING_OUTPUT	(4)		/* Error opening output file */
+#define ERR_MEM_ALLOC		(6)		/* Error allocating memory */
+#define ERR_INVALID_PARAM	(8)		/* Error in chosen encoding parameters */
+#define ERR_READING_INPUT	(10)	/* Error reading input */
+#define ERR_ENCODING		(12)	/* Error occured during encoding */
+#define ERR_WRITING_OUTPUT	(14)	/* Error occured writing to output file */
 
 
 /* 
   Global Variables
 */
-int single_frame_mode = FALSE;	  // only encode a single frame of MPEG audio ?
-int byteswap = FALSE;			   // swap endian on input audio ?
-int channelswap = FALSE;			// swap left and right channels ?
-SF_INFO sfinfo;					 // contains information about input file format
+int single_frame_mode = FALSE;		/* only encode a single frame of MPEG audio ? */
+int byteswap = FALSE;				/* swap endian on input audio ? */
+int channelswap = FALSE;			/* swap left and right channels ? */
+SF_INFO sfinfo;						/* contains information about input file format */
 
 char inputfilename[MAX_NAME_SIZE] = "\0";
 char outputfilename[MAX_NAME_SIZE] = "\0";
@@ -79,7 +79,7 @@ new_extension(char *filename, char *extname, char *newname)
 {
 	int found, dotpos;
 
-	// First, strip the old extension
+	/*  First, strip the old extension */
 	dotpos = strlen(filename);
 	found = 0;
 	do {
@@ -108,8 +108,8 @@ new_extension(char *filename, char *extname, char *newname)
 		newname[dotpos] = '\0';
 	}
 	
-	// Make sure there is room in the string for the 
-	// new filename and the extension
+	/*  Make sure there is room in the string for the  */
+	/*  new filename and the extension */
 	if (strlen(newname)+strlen(extname)+1<MAX_NAME_SIZE) {
 		strcat(newname, extname);
 	}
@@ -131,12 +131,12 @@ format_duration_string( SF_INFO *sfinfo )
 		return string;
 	}
 	
-	// Calculate the number of minutes and seconds
+	/*  Calculate the number of minutes and seconds */
 	seconds = sfinfo->frames / sfinfo->samplerate;
 	minutes = (seconds / 60 );
 	seconds -= (minutes * 60);
 
-	// Create a string out of it
+	/*  Create a string out of it */
 	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
 
 	return string;
@@ -146,9 +146,9 @@ format_duration_string( SF_INFO *sfinfo )
 static char*
 format_filesize_string( int filesize )
 {
-	static const int constKB = 1024;				// Kilobyte
-	static const int constMB = 1024 * 1024;			// Megabyte
-	static const int constGB = 1024 * 1024 * 1024;	// Gigabyte
+	static const int constKB = 1024;				/*  Kilobyte */
+	static const int constMB = 1024 * 1024;			/*  Megabyte */
+	static const int constGB = 1024 * 1024 * 1024;	/*  Gigabyte */
 	char* string = malloc( MAX_NAME_SIZE );
 
 	if (filesize < constKB)
@@ -184,25 +184,25 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 	char sndlibver[128];
 	char *duration = NULL;
 	
-	// Are we being silent ?
+	/*  Are we being silent ? */
 	if (verbosity<=0) return; 
 
-	// Convert 
+	/*  Convert  */
 	if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
 	if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
 
-	// Get the format
+	/*  Get the format */
 	format_info.format = sfinfo.format & SF_FORMAT_TYPEMASK;
 	sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
 
-	// Get the sub-format info
+	/*  Get the sub-format info */
 	subformat_info.format = sfinfo.format & SF_FORMAT_SUBMASK;
 	sf_command (inputfile, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
 
-	// Get the version of libsndfile
+	/*  Get the version of libsndfile */
 	sf_command (NULL, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
 
-	// Get human readable duration of the input file
+	/*  Get human readable duration of the input file */
 	duration = format_duration_string( &sfinfo );
 
 	if (verbosity==1) {
@@ -323,14 +323,14 @@ build_shortopt_string( struct option* opts )
 	char *shortstr = NULL;
 	int c=0, n=0;
 	
-	// Start by counting the number of options
+	/*  Start by counting the number of options */
 	while( opts[count].val!=0 ) { count++; }
 
 	
-	// Allocate memory for the string
+	/*  Allocate memory for the string */
 	shortstr = malloc( (count * 2) + 1 );
 	
-	// And loop through the options again
+	/*  And loop through the options again */
 	for(n=0; opts[n].val!=0; n++ ) {
 		if (opts[n].val > 0 && opts[n].val < 127) {
 			shortstr[c++] = opts[n].val;
@@ -342,7 +342,7 @@ build_shortopt_string( struct option* opts )
 		}
 	}
 	
-	// Finally - terminate the string
+	/*  Finally - terminate the string */
 	shortstr[c] = '\0';
 	
 	return shortstr;
@@ -359,10 +359,10 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 {
 	int ch=0;
 
-	// process args
+	/*  process args */
 	struct option longopts[] = {
 	
-		// Input
+		/*  Input */
 		{ "raw-input",		no_argument,			NULL,		'r' },
 		{ "byte-swap",		no_argument,			NULL,		'x' },
 		{ "samplerate",		required_argument,		NULL,		's' },
@@ -373,7 +373,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 		{ "scale-l",		required_argument,		NULL,		1002 },
 		{ "scale-r",		required_argument,		NULL,		1003 },
 		
-		// Output
+		/*  Output */
 		{ "mode",			required_argument,		NULL,		'm' },
 		{ "downmix",		no_argument,			NULL,		'a' },
 		{ "bitrate",		required_argument,		NULL,		'b' },
@@ -385,7 +385,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 		{ "quick",			required_argument,		NULL,		'q' },
 		{ "single-frame",	no_argument,			NULL,		'S' },
 		
-		// Misc
+		/*  Misc */
 		{ "copyright",		no_argument,			NULL,		'c' },
 		{ "non-original",	no_argument,			NULL,		'o' },
 		{ "original",		no_argument,			NULL,		1004 },
@@ -395,7 +395,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 		{ "deemphasis",		required_argument,		NULL,		'e' },
 		{ "energy",			no_argument,			NULL,		'E' },
 		
-		// Verbosity
+		/*  Verbosity */
 		{ "talkativity",	required_argument,		NULL,		't' },
 		{ "quiet",			no_argument,			NULL,		1005 },
 		{ "brief",			no_argument,			NULL,		1006 },
@@ -406,12 +406,12 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	};
 
 	
-	// Create a short options structure from the long one
+	/*  Create a short options structure from the long one */
 	char* shortopts = build_shortopt_string( longopts );
-	//printf("shortopts: %s\n", shortopts);
+	/* printf("shortopts: %s\n", shortopts); */
 	
 	
-	// Input format defaults
+	/*  Input format defaults */
 	memset( &sfinfo, 0, sizeof(sfinfo) );
 	sfinfo.format = 0;
 	sfinfo.samplerate = 44100;
@@ -423,7 +423,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	{
 		switch(ch) {
 		
-		// Input
+		/*  Input */
 			case 'r':
 				sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
 				break;
@@ -437,12 +437,12 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				sfinfo.samplerate = atoi(optarg);
 				break;
 				
-			case 1000:	// --samplesize
+			case 1000:	/*  --samplesize */
 			
-				// Mask off the sub-format
+				/*  Mask off the sub-format */
 				sfinfo.format &= SF_FORMAT_TYPEMASK;
 			
-				// Set the new sub-format
+				/*  Set the new sub-format */
 				switch(atoi(optarg)) {
 					case 8:	 sfinfo.format |= SF_FORMAT_PCM_S8; break;
 					case 16: sfinfo.format |= SF_FORMAT_PCM_16; break;
@@ -463,21 +463,21 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				channelswap = TRUE;
 				break;
 				
-			case 1001:	// --scale
+			case 1001:	/*  --scale */
 				twolame_set_scale( encopts, atof(optarg) );
 				break;
 
-			case 1002:	// --scale-l
+			case 1002:	/*  --scale-l */
 				twolame_set_scale_left( encopts, atof(optarg) );
 				break;
 
-			case 1003:	// --scale-r
+			case 1003:	/*  --scale-r */
 				twolame_set_scale_right( encopts, atof(optarg) );
 				break;
 
 
 
-		// Output
+		/*  Output */
 			case 'm':
 				if (*optarg == 's') {
 					twolame_set_mode(encopts, TWOLAME_STEREO);
@@ -495,7 +495,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				}
 				break;
 
-			case 'a':	// downmix
+			case 'a':	/*  downmix */
 				twolame_set_mode(encopts, TWOLAME_MONO);
 				 break;
 				
@@ -534,14 +534,14 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				break;
 				
 				
-	// Miscellaneous			
+	/*  Miscellaneous			 */
 			case 'c':
 				twolame_set_copyright(encopts, TRUE);
 				break;
-			case 'o':	// --non-original
+			case 'o':	/*  --non-original */
 				twolame_set_original(encopts, FALSE);
 				break;
-			case 1004:	// --original
+			case 1004:	/*  --original */
 				twolame_set_original(encopts, TRUE);
 				break;
 			case 'p':
@@ -570,20 +570,20 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				break;
 		
 
-	// Verbosity
+	/*  Verbosity */
 			case 't':
 				twolame_set_verbosity(encopts, atoi(optarg));
 				break;
 
-			case 1005:	// --quiet
+			case 1005:	/*  --quiet */
 				twolame_set_verbosity(encopts, 0);
 				break;
 				
-			case 1006: // --brief
+			case 1006: /*  --brief */
 				twolame_set_verbosity(encopts, 1);
 				break;
 				
-			case 1007: // --verbose
+			case 1007: /*  --verbose */
 				twolame_set_verbosity(encopts, 4);
 				break;
 				
@@ -599,7 +599,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	
 	 
 
-	// Look for the input and output file names
+	/*  Look for the input and output file names */
 	argc -= optind;
 	argv += optind;
 	while( argc ) {
@@ -617,14 +617,14 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	}
 	
 	
-	// Check that we now have input and output file names ok
+	/*  Check that we now have input and output file names ok */
 	if ( inputfilename[0] == '\0') {
 		fprintf(stderr, "Missing input filename.\n");
 		usage_short();
 	}
 	if ( outputfilename[0] == '\0' && strcmp(inputfilename, "-") !=0 ) {
-		// Create output filename from the inputfilename 
-		// and change the suffix
+		/*  Create output filename from the inputfilename  */
+		/*  and change the suffix */
 		new_extension( inputfilename, OUTPUT_SUFFIX, outputfilename );
 	}
 	if ( outputfilename[0] == '\0') {
@@ -632,7 +632,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 		usage_short();
 	}
 
-	// Check -r is supplied when reading from STDIN
+	/*  Check -r is supplied when reading from STDIN */
 	if ( strcmp(inputfilename, "-")==0 && !(sfinfo.format&SF_FORMAT_RAW) ) {
 		fprintf(stderr, "Error: please use RAW audio '-r' switch when reading from STDIN.\n");
 		usage_short();
@@ -647,10 +647,10 @@ open_input_file( char* filename )
 {
 	SNDFILE* file = NULL;
 
-	// Open the input file by filename
+	/*  Open the input file by filename */
 	file = sf_open(filename, SFM_READ, &sfinfo);
 
-	// Check for errors
+	/*  Check for errors */
 	if (file == NULL) {
 		fprintf(stderr, "Failed to open input file (%s):\n", filename);
 		fprintf(stderr, "  %s\n", sf_strerror(NULL));
@@ -667,14 +667,14 @@ open_output_file( char* filename )
 	FILE* file;
 
 	
-	// Do they want STDOUT ?
+	/*  Do they want STDOUT ? */
 	if (strncmp( filename, "-", 1 )==0) {
 		file = stdout;
 	} else {
 		file = fopen(filename, "w");
 	}
 	
-	// Check for errors
+	/*  Check for errors */
 	if (file == NULL) {
 		perror("Failed to open output file");
 		exit(ERR_OPENING_OUTPUT);
@@ -701,19 +701,19 @@ main(int argc, char **argv)
 	int				audioReadSize = 0;
 
 
-	// Allocate memory for the PCM audio data
+	/*  Allocate memory for the PCM audio data */
 	if ((pcmaudio = (short int *) calloc(AUDIO_BUF_SIZE, sizeof(short int))) == NULL) {
 		fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
 		exit(ERR_MEM_ALLOC);
 	}
 	
-	// Allocate memory for the encoded MP2 audio data
+	/*  Allocate memory for the encoded MP2 audio data */
 	if ((mp2buffer = (unsigned char *) calloc(MP2_BUF_SIZE, sizeof(unsigned char))) == NULL) {
 		fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
 		exit(ERR_MEM_ALLOC);
 	}
 	
-	// Initialise Encoder Options Structure 
+	/*  Initialise Encoder Options Structure  */
 	encopts = twolame_init();
 	if (encopts == NULL) {
 		fprintf(stderr, "Error: initializing libtwolame encoder failed.\n");
@@ -721,45 +721,45 @@ main(int argc, char **argv)
 	}
 
 	
-	// Get options and parameters from the command line
+	/*  Get options and parameters from the command line */
 	parse_args(argc, argv, encopts);
 
 
-	// Open the input file
+	/*  Open the input file */
 	inputfile = open_input_file( inputfilename );
 	twolame_set_num_channels( encopts, sfinfo.channels );
 	twolame_set_in_samplerate( encopts, sfinfo.samplerate );
 		
-	// Open the output file
+	/*  Open the output file */
 	outputfile = open_output_file( outputfilename );
 	
-	// display file settings
+	/*  display file settings */
 	print_file_config( inputfile, twolame_get_verbosity(encopts) );
 
-	// initialise twolame with this set of options
+	/*  initialise twolame with this set of options */
 	if (twolame_init_params( encopts ) != 0) {
 		fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
 		exit(ERR_INVALID_PARAM);
 	}
 
-	// display encoder settings
+	/*  display encoder settings */
 	twolame_print_config( encopts );
 
 
-	// Only encode a single frame of mpeg audio ?
+	/*  Only encode a single frame of mpeg audio ? */
 	if (single_frame_mode) audioReadSize = TWOLAME_SAMPLES_PER_FRAME;
 	else audioReadSize = AUDIO_BUF_SIZE;
 
-	// Calculate the size and number of frames we are going to encode
+	/*  Calculate the size and number of frames we are going to encode */
 	frame_len = twolame_get_framelength( encopts );
 	if (sfinfo.frames) total_frames = sfinfo.frames / TWOLAME_SAMPLES_PER_FRAME;
 
 
-	// Now do the reading/encoding/writing
+	/*  Now do the reading/encoding/writing */
 	while ((samples_read = sf_read_short( inputfile, pcmaudio, audioReadSize )) > 0) {
 		int bytes_out = 0;
 		
-		// Force byte swapping if requested
+		/*  Force byte swapping if requested */
 		if (byteswap) {
 			int i;
 			for (i = 0; i<samples_read; i++) {
@@ -771,10 +771,10 @@ main(int argc, char **argv)
 			}
 		}
 
-		// Calculate the number of samples we have (per channel)
+		/*  Calculate the number of samples we have (per channel) */
 		samples_read /= sfinfo.channels;
 
-		// Do swapping of left and right channels if requested
+		/*  Do swapping of left and right channels if requested */
 		if (channelswap && sfinfo.channels == 2) {
 			int i;
 			for(i=0; i<samples_read; i++) {
@@ -784,23 +784,23 @@ main(int argc, char **argv)
 			}
 		}
 		
-		// Encode the audio to MP2
+		/*  Encode the audio to MP2 */
 		mp2fill_size = twolame_encode_buffer_interleaved( encopts, pcmaudio, samples_read, mp2buffer, MP2_BUF_SIZE);
 		
-		// Stop if we don't have any bytes (probably don't have enough audio for a full frame of mpeg audio)
+		/*  Stop if we don't have any bytes (probably don't have enough audio for a full frame of mpeg audio) */
 		if (mp2fill_size==0) break;
 		if (mp2fill_size<0) {
 			fprintf(stderr,"error while encoding audio: %d\n", mp2fill_size);
 			exit(ERR_ENCODING);
 		}
 
-		// Check that a whole number of frame was written
-		//if (mp2fill_size % frame_len != 0) {
-		//	  fprintf(stderr,"error while encoding audio: non-whole number of frames written\n");
-		//	  exit(ERR_ENCODING);
-		//}
+		/*  Check that a whole number of frame was written */
+		/* if (mp2fill_size % frame_len != 0) { */
+		/* 	  fprintf(stderr,"error while encoding audio: non-whole number of frames written\n"); */
+		/* 	  exit(ERR_ENCODING); */
+		/* } */
 
-		// Write the encoded audio out
+		/*  Write the encoded audio out */
 		bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
 		if (bytes_out != mp2fill_size) {
 			perror("error while writing to output file");
@@ -808,11 +808,11 @@ main(int argc, char **argv)
 		}
 		total_bytes += bytes_out;
 		
-		// Only single frame ?
+		/*  Only single frame ? */
 		if (single_frame_mode) break;
 		
 
-		// Display Progress
+		/*  Display Progress */
 		frame_count += (mp2fill_size / frame_len);
 		if (twolame_get_verbosity(encopts)>0) {
 			fprintf(stderr, "\rEncoding frame: %i", frame_count );
@@ -823,19 +823,18 @@ main(int argc, char **argv)
 		}
 	}
 
-	// Was there an error reading the audio?
+	/*  Was there an error reading the audio? */
 	if (sf_error(inputfile) != SF_ERR_NO_ERROR) {
 		fprintf(stderr, "Error reading from input file: %s\n", sf_strerror( inputfile ) );
 	}
 
-	//
-	// flush any remaining audio. (don't send any new audio data) There
-	// should only ever be a max of 1 frame on a flush. There may be zero
-	// frames if the audio data was an exact multiple of 1152
-	//
+	/*  
+		flush any remaining audio. (don't send any new audio data) There 
+		should only ever be a max of 1 frame on a flush. There may be zero 
+		frames if the audio data was an exact multiple of 1152 
+	*/
 	mp2fill_size = twolame_encode_flush( encopts, mp2buffer, MP2_BUF_SIZE);
 	if (mp2fill_size>0) {
-		frame_count++;
 		int bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
 		if (bytes_out<=0) {
 			perror("error while writing to output file");
@@ -851,15 +850,15 @@ main(int argc, char **argv)
 		free(filesize);
 	}
 
-	// Close input and output files
+	/*  Close input and output files */
 	sf_close( inputfile );
 	fclose( outputfile );
 
-	// Close the libtwolame encoder
+	/*  Close the libtwolame encoder */
 	twolame_close(&encopts);
 	
 	
-	// Free up memory
+	/*  Free up memory */
 	free(pcmaudio);
 	free(mp2buffer);
 

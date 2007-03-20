@@ -113,12 +113,12 @@ AC_CHECK_HEADER(getopt.h,
 
 dnl ############## Compiler and Linker Flags
 
-CFLAGS="$CFLAGS -std=c99 -Wunused -Wall"
+CFLAGS="$CFLAGS -std=c89 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
 # If debugging is enabled then make warnings errors
 if test "$Debugging" = "Enabled"; then
-	CFLAGS="$CFLAGS -g -Werror"
+	CFLAGS="$CFLAGS -g -Werror -pedantic"
 else
 	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
 	CFLAGS="$CFLAGS -O3"

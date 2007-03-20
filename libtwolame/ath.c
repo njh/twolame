@@ -18,7 +18,7 @@
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -62,7 +62,7 @@ FLOAT ath_db(FLOAT f, FLOAT value)
 	if (f < -.3)
 	  f=3410;
 	
-	f /= 1000;  // convert to khz
+	f /= 1000;  /* convert to khz */
 	f  = MAX(0.01, f);
 	f  = MIN(18.0, f);
 	
@@ -82,7 +82,7 @@ FLOAT ath_db(FLOAT f, FLOAT value)
 FLOAT ath_energy(FLOAT freq, FLOAT value)
 {
 	FLOAT db;
-	db = ath_db(freq, 0) + value; // Originally: ath_db(freq,value)
+	db = ath_db(freq, 0) + value; /* Originally: ath_db(freq,value) */
 	/* The values in the standard, and from the ATH formula are in dB.
 	 In the psycho model we are working in the energy domain. Hence the values that 
 	 are in the absthr_X tables are not in dB. This function converts from dB into the energy domain.

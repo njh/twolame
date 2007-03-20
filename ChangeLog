@@ -2,14 +2,17 @@ What is new in TwoLAME
 ======================
 
 
-Version 0.3.10 (2007-?-?)
+Version 0.3.10 (2007-03-20)
 -------------------------
 
 - Added win32/winutil.h to tarball - fixes bug #1629945
 - Fixed presentation of --enable-debug in configure script
 - Added twolame_encode_buffer_float32_interleaved()
+- Fixed bug that was loosing stereo in twolame_encode_buffer_float32()
 - Fixed twolame_set_mode() to accept TWOLAME_AUTO_MODE
-
+- Added source file Ids to the top of every file
+- Changed standards compliance from C99 to C89 to make it more portable
+- Added -pedantic to CFLAGS for debug build
 
 
 Version 0.3.9 (2006-12-31)
@@ -32,7 +35,6 @@ Version 0.3.9 (2006-12-31)
    * Total number of frames to be encoded and percentage complete
    * The filesize of the output file
  - Cleaned up source files so that it is consistent and all uses tabs (tab width 4)  
-
 
 
 Version 0.3.8 (2006-06-19)
