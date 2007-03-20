@@ -17,7 +17,9 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *  
+ *
+ *  $Id:$
+ *
  */
 
 
@@ -107,4 +109,4 @@ FLOAT ath_freq2bark(FLOAT freq)
 	return 13.0*atan(.76*freq) + 3.5*atan(freq*freq/(7.5*7.5));
 }
 
-// vim:ts=4:sw=4:nowrap:
+/* vim:ts=4:sw=4:nowrap: */

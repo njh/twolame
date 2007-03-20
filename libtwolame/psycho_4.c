@@ -17,7 +17,9 @@
  *	You should have received a copy of the GNU Lesser General Public
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *	
+ *
+ *  $Id:$
+ *
  */
 
 #include <stdio.h>
@@ -574,4 +576,4 @@ void psycho_4_deinit(psycho_4_mem **mem) {
 
 
 
-// vim:ts=4:sw=4:nowrap:
+/* vim:ts=4:sw=4:nowrap: */
