@@ -35,4 +35,4 @@ int twolame_get_version_for_samplerate (long sample_rate);
 #endif /* _UTIL_H_ */
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 

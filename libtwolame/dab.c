@@ -91,7 +91,7 @@ void dab_crc_update (unsigned int data, unsigned int length, unsigned int *crc)
 
 
 #ifdef OLD_BROKEN_DAB_STUFF
-/*  Leaving these here while DAB is reimplemented properly */
+// Leaving these here while DAB is reimplemented properly
 
 #define		MINIMUM			4   /* Minimum size of the buffer in bytes */
 #define		MAX_LENGTH		32  /* Maximum length of word written */
@@ -142,5 +142,5 @@ void dab_crc_update (unsigned int data, unsigned int length, unsigned int *crc)
 #endif
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 
 

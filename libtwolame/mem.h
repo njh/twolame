@@ -25,9 +25,8 @@
 #ifndef _MEM_H
 #define _MEM_H
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
+
+#include "common.h"
 
 #ifdef HAVE_STDLIB_H
 #include <stdlib.h>
@@ -42,14 +41,14 @@
 #endif
 
 
-/*  Macros */
+// Macros
 #define TWOLAME_MALLOC(size) twolame_malloc( size, __LINE__, __FILE__ )
 #define TWOLAME_FREE(ptr) if(ptr!=NULL) { free(ptr); ptr=NULL; }
 
-/*  Functions */
+// Functions
 void *twolame_malloc (size_t size, int line,  char *file);
 
 #endif
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 

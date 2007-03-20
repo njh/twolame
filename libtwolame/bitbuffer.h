@@ -42,11 +42,11 @@ typedef struct bit_stream_struc {
 bit_stream * buffer_init( unsigned char *buffer, int buffer_size );
 void buffer_deinit( bit_stream **bs );
 
-void buffer_put1bit (bit_stream *, int);
-void buffer_putbits (bit_stream *, unsigned int, int);
-unsigned long buffer_sstell (bit_stream *);
+NO_DLL_INLINE void buffer_put1bit (bit_stream *, int);
+NO_DLL_INLINE void buffer_putbits (bit_stream *, unsigned int, int);
+NO_DLL_INLINE unsigned long buffer_sstell (bit_stream *);
 
 #endif
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 

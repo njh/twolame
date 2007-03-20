@@ -113,7 +113,7 @@ AC_CHECK_HEADER(getopt.h,
 
 dnl ############## Compiler and Linker Flags
 
-CFLAGS="$CFLAGS -std=c89 -Wunused -Wall"
+CFLAGS="$CFLAGS -std=c99 -Wunused -Wall"
 LDFLAGS="$LDFLAGS"
 
 # If debugging is enabled then make warnings errors

@@ -42,7 +42,7 @@
    a tiny fraction slower than the dist10 code, and nothing has been optimized)
    MFC Feb 2003 */
 
-static FLOAT psycho_3_add_db (psycho_3_mem *mem, FLOAT a, FLOAT b)
+static inline FLOAT psycho_3_add_db (psycho_3_mem *mem, FLOAT a, FLOAT b)
 {
   /* MFC - if the difference between a and b is large (>99), then just return the
 	 largest one. (about 10% of the time)
@@ -257,7 +257,7 @@ static void psycho_3_noise_label (psycho_3_mem *mem, FLOAT power[HBLKSIZE], FLOA
 	  /* Otherwise, work out the mean position of the noise, and put it there. */
 	  centre = cbandindex[i] + (int)(centreweight/esum);
 	}
-	/*  /MEANX */
+	// /MEANX
 	Xnm[centre] = sum;
 	noiselabel[centre] = NOISE;
   }
@@ -450,7 +450,7 @@ static psycho_3_mem *psycho_3_init( twolame_options *glopts ) {
 	
 	cbands++;
 	cbandindex[cbands] = 513; /* Set the top of the last critical band */
-	mem->cbands = cbands; /*  make a not of the number of cbands */
+	mem->cbands = cbands; // make a not of the number of cbands
 
 	/* For each crtical band calculate the average bark value 
 	   cbval [central bark value] */
@@ -579,4 +579,4 @@ void psycho_3_deinit(psycho_3_mem **mem) {
 }
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 

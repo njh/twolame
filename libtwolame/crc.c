@@ -61,27 +61,27 @@ void crc_writeheader( unsigned char *bitstream, int bit_count )
 	int whole_bytes = (bit_count>>3);
 	int byte;
 	
-	/*  Calculate the CRC on the second two bytes of the header */
+	// Calculate the CRC on the second two bytes of the header
 	crc = crc_update(bitstream[2], crc, 8);
 	crc = crc_update(bitstream[3], crc, 8);
 	
-	/*  Calculate CRC on whole bytes after CRC */
+	// Calculate CRC on whole bytes after CRC
 	for(byte=6; byte<(whole_bytes+6); byte++)
 	{
 		crc = crc_update(bitstream[byte], crc, 8);
 	}
 	
-	/*  Calculate CRC on remaining bits */
+	// Calculate CRC on remaining bits
 	if(bit_count & 7)
 	{
 		crc = crc_update(bitstream[byte], crc, bit_count&7);
 	}
 	
-	/*  Insert the CRC into the 16-bits after the header */
+	// Insert the CRC into the 16-bits after the header
 	bitstream[4] = crc >> 8;
 	bitstream[5] = crc & 0xFF;
 }
 
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 

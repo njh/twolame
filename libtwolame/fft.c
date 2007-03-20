@@ -364,7 +364,7 @@ static void atan_table_init(void) {
 		atan_t[i] = atan((FLOAT)i/ATANSCALE);
 }
 
-#endif /* NEWATAN */
+#endif //NEWATAN
 
 /* For variations on psycho model 2:
    N always equals 1024
@@ -435,6 +435,6 @@ void psycho_1_fft (FLOAT * x_real, FLOAT * energy, int N)
 }
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 
 
 

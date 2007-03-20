@@ -18,7 +18,7 @@
  *	License along with this library; if not, write to the Free Software
  *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- *  $Id:$
+ *  $Id$
  *
  */
 
@@ -88,14 +88,14 @@ typedef enum {
 typedef enum {
 	TWOLAME_PAD_NO = 0,		/**< No Padding */
 	TWOLAME_PAD_ALL			/**< Pad all frames */
-/*	TWOLAME_PAD_ADJUST		 * unsupported by twolame */
+//	TWOLAME_PAD_ADJUST		// unsupported by twolame
 } TWOLAME_Padding;
 
 /** Emphasis types. */
 typedef enum {
 	TWOLAME_EMPHASIS_N = 0, /**< No Emphasis */
 	TWOLAME_EMPHASIS_5 = 1, /**< 50/15 ms */
-							/* reserved */
+							// reserved
 	TWOLAME_EMPHASIS_C = 3	/**< CCIT J.17 */ 
 } TWOLAME_Emphasis;
 
@@ -123,7 +123,7 @@ DLL_EXPORT const char* get_twolame_version( void );
 
 
 /** Get the URL of the TwoLAME homepage. 
- *	eg "http://www.twolame.org/". 
+ *	eg "http://www.twolame.org/".
  *
  *	\return The url as a C string
  */
@@ -926,4 +926,4 @@ DLL_EXPORT int twolame_get_DAB_crc_length(twolame_options *glopts);
 #endif /* _TWOLAME_H_ */
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap:

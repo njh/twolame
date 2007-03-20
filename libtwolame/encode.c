@@ -96,7 +96,7 @@ static const int steps2n[18]={0, 2, 4, 4, 8,  8,  16, 32, 64,  128, 256,  512,	1
 /* The bits per codeword from TableB.4 */
 static const int bits[18] =	 {0, 5, 7, 3, 10, 4,  5,  6,  7,   8,	9,	  10,	11,	  12,	13,	  14,	 15,	16};
 /* Samples per codeword Table B.4 Page 53 */
-/* static int group[18] = {0, 3, 3, 1, 3,  1,  1,  1,  1,   1,	1,	  1,	1,	  1,	1,	  1,	 1,		1}; */
+//static int group[18] = {0, 3, 3, 1, 3,  1,  1,  1,  1,   1,	1,	  1,	1,	  1,	1,	  1,	 1,		1};
 static const int group[18] = {0, 1, 1, 3, 1,  3,  3,  3,  3,   3,	3,	  3,	3,	  3,	3,	  3,	 3,		3};
 
 /* nbal */
@@ -195,10 +195,10 @@ int encode_init( twolame_options *glopts )
 		glopts->tablenum = 4;
 	}
 	
-	/* glopts->sblimit = pick_table ( glopts ); */
+	//glopts->sblimit = pick_table ( glopts );
 	/* MFC FIX this up */
 	glopts->sblimit = table_sblimit[glopts->tablenum];
-	/* fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, glopts->sblimit); */
+	//fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum, glopts->sblimit);
 	
 	if (glopts->mode == TWOLAME_JOINT_STEREO)
 		glopts->jsbound = get_js_bound(header->mode_ext);
@@ -236,7 +236,7 @@ int encode_init( twolame_options *glopts )
 	}
 	#endif
 
-	/*  Success */
+	// Success
 	return 0;
 }
 
@@ -521,7 +521,7 @@ void write_scalefactors ( twolame_options *glopts,
 	/* Write out the scalefactors */
 	for (sb = 0; sb < sblimit; sb++)
 	for (ch = 0; ch < nch; ch++)
-	if (bit_alloc[ch][sb]) /*  above jsbound, bit_alloc[0][i] == ba[1][i]  */
+	if (bit_alloc[ch][sb]) // above jsbound, bit_alloc[0][i] == ba[1][i] 
 	{ 
 		switch (sf_selectinfo[ch][sb]) {
 			case 0:
@@ -756,10 +756,10 @@ int bits_for_nonoise ( twolame_options * glopts,
 	channels in each subband. If we're above the jsbound, then pretend we only
 	have one channel */
 	for (sb = 0; sb < jsbound; ++sb)
-		bbal += nch * nbal[ line[glopts->tablenum][sb] ]; /* (*alloc)[sb][0].bits; */
+		bbal += nch * nbal[ line[glopts->tablenum][sb] ]; //(*alloc)[sb][0].bits;
 		
 	for (sb = jsbound; sb < sblimit; ++sb)
-		bbal += nbal[ line[glopts->tablenum][sb] ]; /* (*alloc)[sb][0].bits; */
+		bbal += nbal[ line[glopts->tablenum][sb] ]; //(*alloc)[sb][0].bits;
 	req_bits = banc + bbal + berr;
 	
 	for (sb = 0; sb < sblimit; ++sb)
@@ -768,7 +768,7 @@ int bits_for_nonoise ( twolame_options * glopts,
 		int thisline = line[glopts->tablenum][sb];
 		
 		/* How many possible steps are there to choose from ? */
-		maxAlloc = (1 << nbal[ line[glopts->tablenum][sb] ]) -1; /* (*alloc)[sb][0].bits) - 1; */
+		maxAlloc = (1 << nbal[ line[glopts->tablenum][sb] ]) -1; //(*alloc)[sb][0].bits) - 1;
 		sel_bits = sc_bits = smp_bits = 0;
 		/* Keep choosing the next number of steps (and hence our SNR value)
 		until we have the required MNR value */
@@ -784,7 +784,7 @@ int bits_for_nonoise ( twolame_options * glopts,
 			break;
 		}
 		if (ba > 0) {
-			/* smp_bits = SCALE_BLOCK * ((*alloc)[sb][ba].group * (*alloc)[sb][ba].bits); */
+			//smp_bits = SCALE_BLOCK * ((*alloc)[sb][ba].group * (*alloc)[sb][ba].bits);
 			int thisstep_index = step_index[thisline][ba];
 			smp_bits = SCALE_BLOCK * group[thisstep_index] * bits[thisstep_index];
 			/* scale factor bits required for subband */
@@ -1008,8 +1008,8 @@ static void vbr_maxmnr (FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimi
 	if (mnr[ch][sb] < vbrlevel) {
 		*min_sb = sb;
 		*min_ch = ch;
-		/* fprintf(stderr,"."); */
-		/* fflush(stderr); */
+		//fprintf(stderr,".");
+		//fflush(stderr);
 		return;
 	}
 #endif
@@ -1022,7 +1022,7 @@ static void vbr_maxmnr (FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimi
 		*min_sb = sb;
 		*min_ch = ch;
 	}
-	/* fprintf(stderr,"Min sb: %i\n",*min_sb); */
+	//fprintf(stderr,"Min sb: %i\n",*min_sb);
 }
 
 
@@ -1123,7 +1123,7 @@ int vbr_bit_allocation (twolame_options *glopts,
 				thisstep_index = step_index[thisline][ba];
 				mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
 				/* Check if this min_sb subband has been fully allocated max bits */
-				if (ba >= (1 << nbal[ line[glopts->tablenum][min_sb] ]) -1 ) /* (*alloc)[min_sb][0].bits) - 1) */
+				if (ba >= (1 << nbal[ line[glopts->tablenum][min_sb] ]) -1 ) //(*alloc)[min_sb][0].bits) - 1)
 				used[min_ch][min_sb] = 2; /* don't let this sb get any more bits */
 			} else {
 				used[min_ch][min_sb] = 2;	/* can't increase this alloc */
@@ -1217,9 +1217,9 @@ int a_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 	}
 
 	for (sb = 0; sb < jsbound; sb++)
-		bbal += nch * nbal[ line[glopts->tablenum][sb] ]; /* (*alloc)[sb][0].bits; */
+		bbal += nch * nbal[ line[glopts->tablenum][sb] ]; //(*alloc)[sb][0].bits;
 	for (sb = jsbound; sb < sblimit; sb++)
-		bbal += nbal[ line[glopts->tablenum][sb] ]; /* (*alloc)[sb][0].bits; */
+		bbal += nbal[ line[glopts->tablenum][sb] ]; //(*alloc)[sb][0].bits;
 	*adb -= bbal + berr + banc;
 	ad = *adb;
 
@@ -1276,7 +1276,7 @@ int a_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 				thisstep_index = step_index[thisline][ba];
 				mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
 				/* Check if this min_sb subband has been fully allocated max bits */
-				if (ba >= (1 << nbal[ line[glopts->tablenum][min_sb] ]) -1 ) /* (*alloc)[min_sb][0].bits) - 1) */
+				if (ba >= (1 << nbal[ line[glopts->tablenum][min_sb] ]) -1 ) //(*alloc)[min_sb][0].bits) - 1)
 					used[min_ch][min_sb] = 2; /* don't let this sb get any more bits */
 			} else {
 				used[min_ch][min_sb] = 2;	/* can't increase this alloc */
@@ -1287,7 +1287,7 @@ int a_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 				used[oth_ch][min_sb] = used[min_ch][min_sb];
 				thisstep_index = step_index[thisline][ba];
 				mnr[oth_ch][min_sb] = SNR[thisstep_index] - SMR[oth_ch][min_sb];
-				/* mnr[oth_ch][min_sb] = SNR[(*alloc)[min_sb][ba].quant + 1] - SMR[oth_ch][min_sb]; */
+				//mnr[oth_ch][min_sb] = SNR[(*alloc)[min_sb][ba].quant + 1] - SMR[oth_ch][min_sb];
 			}
 		
 		}
@@ -1305,5 +1305,5 @@ int a_bit_allocation (twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 }
 
 
-/* vim:ts=4:sw=4:nowrap: */
+// vim:ts=4:sw=4:nowrap: 
 

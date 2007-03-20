@@ -110,7 +110,7 @@ int wave_get_samples (wave_info_t *wave_info, short int pcm[], int numSamples)
 
 wave_info_t *wave_init (char *inPath)
 {
-	unsigned char wave_header_buffer[40];	/* HH fixed */
+	unsigned char wave_header_buffer[40];	//HH fixed
 	int wave_header_read = 0;
 	int wave_header_stereo = -1;
 	int wave_header_16bit = -1;
@@ -222,7 +222,7 @@ wave_info_t *wave_init (char *inPath)
 			fclose(file); return(NULL);
 		}
 		
-		/*  Successfully processed the wave header */
+		// Successfully processed the wave header
 		wave_info = (wave_info_t *)calloc(1, sizeof(wave_info_t));
 		wave_info->soundfile = file;
 		if (wave_header_stereo == 1)
@@ -230,11 +230,11 @@ wave_info_t *wave_init (char *inPath)
 		else	wave_info->channels = 1;
 		wave_info->samplerate = samplerate;
 		
-		/*  UNKNOWN. But we really should be able to work  */
-		/*  it out. FIX THIS. MFC May03. */
+		// UNKNOWN. But we really should be able to work 
+		// it out. FIX THIS. MFC May03.
 		wave_info->num_samples = -1;
 		
-		/*  Enable byte swap for big endian machines */
+		// Enable byte swap for big endian machines
 		if (NativeByteOrder == order_bigEndian)
 				wave_info->byteswap = 1;
 		else	wave_info->byteswap = 0;
@@ -242,7 +242,7 @@ wave_info_t *wave_init (char *inPath)
 		return(wave_info);
 	}
 	
-	/*  not a wave file */
+	// not a wave file
 	fclose(file);  return(NULL);
 }
 

@@ -83,8 +83,8 @@ int main (int argc, char **argv) {
 	}
 
 
-	/*  Use sound file to over-ride preferences for */
-	/*  mono/stereo and sampling-frequency */
+	// Use sound file to over-ride preferences for
+	// mono/stereo and sampling-frequency
 	twolame_set_num_channels(encodeOptions, wave_info->channels);
 	if (wave_info->channels == 1) {
 		twolame_set_mode(encodeOptions, TWOLAME_MONO);
@@ -114,16 +114,16 @@ int main (int argc, char **argv) {
 	}
   
 
-	/*  Read num_samples of	audio data *per channel* from the input file */
+	// Read num_samples of	audio data *per channel* from the input file
 	while ( (num_samples = wave_get_samples(wave_info, pcmaudio, AUDIOBUFSIZE)) != 0 ) { 
 		
-		/*  Encode the audio! */
+		// Encode the audio!
 		mp2fill_size = twolame_encode_buffer_interleaved(encodeOptions, pcmaudio, num_samples, mp2buffer, MP2BUFSIZE);
 		
-		/*  Write the MPEG bitstream to the file */
+		// Write the MPEG bitstream to the file
 		fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outfile);
 		
-		/*  Display the number of MPEG audio frames we have encoded */
+		// Display the number of MPEG audio frames we have encoded
 		frames += (num_samples/TWOLAME_SAMPLES_PER_FRAME);
 		fprintf(stdout,"[%04i]\r", frames);
 		fflush(stdout);
