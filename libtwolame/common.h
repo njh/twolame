@@ -25,15 +25,20 @@
 #define _COMMON_H
 
 #ifdef _WIN32
-#include "../win32/configwin.h"
+# include "../win32/configwin.h"
 /*
  * When building as a Win32 DLL, some functions are not allowed to be inlined,
  * otherwise the Microsoft Visual Studio 2005 linker will complain
  */
-#define NO_DLL_INLINE
+# define NO_DLL_INLINE
 #else
-#include "config.h"
-#define NO_DLL_INLINE inline
+# include "config.h"
+# ifdef __APPLE__
+/* Same problem under Mac OS X */
+#  define NO_DLL_INLINE
+# else
+#  define NO_DLL_INLINE inline
+# endif
 #endif
 
 
