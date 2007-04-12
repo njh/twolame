@@ -38,8 +38,9 @@
 int get_required_energy_bits( twolame_options *glopts )
 {
 	if (glopts->mode==TWOLAME_MONO) {
-		// only 2 bytes needed for energy level for mono channel
-		return 16;
+		// only 2 bytes + zero at n-3 needed for energy level for mono channel
+		return 24;
+
 	} else {
 		// 5 bytes for the stereo energy info
 		return 40;
@@ -104,11 +105,11 @@ void do_energy_levels(twolame_options *glopts, bit_stream *bs)
 	// Write the left channel into the last two bytes of the frame
 	bs->buf[frameEnd-1] = llobyte;
 	bs->buf[frameEnd-2] = lhibyte;
+    bs->buf[frameEnd-3] = 0;
 	
 	// Only write the right channel energy info
 	// if we're in stereo mode.
 	if (glopts->mode!=TWOLAME_MONO) {
-		bs->buf[frameEnd-3] = 0;
 		
 		rhibyte = rightMax/256;
 		rlobyte = rightMax - 256*rhibyte;

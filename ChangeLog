@@ -1,6 +1,12 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.11 (2007-??-??)
+---------------------------
+
+- Fixed energy levels bug for mono audio
+   * thanks to Staale Helleberg for patch
+   
 
 Version 0.3.10 (2007-03-20)
 ---------------------------
