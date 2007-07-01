@@ -1,7 +1,7 @@
 /*
  *	TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *	Copyright (C) 2004-2006 The TwoLAME Project
+ *	Copyright (C) 2004-2007 The TwoLAME Project
  *
  *	This library is free software; you can redistribute it and/or
  *	modify it under the terms of the GNU Lesser General Public
@@ -29,34 +29,15 @@
 
 #include <twolame.h>
 #include <sndfile.h>
+#include "frontend.h"
 
-
-/*
-  Constants
-*/
-#define MP2_BUF_SIZE	(16384)
-#define AUDIO_BUF_SIZE	(9210)
-#define MAX_NAME_SIZE	(1024)
-#define OUTPUT_SUFFIX	".mp2"
-
-
-/*
-  Result codes
-*/
-#define ERR_NO_ERROR		(0)		// No Error (encoded ok)
-#define ERR_NO_ENCODE		(1)		// No Error (no encoding performed)
-#define ERR_OPENING_INPUT	(2)		// Error opening input file
-#define ERR_OPENING_OUTPUT	(4)		// Error opening output file
-#define ERR_MEM_ALLOC		(6)		// Error allocating memory
-#define ERR_INVALID_PARAM	(8)		// Error in chosen encoding parameters
-#define ERR_READING_INPUT	(10)	// Error reading input
-#define ERR_ENCODING		(12)	// Error occured during encoding
-#define ERR_WRITING_OUTPUT	(14)	// Error occured writing to output file
 
 
 /* 
   Global Variables
 */
+int use_raw = FALSE;				// use raw input?
+int sample_size = 16;				// number of bits per sample for raw input
 int single_frame_mode = FALSE;		// only encode a single frame of MPEG audio ?
 int byteswap = FALSE;				// swap endian on input audio ?
 int channelswap = FALSE;			// swap left and right channels ?
@@ -115,36 +96,7 @@ new_extension(char *filename, char *extname, char *newname)
 	}
 }
 
-/* 
-  format_duration_string() 
-  Create human readable duration string from libsndfile info
-*/
-static char*
-format_duration_string( SF_INFO *sfinfo )
-{
-	float seconds;
-	int minutes;
-	char * string = malloc( MAX_NAME_SIZE );
-	
-	if (sfinfo->frames==0 || sfinfo->samplerate==0) {
-		snprintf( string, MAX_NAME_SIZE, "Unknown" );
-		return string;
-	}
-	
-	// Calculate the number of minutes and seconds
-	seconds = sfinfo->frames / sfinfo->samplerate;
-	minutes = (seconds / 60 );
-	seconds -= (minutes * 60);
-
-	// Create a string out of it
-	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
-
-	return string;
-}
-
-
-static char*
-format_filesize_string( int filesize )
+static char* format_filesize_string( int filesize )
 {
 	static const int constKB = 1024;				// Kilobyte
 	static const int constMB = 1024 * 1024;			// Megabyte
@@ -173,11 +125,38 @@ format_filesize_string( int filesize )
 
 
 /* 
-  print_file_config() 
+  format_duration_string() 
+  Create human readable duration string from libsndfile info
+*/
+static char* format_duration_string( SF_INFO *sfinfo )
+{
+	float seconds;
+	int minutes;
+	char * string = malloc( MAX_NAME_SIZE );
+	
+	if (sfinfo->frames==0 || sfinfo->samplerate==0) {
+		snprintf( string, MAX_NAME_SIZE, "Unknown" );
+		return string;
+	}
+	
+	// Calculate the number of minutes and seconds
+	seconds = sfinfo->frames / sfinfo->samplerate;
+	minutes = (seconds / 60 );
+	seconds -= (minutes * 60);
+
+	// Create a string out of it
+	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
+
+	return string;
+}
+
+
+
+/* 
+  print_config() 
   Display information about input and output files
 */
-static void
-print_file_config( SNDFILE *inputfile, int verbosity )
+static void print_config( int verbosity )
 {
 	SF_FORMAT_INFO format_info;
 	SF_FORMAT_INFO subformat_info;
@@ -193,11 +172,11 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 
 	// Get the format
 	format_info.format = sfinfo.format & SF_FORMAT_TYPEMASK;
-	sf_command (inputfile, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
+	sf_command (NULL, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
 
 	// Get the sub-format info
 	subformat_info.format = sfinfo.format & SF_FORMAT_SUBMASK;
-	sf_command (inputfile, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
+	sf_command (NULL, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
 
 	// Get the version of libsndfile
 	sf_command (NULL, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
@@ -218,8 +197,8 @@ print_file_config( SNDFILE *inputfile, int verbosity )
 	
 	
 	free( duration );
-}
 
+}
 
 
 
@@ -414,8 +393,8 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	// Input format defaults
 	memset( &sfinfo, 0, sizeof(sfinfo) );
 	sfinfo.format = 0;
-	sfinfo.samplerate = 44100;
-	sfinfo.channels = 2;
+	sfinfo.samplerate = DEFAULT_SAMPLERATE;
+	sfinfo.channels = DEFAULT_CHANNELS;
 	sfinfo.frames = 0;
 
 
@@ -425,7 +404,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 		
 		// Input
 			case 'r':
-				sfinfo.format = SF_FORMAT_RAW | SF_FORMAT_PCM_16;
+				use_raw = 1;
 				break;
 
 			case 'x':
@@ -438,21 +417,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 				break;
 				
 			case 1000:	// --samplesize
-			
-				// Mask off the sub-format
-				sfinfo.format &= SF_FORMAT_TYPEMASK;
-			
-				// Set the new sub-format
-				switch(atoi(optarg)) {
-					case 8:	 sfinfo.format |= SF_FORMAT_PCM_S8; break;
-					case 16: sfinfo.format |= SF_FORMAT_PCM_16; break;
-					case 24: sfinfo.format |= SF_FORMAT_PCM_24; break;
-					case 32: sfinfo.format |= SF_FORMAT_PCM_32; break;
-					default:
-						fprintf(stderr, "Error: invalid sample size: %d bit\n\n", atoi(optarg));
-						usage_long();
-					break;
-				}
+				sample_size = atoi(optarg);
 				break;
 
 			case 'N':
@@ -633,32 +598,12 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 	}
 
 	// Check -r is supplied when reading from STDIN
-	if ( strcmp(inputfilename, "-")==0 && !(sfinfo.format&SF_FORMAT_RAW) ) {
+	if ( strcmp(inputfilename, "-")==0 && !use_raw ) {
 		fprintf(stderr, "Error: please use RAW audio '-r' switch when reading from STDIN.\n");
 		usage_short();
 	}
 }
 
-
-
-
-SNDFILE*
-open_input_file( char* filename )
-{
-	SNDFILE* file = NULL;
-
-	// Open the input file by filename
-	file = sf_open(filename, SFM_READ, &sfinfo);
-
-	// Check for errors
-	if (file == NULL) {
-		fprintf(stderr, "Failed to open input file (%s):\n", filename);
-		fprintf(stderr, "  %s\n", sf_strerror(NULL));
-		exit(ERR_OPENING_INPUT);
-	}
-
-	return file;
-}
 
 
 FILE*
@@ -688,15 +633,15 @@ int
 main(int argc, char **argv)
 {
 	twolame_options *encopts = NULL;
-	SNDFILE			*inputfile = NULL;
+	audioin_t		*inputfile = NULL;
 	FILE			*outputfile = NULL;
 	short int		*pcmaudio = NULL;
-	unsigned int	samples_read = 0;
 	unsigned int	frame_count = 0;
 	unsigned int	total_frames = 0;
 	unsigned int	frame_len = 0;
 	unsigned int	total_bytes = 0;
 	unsigned char	*mp2buffer = NULL;
+	int				samples_read = 0;
 	int				mp2fill_size = 0;
 	int				audioReadSize = 0;
 
@@ -726,7 +671,15 @@ main(int argc, char **argv)
 
 
 	// Open the input file
-	inputfile = open_input_file( inputfilename );
+	if (use_raw) {
+		// use raw input handler
+		inputfile = open_audioin_raw( inputfilename, sample_size );
+	} else {
+		// use libsndfile
+		inputfile = open_audioin_sndfile( inputfilename, &sfinfo );
+	}
+	
+	// Use information from input file to configure libtwolame 
 	twolame_set_num_channels( encopts, sfinfo.channels );
 	twolame_set_in_samplerate( encopts, sfinfo.samplerate );
 		
@@ -734,7 +687,7 @@ main(int argc, char **argv)
 	outputfile = open_output_file( outputfilename );
 	
 	// display file settings
-	print_file_config( inputfile, twolame_get_verbosity(encopts) );
+	print_config( twolame_get_verbosity(encopts) );
 
 	// initialise twolame with this set of options
 	if (twolame_init_params( encopts ) != 0) {
@@ -756,7 +709,7 @@ main(int argc, char **argv)
 
 
 	// Now do the reading/encoding/writing
-	while ((samples_read = sf_read_short( inputfile, pcmaudio, audioReadSize )) > 0) {
+	while ((samples_read = inputfile->read( inputfile, pcmaudio, audioReadSize )) > 0) {
 		int bytes_out = 0;
 		
 		// Force byte swapping if requested
@@ -824,8 +777,8 @@ main(int argc, char **argv)
 	}
 
 	// Was there an error reading the audio?
-	if (sf_error(inputfile) != SF_ERR_NO_ERROR) {
-		fprintf(stderr, "Error reading from input file: %s\n", sf_strerror( inputfile ) );
+	if (inputfile->error_str( inputfile )) {
+		fprintf(stderr, "Error reading from input file: %s\n", inputfile->error_str(inputfile) );
 	}
 
 	//
@@ -851,8 +804,8 @@ main(int argc, char **argv)
 		free(filesize);
 	}
 
-	// Close input and output files
-	sf_close( inputfile );
+	// Close input and output streams
+	inputfile->close( inputfile );
 	fclose( outputfile );
 
 	// Close the libtwolame encoder
