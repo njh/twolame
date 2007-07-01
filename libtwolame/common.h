@@ -39,7 +39,7 @@
 /* Same problem under Mac OS X */
 #  define NO_DLL_INLINE
 # else
-#  define NO_DLL_INLINE inline
+#  define NO_DLL_INLINE extern inline
 # endif
 #endif
 

@@ -59,7 +59,7 @@ void buffer_deinit( bit_stream **bs )
 
 
 /*write 1 bit from the bit stream */
-NO_DLL_INLINE void buffer_put1bit (bit_stream * bs, int bit)
+void buffer_put1bit (bit_stream * bs, int bit)
 {
 	bs->totbit++;
 	
@@ -78,7 +78,7 @@ NO_DLL_INLINE void buffer_put1bit (bit_stream * bs, int bit)
 }
 
 /*write N bits into the bit stream */
-NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
+void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 {
 	static const int putmask[9] = { 0x0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff };
 	register int j = N;
@@ -105,7 +105,7 @@ NO_DLL_INLINE void buffer_putbits (bit_stream * bs, unsigned int val, int N)
 }
 
 /*return the current bit stream length (in bits)*/
-NO_DLL_INLINE unsigned long buffer_sstell (bit_stream * bs)
+unsigned long buffer_sstell (bit_stream * bs)
 {
 	return (bs->totbit);
 }
