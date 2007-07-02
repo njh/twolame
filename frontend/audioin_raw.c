@@ -28,6 +28,17 @@
 #include "frontend.h"
 
 
+/* We still use libsndfiles' SF_INFO structure for convenience */
+
+
+static void print_info_raw(struct audioin_s *audioin )
+{
+
+	fprintf(stderr, "Raw input format: %d channels, %d-bit, %d Hz\n",
+		audioin->sfinfo->channels, audioin->samplesize, audioin->sfinfo->samplerate );
+	
+}
+
 
 /* Read in some audio samples into buffer */
 static int read_raw( audioin_t* audioin, short *buffer, int samples) 
@@ -54,18 +65,22 @@ static const char* error_str_raw( audioin_t* audioin )
 	return strerror(error);
 }
 
+
 static int close_raw( audioin_t* audioin )
 {
 	FILE* file = audioin->file;
+
+	free( audioin );
+	
 	return fclose( file );
 }
 
-audioin_t* open_audioin_raw( char* filename, int samplesize )
+
+audioin_t* open_audioin_raw( char* filename, SF_INFO *sfinfo, int samplesize )
 {
 	audioin_t* audioin = NULL;
 
-	fprintf(stderr, "Debug: Going to open %s using raw, samplesize=%d.\n", filename, samplesize);
-	
+
 	// Allocate memory for structure
 	audioin = malloc( sizeof( audioin_t ) );
 	if (audioin==NULL) {
@@ -90,6 +105,8 @@ audioin_t* open_audioin_raw( char* filename, int samplesize )
 
 	// Fill-in data structure
 	audioin->samplesize = samplesize;
+	audioin->sfinfo = sfinfo;
+	audioin->print_info = print_info_raw;
 	audioin->read = read_raw;
 	audioin->error_str = error_str_raw;
 	audioin->close = close_raw;

@@ -53,6 +53,9 @@
 
 typedef struct audioin_s {
 
+	// Display information about input stream
+	void (*print_info)(struct audioin_s *);
+
 	// Read in some audio
 	int (*read)(struct audioin_s *, short *buffer, int samples);
 	
@@ -66,6 +69,9 @@ typedef struct audioin_s {
 	// Pointer to file / input stream
 	void* file;
 	
+	// Pointer to linsndfile info structure
+	SF_INFO* sfinfo;
+	
 	// Size of the samples (in bits)
 	int samplesize;
 
@@ -75,5 +81,5 @@ typedef struct audioin_s {
 
 /* Initialisers */
 audioin_t* open_audioin_sndfile( char* filename, SF_INFO *sfinfo );
-audioin_t* open_audioin_raw( char* filename, int samplesize);
+audioin_t* open_audioin_raw( char* filename, SF_INFO *sfinfo, int samplesize);
 

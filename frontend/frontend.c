@@ -123,80 +123,28 @@ static char* format_filesize_string( int filesize )
 	return string;
 }
 
-
-/* 
-  format_duration_string() 
-  Create human readable duration string from libsndfile info
+/*
+	print_filenames()
+	Display the input and output filenames
 */
-static char* format_duration_string( SF_INFO *sfinfo )
+static void print_filenames( int verbosity ) 
 {
-	float seconds;
-	int minutes;
-	char * string = malloc( MAX_NAME_SIZE );
+	char *ifn, *ofn;
+
+	if (strcmp(inputfilename, "-")==0) ifn = "STDIN";
+	else ifn = inputfilename;
 	
-	if (sfinfo->frames==0 || sfinfo->samplerate==0) {
-		snprintf( string, MAX_NAME_SIZE, "Unknown" );
-		return string;
-	}
-	
-	// Calculate the number of minutes and seconds
-	seconds = sfinfo->frames / sfinfo->samplerate;
-	minutes = (seconds / 60 );
-	seconds -= (minutes * 60);
+	if (strcmp(outputfilename, "-")==0) ofn = "STDOUT";
+	else ofn = outputfilename;
 
-	// Create a string out of it
-	snprintf( string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
-
-	return string;
-}
-
-
-
-/* 
-  print_config() 
-  Display information about input and output files
-*/
-static void print_config( int verbosity )
-{
-	SF_FORMAT_INFO format_info;
-	SF_FORMAT_INFO subformat_info;
-	char sndlibver[128];
-	char *duration = NULL;
-	
-	// Are we being silent ?
-	if (verbosity<=0) return; 
-
-	// Convert 
-	if (strcmp( inputfilename, "-" )==0) strcpy(inputfilename, "STDIN");
-	if (strcmp( outputfilename, "-" )==0) strcpy(outputfilename, "STDOUT");
-
-	// Get the format
-	format_info.format = sfinfo.format & SF_FORMAT_TYPEMASK;
-	sf_command (NULL, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info)) ;
-
-	// Get the sub-format info
-	subformat_info.format = sfinfo.format & SF_FORMAT_SUBMASK;
-	sf_command (NULL, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info)) ;
-
-	// Get the version of libsndfile
-	sf_command (NULL, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
-
-	// Get human readable duration of the input file
-	duration = format_duration_string( &sfinfo );
 
 	if (verbosity==1) {
-		fprintf(stderr, "Encoding %s to %s\n", inputfilename, outputfilename);
-	} else {
+		fprintf(stderr, "Encoding %s to %s\n", ifn, ofn);
+	} else if (verbosity>1) {
 		fprintf(stderr, "---------------------------------------------------------\n");
-		fprintf(stdout, "%s (http://www.mega-nerd.com/libsndfile/)\n", sndlibver);
-		fprintf(stderr, "Input File: %s\n", inputfilename );
-		fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name );
-		fprintf(stderr, "Input Duration: %s\n", duration );
-		fprintf(stderr, "Output File: %s\n", outputfilename );
+		fprintf(stderr, "Input Filename: %s\n", ifn);
+		fprintf(stderr, "Output Filename: %s\n", ofn);
 	}
-	
-	
-	free( duration );
 
 }
 
@@ -206,8 +154,7 @@ static void print_config( int verbosity )
   usage_long() 
   Display the extended usage information
 */
-static void
-usage_long()
+static void usage_long()
 {
 	
 	fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
@@ -669,25 +616,30 @@ main(int argc, char **argv)
 	// Get options and parameters from the command line
 	parse_args(argc, argv, encopts);
 
+	// Display the filenames
+	print_filenames( twolame_get_verbosity(encopts) );
 
 	// Open the input file
 	if (use_raw) {
 		// use raw input handler
-		inputfile = open_audioin_raw( inputfilename, sample_size );
+		inputfile = open_audioin_raw( inputfilename, &sfinfo, sample_size );
 	} else {
 		// use libsndfile
 		inputfile = open_audioin_sndfile( inputfilename, &sfinfo );
 	}
 	
+	// Display input information
+	if (twolame_get_verbosity(encopts)>1) {
+		inputfile->print_info( inputfile );
+	}
+	
 	// Use information from input file to configure libtwolame 
 	twolame_set_num_channels( encopts, sfinfo.channels );
 	twolame_set_in_samplerate( encopts, sfinfo.samplerate );
+
 		
 	// Open the output file
 	outputfile = open_output_file( outputfilename );
-	
-	// display file settings
-	print_config( twolame_get_verbosity(encopts) );
 
 	// initialise twolame with this set of options
 	if (twolame_init_params( encopts ) != 0) {
