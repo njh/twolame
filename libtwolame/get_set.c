@@ -60,7 +60,7 @@ const char *twolame_get_mode_name(twolame_options *glopts)
 	static const char *mode_name[6] = { "Auto", "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode"};
 	int mode = glopts->mode;
 	if (mode>=TWOLAME_AUTO_MODE && mode<=TWOLAME_MONO)
-		return (mode_name[mode-1]);
+		return (mode_name[mode+1]);
 	else 
 		return (mode_name[5]);
 }
