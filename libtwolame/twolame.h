@@ -101,7 +101,7 @@ typedef enum {
 
 
 /** Number of samples per frame of Layer 2 MPEG Audio */
-#define TWOLAME_SAMPLES_PER_FRAME		1152
+#define TWOLAME_SAMPLES_PER_FRAME		(1152)
 
 
 /** Opaque structure for the twolame encoder options. */
