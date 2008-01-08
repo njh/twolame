@@ -1,12 +1,16 @@
 What is new in TwoLAME 
 ======================
 
-Version 0.3.11 (2007-??-??)
+Version 0.3.11 (2007-07-02)
 ---------------------------
 
 - Fixed energy levels bug for mono audio
    * thanks to Staale Helleberg for patch
-   
+- Fixed 'inline' for the forthcoming gcc-4.3
+   * thanks to Martin Michlmayr for patch
+- Fixed STDIN support in twolame frontend
+
+
 
 Version 0.3.10 (2007-03-20)
 ---------------------------
