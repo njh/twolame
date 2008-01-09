@@ -1,6 +1,13 @@
 What is new in TwoLAME 
 ======================
 
+Version 0.3.13 (2008-??-??)
+---------------------------
+
+- Fixed documentation location (--docdir in configure)
+   * thanks to Chris Mayo for patch
+
+
 Version 0.3.12 (2008-01-09)
 ---------------------------
 

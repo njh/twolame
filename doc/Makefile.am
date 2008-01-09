@@ -52,8 +52,7 @@ build-html:
 
 
 ## Install HTML Documention
-docdir = $(datadir)/doc
-pkgdocdir = $(docdir)/$(PACKAGE)
+pkgdocdir = @docdir@
 pkghtmldir = $(pkgdocdir)/html
 
 pkghtml_DATA = \
