@@ -109,7 +109,7 @@ static char* format_filesize_string( int filesize )
 	}
 	else if (filesize < constMB)
 	{
-		snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float)filesize/constKB);
+		snprintf(string, MAX_NAME_SIZE, "%2.2f KB", (float)filesize/constKB);
 	}
 	else if (filesize < constGB)
 	{
