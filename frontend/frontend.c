@@ -563,7 +563,7 @@ open_output_file( char* filename )
 	if (strncmp( filename, "-", 1 )==0) {
 		file = stdout;
 	} else {
-		file = fopen(filename, "w");
+		file = fopen(filename, "wb");
 	}
 	
 	// Check for errors
