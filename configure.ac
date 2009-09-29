@@ -94,8 +94,8 @@ PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
 	) ]
 )
 			
-AC_SUBST( SNDFILE_CFLAGS )
-AC_SUBST( SNDFILE_LIBS )
+AC_SUBST(SNDFILE_CFLAGS)
+AC_SUBST(SNDFILE_LIBS)
 
 
 
@@ -138,7 +138,7 @@ if test "x$HAVE_SNDFILE" = "xyes"; then
 else 
 	AC_MSG_WARN([Not building twolame frontend because libsndfile is missing.])
 fi
-AC_SUBST( TWOLAME_BIN )
+AC_SUBST(TWOLAME_BIN)
 
 
 dnl ############## Final Output
