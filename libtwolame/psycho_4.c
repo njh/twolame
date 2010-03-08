@@ -102,6 +102,7 @@ static void psycho_4_trigtable_init(psycho_4_mem *p4mem) {
   }
 }
 
+#ifdef NEWTAN
 static inline FLOAT psycho_4_cos(psycho_4_mem *p4mem, FLOAT phi) {
   int index;
   int sign=1;
@@ -115,6 +116,8 @@ static inline FLOAT psycho_4_cos(psycho_4_mem *p4mem, FLOAT phi) {
   }
   return(sign * p4mem->cos_table[index]);
 }
+#endif
+
 /* The spreading function.	Values returned in units of energy
    Argument 'bark' is the difference in bark values between the
    centre of two partitions.

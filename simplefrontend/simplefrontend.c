@@ -35,13 +35,15 @@
 
 
 
-void usage (void) {
+static void usage (void)
+{
 	fprintf(stdout,"stwolame <input wavefile> <output mp2 file>\n");
 	exit (1);
 }
 
 
-int main (int argc, char **argv) {
+int main (int argc, char **argv)
+{
 	twolame_options *encodeOptions;
 	char *inputfilename = argv[1];
 	char *outputfilename = argv[2];

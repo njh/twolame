@@ -225,8 +225,7 @@ static void usage_long()
   usage_short() 
   Display the short usage information
 */
-void
-usage_short()
+static void usage_short()
 {
 	/* print a bit of info about the program */
 	fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
@@ -242,8 +241,7 @@ usage_short()
 	Creates a short args string from the options structure
 	for use with getopt_long
 */
-char*
-build_shortopt_string( struct option* opts )
+static char* build_shortopt_string( struct option* opts )
 {
 	int count=0;
 	char *shortstr = NULL;
@@ -280,8 +278,7 @@ build_shortopt_string( struct option* opts )
   parse_args() 
   Parse the command line arguments
 */
-void
-parse_args(int argc, char **argv, twolame_options * encopts )
+static void parse_args(int argc, char **argv, twolame_options * encopts )
 {
 	int ch=0;
 
@@ -553,8 +550,7 @@ parse_args(int argc, char **argv, twolame_options * encopts )
 
 
 
-FILE*
-open_output_file( char* filename )
+static FILE* open_output_file( char* filename )
 {
 	FILE* file;
 
@@ -576,8 +572,7 @@ open_output_file( char* filename )
 }
 
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
 	twolame_options *encopts = NULL;
 	audioin_t		*inputfile = NULL;

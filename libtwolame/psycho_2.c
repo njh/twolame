@@ -121,7 +121,7 @@ psycho_2_mem *psycho_2_init (twolame_options *glopts, int sfreq)
 	window = mem->window;
 	ath = mem->ath;
 	numlines = mem->numlines;
-	partition = mem->numlines;
+	partition = mem->partition;
 	s = mem->s;
 	tmn = mem->tmn;
 	fthr = mem->fthr;
