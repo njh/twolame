@@ -1,6 +1,5 @@
-
-dnl Require autoconf version >= 2.57
-AC_PREREQ(2.57)
+dnl Require autoconf version >= 2.59
+AC_PREREQ(2.59)
 
 
 dnl ############# Initialization
@@ -9,11 +8,9 @@ AC_INIT([twolame], [0.3.13], [twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build)
-AC_CANONICAL_SYSTEM
-
-dnl Version 1.7 of automake is recommended
-AM_INIT_AUTOMAKE(1.7)
-AM_CONFIG_HEADER(build/config.h)
+AC_CONFIG_MACRO_DIR(build)
+AM_INIT_AUTOMAKE([1.9])
+LT_INIT
 
 
 
@@ -39,16 +36,6 @@ AC_SUBST(TWOLAME_SO_VERSION)
 
 
 
-dnl ############# Compiler and tools Checks
-
-AC_PROG_CC
-AC_PROG_INSTALL
-AC_PROG_LN_S
-
-AC_PROG_LIBTOOL
-AC_C_BIGENDIAN
-AC_C_INLINE
-
 
 dnl ############# Configure Arguments
 
@@ -58,6 +45,33 @@ AC_ARG_ENABLE(debug,
 		AC_DEFINE(DEBUG, 1, [ Define if debugging is enabled. ]) ],
 	  [ Debugging="Disabled" ]
 )
+
+
+dnl ############## Compiler and Linker Flags
+
+# FIXME: use AC PROG CC C99
+CFLAGS="$CFLAGS -std=c99"
+
+# If debugging is enabled then make warnings errors
+if test "$Debugging" = "Enabled"; then
+	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
+	CFLAGS="$CFLAGS -Wunused -Wmissing-prototypes -Wmissing-declarations"
+else
+	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
+	CFLAGS="$CFLAGS -O3"
+fi
+
+
+dnl ############# Compiler and tools Checks
+
+AC_PROG_CC
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_LIBTOOL
+
+AC_C_BIGENDIAN
+AC_C_INLINE
+AC_C_CONST
 
 
 
@@ -111,21 +125,6 @@ AC_CHECK_HEADER(getopt.h,
 
 
 
-dnl ############## Compiler and Linker Flags
-
-CFLAGS="$CFLAGS -std=c99 -Wunused -Wall"
-LDFLAGS="$LDFLAGS"
-
-# If debugging is enabled then make warnings errors
-if test "$Debugging" = "Enabled"; then
-	CFLAGS="$CFLAGS -g -Werror -pedantic"
-else
-	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
-	CFLAGS="$CFLAGS -O3"
-fi
-
-
-
 dnl ############## Only compile frontend if sndfile is available
 
 TWOLAME_BIN=""
@@ -141,13 +140,17 @@ fi
 AC_SUBST(TWOLAME_BIN)
 
 
-dnl ############## Final Output
+dnl ############## Output files
 
-AC_OUTPUT(
+AC_CONFIG_HEADERS([libtwolame/config.h])
+
+AC_CONFIG_FILES([
 	Makefile \
 	twolame.pc \
 	doc/Makefile \
 	libtwolame/Makefile \
 	frontend/Makefile \
 	simplefrontend/Makefile \
-)
+])
+
+AC_OUTPUT
