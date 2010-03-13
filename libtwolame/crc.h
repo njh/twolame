@@ -25,7 +25,7 @@
 #ifndef	_CRC_H_
 #define	_CRC_H_
 
-void crc_writeheader( unsigned char *bitstream, int bit_count );
+void crc_writeheader(unsigned char *bitstream, int bit_count);
 
 #endif
 

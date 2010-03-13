@@ -26,13 +26,12 @@
 #ifndef	_DAB_H_
 #define	_DAB_H_
 
-void dab_crc_calc (twolame_options *glopts,
-			 unsigned int bit_alloc[2][SBLIMIT],
-			 unsigned int scfsi[2][SBLIMIT],
-			 unsigned int scalar[2][3][SBLIMIT],
-			 unsigned int *crc, int i);
+void dab_crc_calc(twolame_options * glopts,
+                  unsigned int bit_alloc[2][SBLIMIT],
+                  unsigned int scfsi[2][SBLIMIT],
+                  unsigned int scalar[2][3][SBLIMIT], unsigned int *crc, int i);
 
-void dab_crc_update (unsigned int, unsigned int, unsigned int *);
+void dab_crc_update(unsigned int, unsigned int, unsigned int *);
 
 #endif
 

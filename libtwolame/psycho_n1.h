@@ -25,7 +25,7 @@
 #ifndef	_PSYCHO_N1_H_
 #define	_PSYCHO_N1_H_
 
-void psycho_n1(twolame_options *glopts, FLOAT ltmin[2][SBLIMIT], int stereo);
+void psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo);
 
 #endif
 

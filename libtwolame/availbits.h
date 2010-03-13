@@ -25,7 +25,7 @@
 #ifndef	_AVAILBITS_H_
 #define	_AVAILBITS_H_
 
-int available_bits ( twolame_options * glopts );
+int available_bits(twolame_options * glopts);
 
 #endif
 

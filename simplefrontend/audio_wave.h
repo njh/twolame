@@ -22,20 +22,18 @@
  *
  */
 
-typedef struct wave_info_struct
-{
-	FILE *soundfile;
-	short channels;				// 1 - mono . 2 - stereo. d'uh.
-	unsigned long num_samples;	// total number of samples/channel if available
-	short samplesize;			// 8 bit or 16bit. could probably just auto scale. but i think
-								// we'll just ignore 8bit sound. MFC May03
-	int samplerate;				// in Hz
-	int byteswap;
-}
-wave_info_t;
+typedef struct wave_info_struct {
+    FILE *soundfile;
+    short channels;             // 1 - mono . 2 - stereo. d'uh.
+    unsigned long num_samples;  // total number of samples/channel if available
+    short samplesize;           // 8 bit or 16bit. could probably just auto scale. but i think
+    // we'll just ignore 8bit sound. MFC May03
+    int samplerate;             // in Hz
+    int byteswap;
+} wave_info_t;
 
 
 wave_info_t *wave_init(char *inPath);
-int wave_get_samples(wave_info_t *wave_info, short int pcm[], int num_samples);
+int wave_get_samples(wave_info_t * wave_info, short int pcm[], int num_samples);
 
 // vim:ts=4:sw=4:nowrap: 

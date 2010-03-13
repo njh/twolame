@@ -21,18 +21,18 @@
  *  $Id$
  *
  */
- 
+
 
 #ifndef	_UTIL_H_
 #define	_UTIL_H_
 
 /* non-public prototypes */
-const char* twolame_mpeg_version_name (int version);
-int twolame_get_bitrate_index (int bitrate, TWOLAME_MPEG_version version);
-int twolame_get_samplerate_index (long sample_rate);
-int twolame_get_version_for_samplerate (long sample_rate);
+const char *twolame_mpeg_version_name(int version);
+int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version);
+int twolame_get_samplerate_index(long sample_rate);
+int twolame_get_version_for_samplerate(long sample_rate);
 
-#endif /* _UTIL_H_ */
+#endif                          /* _UTIL_H_ */
 
 
 // vim:ts=4:sw=4:nowrap: 

@@ -29,22 +29,22 @@
 
 /* bit stream structure */
 typedef struct bit_stream_struc {
-	unsigned char *buf;		  /* bit stream buffer */
-	int buf_size;		  /* size of buffer (in number of bytes) */
-	long totbit;		  /* bit counter of bit stream */
-	int buf_byte_idx;	  /* pointer to top byte in buffer */
-	int buf_bit_idx;	  /* pointer to top bit of top byte in buffer */
-	int eob;		  /* end of buffer index */
-	int eobs;		  /* end of bit stream flag */
+    unsigned char *buf;         /* bit stream buffer */
+    int buf_size;               /* size of buffer (in number of bytes) */
+    long totbit;                /* bit counter of bit stream */
+    int buf_byte_idx;           /* pointer to top byte in buffer */
+    int buf_bit_idx;            /* pointer to top bit of top byte in buffer */
+    int eob;                    /* end of buffer index */
+    int eobs;                   /* end of bit stream flag */
 } bit_stream;
 
 
-bit_stream * buffer_init( unsigned char *buffer, int buffer_size );
-void buffer_deinit( bit_stream **bs );
+bit_stream *buffer_init(unsigned char *buffer, int buffer_size);
+void buffer_deinit(bit_stream ** bs);
 
-NO_DLL_INLINE void buffer_put1bit (bit_stream *, int);
-NO_DLL_INLINE void buffer_putbits (bit_stream *, unsigned int, int);
-NO_DLL_INLINE unsigned long buffer_sstell (bit_stream *);
+NO_DLL_INLINE void buffer_put1bit(bit_stream *, int);
+NO_DLL_INLINE void buffer_putbits(bit_stream *, unsigned int, int);
+NO_DLL_INLINE unsigned long buffer_sstell(bit_stream *);
 
 #endif
 

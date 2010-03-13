@@ -27,8 +27,8 @@
 #ifndef	_ENERGY_H_
 #define	_ENERGY_H_
 
-int get_required_energy_bits( twolame_options *glopts );
-void do_energy_levels(twolame_options *glopts, bit_stream *bs);
+int get_required_energy_bits(twolame_options * glopts);
+void do_energy_levels(twolame_options * glopts, bit_stream * bs);
 
 #endif
 

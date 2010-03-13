@@ -46,7 +46,7 @@
 #define TWOLAME_FREE(ptr) if(ptr!=NULL) { free(ptr); ptr=NULL; }
 
 // Functions
-void *twolame_malloc (size_t size, int line,  char *file);
+void *twolame_malloc(size_t size, int line, char *file);
 
 #endif
 
