@@ -2,7 +2,7 @@ TwoLAME Authors
 ===============
 
 
-.Nicholas Humfrey - <njh at aelius.com>
+.Nicholas J Humfrey - <njh at aelius.com>
  -  Current Maintainer
  -	New automake build system
  -	Added libsndfile support
