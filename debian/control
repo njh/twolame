@@ -1,7 +1,7 @@
 Source: twolame
 Section: sound
 Priority: optional
-Maintainer: Nicholas Humfrey <njh@ecs.soton.ac.uk>
+Maintainer: Nicholas Humfrey <njh@aelius.com>
 Build-Depends: debhelper (>> 3.0.0), libsndfile1-dev
 Standards-Version: 3.5.2
 
