@@ -197,7 +197,7 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
         // bark = mem->bark;
         ath = mem->ath;
         numlines = mem->numlines;
-        partition = mem->numlines;
+        partition = mem->partition;
         s = mem->s;
         tmn = mem->tmn;
     }
