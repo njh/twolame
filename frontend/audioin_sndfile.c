@@ -35,14 +35,20 @@
 */
 static char *format_duration_string(SF_INFO * sfinfo)
 {
-    float seconds;
-    int minutes;
-    char *string = malloc(MAX_NAME_SIZE);
+    float seconds = 0.0f;
+    char *string = NULL;
+    int minutes = 0;
+    
+    string = malloc(MAX_NAME_SIZE);
+    if (!string) {
+        return NULL;
+    }
 
     if (sfinfo->frames == 0 || sfinfo->samplerate == 0) {
         snprintf(string, MAX_NAME_SIZE, "Unknown");
         return string;
     }
+
     // Calculate the number of minutes and seconds
     seconds = sfinfo->frames / sfinfo->samplerate;
     minutes = (seconds / 60);
