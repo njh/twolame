@@ -1,15 +1,17 @@
-dnl Require autoconf version >= 2.59
-AC_PREREQ(2.59)
+dnl Require autoconf version >= 2.60
+AC_PREREQ(2.60)
 
 
 dnl ############# Initialization
 
-AC_INIT([twolame], [0.3.13], [twolame-discuss@lists.sourceforge.net])
+AC_INIT([twolame],[0.3.13],[twolame-discuss@lists.sourceforge.net])
 
 AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build-scripts)
 AC_CONFIG_MACRO_DIR(build-scripts)
-AM_INIT_AUTOMAKE([1.9])
+AM_INIT_AUTOMAKE([1.10])
+
+LT_PREREQ([2.2])
 LT_INIT
 
 
@@ -49,9 +51,6 @@ AC_ARG_ENABLE(debug,
 
 dnl ############## Compiler and Linker Flags
 
-# FIXME: use AC PROG CC C99
-CFLAGS="$CFLAGS -std=c99"
-
 # If debugging is enabled then make warnings errors
 if test "$Debugging" = "Enabled"; then
 	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
@@ -65,6 +64,7 @@ fi
 dnl ############# Compiler and tools Checks
 
 AC_PROG_CC
+AC_PROG_CC_C99
 AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_LIBTOOL
