@@ -151,6 +151,7 @@ AC_CONFIG_FILES([
 	libtwolame/Makefile \
 	frontend/Makefile \
 	simplefrontend/Makefile \
+	tests/Makefile \
 ])
 
 AC_OUTPUT

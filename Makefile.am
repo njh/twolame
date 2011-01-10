@@ -2,7 +2,7 @@
 AUTOMAKE_OPTIONS = foreign
 ACLOCAL_AMFLAGS = -I build-scripts
 
-SUBDIRS = libtwolame frontend simplefrontend doc
+SUBDIRS = libtwolame frontend simplefrontend doc tests
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = twolame.pc
@@ -20,3 +20,5 @@ EXTRA_DIST = \
 	win32/libtwolame_static.sln \
 	win32/libtwolame_static.vcproj \
 	win32/winutil.h
+
+test: check
