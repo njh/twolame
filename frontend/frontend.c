@@ -192,6 +192,7 @@ static void usage_long()
 
     fprintf(stdout, "\nMiscellaneous Options\n");
     fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
+    fprintf(stdout, "\t    --non-copyright      mark as non-copyright (default)\n");
     fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
     fprintf(stdout, "\t    --original           mark as original (default)\n");
     fprintf(stdout, "\t-p, --protect            enable CRC error protection\n");
@@ -310,8 +311,9 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
 
         // Misc
         {"copyright", no_argument, NULL, 'c'},
+        {"non-copyright", no_argument, NULL, 1004},
         {"non-original", no_argument, NULL, 'o'},
-        {"original", no_argument, NULL, 1004},
+        {"original", no_argument, NULL, 1005},
         {"protect", no_argument, NULL, 'p'},
         {"padding", no_argument, NULL, 'd'},
         {"reserve-bits", required_argument, NULL, 'R'},
@@ -320,9 +322,9 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
 
         // Verbosity
         {"talkativity", required_argument, NULL, 't'},
-        {"quiet", no_argument, NULL, 1005},
-        {"brief", no_argument, NULL, 1006},
-        {"verbose", no_argument, NULL, 1007},
+        {"quiet", no_argument, NULL, 1006},
+        {"brief", no_argument, NULL, 1007},
+        {"verbose", no_argument, NULL, 1008},
         {"help", no_argument, NULL, 'h'},
 
         {NULL, 0, NULL, 0}
@@ -446,10 +448,13 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         case 'c':
             twolame_set_copyright(encopts, TRUE);
             break;
+        case 1004:              // --non-copyright
+            twolame_set_copyright(encopts, FALSE);
+            break;
         case 'o':              // --non-original
             twolame_set_original(encopts, FALSE);
             break;
-        case 1004:             // --original
+        case 1005:             // --original
             twolame_set_original(encopts, TRUE);
             break;
         case 'p':
@@ -483,15 +488,15 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             twolame_set_verbosity(encopts, atoi(optarg));
             break;
 
-        case 1005:             // --quiet
+        case 1006:             // --quiet
             twolame_set_verbosity(encopts, 0);
             break;
 
-        case 1006:             // --brief
+        case 1007:             // --brief
             twolame_set_verbosity(encopts, 1);
             break;
 
-        case 1007:             // --verbose
+        case 1008:             // --verbose
             twolame_set_verbosity(encopts, 4);
             break;
 
