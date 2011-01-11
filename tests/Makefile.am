@@ -6,4 +6,4 @@ TESTS_ENVIRONMENT = \
 	TWOLAME_CMD="$(top_builddir)/frontend/twolame" \
 	perl -w -Mstrict -MTest::Harness -e "runtests(@ARGV)"
 
-CLEANFILES = *.mp2
+CLEANFILES = *.mp2 *.raw

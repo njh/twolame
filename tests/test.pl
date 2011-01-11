@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 32;
+use Test::More tests => 37;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD};
 $TWOLAME_CMD = $ARGV[0] if ($ARGV[0]);
@@ -47,6 +47,7 @@ my $encoding_parameters = [
   },
 ];
 
+
 my $count = 1;
 foreach my $params (@$encoding_parameters) {
   my $INPUT_FILENAME = $params->{input_filename};
@@ -79,19 +80,42 @@ foreach my $params (@$encoding_parameters) {
   is($info->{original}, $params->{original}, "[$count] MPEG Audio Header - Original Flag");
   is($info->{deemphasis}, $params->{deemphasis}, "[$count] MPEG Audio Header - De-emphasis");
 
-  is($info->{total_frames}, $params->{total_frames}, "[$count] MPEG Audio total number of frames");
-  is($info->{total_bytes}, $params->{total_bytes}, "[$count] MPEG Audio total number of bytes");
-  is($info->{total_samples}, $params->{total_samples}, "[$count] MPEG Audio total number of samples");
+  is($info->{total_frames}, $params->{total_frames}, "[$count] total number of frames");
+  is($info->{total_bytes}, $params->{total_bytes}, "[$count] total number of bytes");
+  is($info->{total_samples}, $params->{total_samples}, "[$count] total number of samples");
 
   # FIXME: test error protection / CRC
 
   is(filesize($OUTPUT_FILENAME), $params->{total_bytes}, , "[$count] file size of output file");
   is(md5_file($OUTPUT_FILENAME), $params->{output_md5sum}, "[$count] md5sum of output file");
 
-  unlink($OUTPUT_FILENAME) if (-e $OUTPUT_FILENAME);
-
   $count++;
 }
+
+
+# Test encoding from STDIN
+SKIP: {
+  my $result = system("which sndfile-convert > /dev/null");
+  skip("sndfile-convert is not available", 5) unless ($result == 0);
+
+  $result = system("sndfile-convert -pcm16 testcase.wav testcase.raw");
+  is($result, 0, "sndfile-convert to raw response code");
+
+  my $OUTPUT_FILENAME = 'testcase-stdin.mp2';
+  $result = system("$TWOLAME_CMD --quiet --raw-input - $OUTPUT_FILENAME < testcase.raw");
+  is($result, 0, "converting from STDIN - response code");
+
+  my $info = mpeg_audio_info($OUTPUT_FILENAME);
+  is($info->{total_frames}, 22, "converting from STDIN - total number of frames");
+  is($info->{total_bytes}, 13772, "converting from STDIN - total number of bytes");
+  is(md5_file($OUTPUT_FILENAME), '956f85e3647314750a1d3ed3fbf81ae3', "converting from STDIN - md5sum of output file");
+}
+
+
+
+## END OF TESTS ##
+
+
 
 sub filesize {
   return (stat(@_))[7];
