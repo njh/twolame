@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 37;
+use Test::More tests => 53;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD};
 $TWOLAME_CMD = $ARGV[0] if ($ARGV[0]);
@@ -15,11 +15,13 @@ die "Error: twolame command not found: $TWOLAME_CMD" unless (-e $TWOLAME_CMD);
 my $encoding_parameters = [
   {
     # Test Case 1
-    'input_filename' => 'testcase.wav',
+    'input_filename' => 'testcase-44100.wav',
     'input_md5sum' => 'f50499fded70a74c810dbcadb3f28062',
     'bitrate' => 192,
     'samplerate' => 44100,
+    'version' => '1',
     'mode' => 'stereo',
+    'psycmode' => 3,
     'original' => 1,
     'copyright' => 0,
     'padding' => 0,
@@ -30,20 +32,40 @@ my $encoding_parameters = [
     'output_md5sum' => '956f85e3647314750a1d3ed3fbf81ae3'
   },
   {
-    # Test Case 2
-    'input_filename' => 'testcase.wav',
+    # Test Case 2 (toolame 0.2l default settings)
+    'input_filename' => 'testcase-44100.wav',
     'input_md5sum' => 'f50499fded70a74c810dbcadb3f28062',
-    'bitrate' => 32,
+    'bitrate' => 192,
     'samplerate' => 44100,
+    'version' => '1',
+    'mode' => 'joint',
+    'psycmode' => 1,
+    'original' => 0,
+    'copyright' => 0,
+    'padding' => 1,
+    'deemphasis' => 'n',
+    'total_frames' => 22,
+    'total_bytes' => 13792,
+    'total_samples' => 25344,
+    'output_md5sum' => 'fef3bb4926978e56822d33eaa89208d2'
+  },
+  {
+    # Test Case 3
+    'input_filename' => 'testcase-22050.wav',
+    'input_md5sum' => 'a5ec3077c2138a1023bcd980aec8e4b4',
+    'bitrate' => 32,
+    'samplerate' => 22050,
+    'version' => '2',
     'mode' => 'mono',
+    'psycmode' => 4,
     'original' => 0,
     'copyright' => 1,
     'padding' => 1,
     'deemphasis' => '5',
-    'total_frames' => 22,
+    'total_frames' => 11,
     'total_bytes' => 2298,
-    'total_samples' => 25344,
-    'output_md5sum' => 'f9d7030805fb813679d5cfb45254c955'
+    'total_samples' => 12672,
+    'output_md5sum' => '3175f5332040aaad42b00823cd1ec913'
   },
 ];
 
@@ -60,6 +82,7 @@ foreach my $params (@$encoding_parameters) {
     '--quiet',
     '--bitrate', $params->{bitrate},
     '--mode', $params->{mode},
+    '--psyc-mode', $params->{psycmode},
     $params->{copyright} ? '--copyright' : '--non-copyright',
     $params->{original} ? '--original' : '--non-original',
     $params->{padding} ? '--padding' : '',
@@ -71,10 +94,10 @@ foreach my $params (@$encoding_parameters) {
 
   my $info = mpeg_audio_info($OUTPUT_FILENAME);
   is($info->{syncword}, 0xff, "[$count] MPEG Audio Header - Sync Word");
-  is($info->{version}, 1, "[$count] MPEG Audio Header - Version");
+  is($info->{version}, $params->{version}, "[$count] MPEG Audio Header - Version");
   is($info->{layer}, 2, "[$count] MPEG Audio Header - Layer");
   is($info->{mode}, $params->{mode}, "[$count] MPEG Audio Header - Mode");
-  is($info->{samplerate}, 44100, "[$count] MPEG Audio Header - Sample Rate");
+  is($info->{samplerate}, $params->{samplerate}, "[$count] MPEG Audio Header - Sample Rate");
   is($info->{bitrate}, $params->{bitrate}, "[$count] MPEG Audio Header - Bitrate");
   is($info->{copyright}, $params->{copyright}, "[$count] MPEG Audio Header - Copyright Flag");
   is($info->{original}, $params->{original}, "[$count] MPEG Audio Header - Original Flag");
@@ -98,7 +121,7 @@ SKIP: {
   my $result = system("which sndfile-convert > /dev/null");
   skip("sndfile-convert is not available", 5) unless ($result == 0);
 
-  $result = system("sndfile-convert -pcm16 testcase.wav testcase.raw");
+  $result = system("sndfile-convert -pcm16 testcase-44100.wav testcase.raw");
   is($result, 0, "sndfile-convert to raw response code");
 
   my $OUTPUT_FILENAME = 'testcase-stdin.mp2';
@@ -139,7 +162,7 @@ sub mpeg_audio_info {
 
   open(MPAFILE, $filename) or die "Failed to open file: $filename ($!)";
 
-  do {
+  until (eof(MPAFILE)) {
     my $buffer = '';
     my $bytes = read(MPAFILE, $buffer, 4);
     if ($bytes != 4) {
@@ -165,7 +188,7 @@ sub mpeg_audio_info {
     $info->{total_frames} += 1;
     $info->{total_samples} += $frame_info->{samples};
     $info->{total_bytes} += $frame_info->{framesize};
-  } until (eof(MPAFILE));
+  };
 
   close(MPAFILE);
 
@@ -203,13 +226,13 @@ sub parse_mpeg_header {
 
   $info->{syncword} = ($header >> 23) & 0xff;
 
-  my $version = (($header >> 18) & 0x03);
+  my $version = (($header >> 19) & 0x03);
   if ($version == 0x00) {
-    $info->{version} = 3;   # MPEG 2.5
+    $info->{version} = '2.5';   # MPEG 2.5
   } elsif ($version == 0x02) {
-    $info->{version} = 2;   # MPEG 2
+    $info->{version} = '2';   # MPEG 2
   } elsif ($version == 0x03) {
-    $info->{version} = 1;   # MPEG 1
+    $info->{version} = '1';   # MPEG 1
   } else {
     $info->{version} = undef;
   }
@@ -260,8 +283,14 @@ sub parse_mpeg_header {
     $info->{mode} = undef;
   }
 
-  $info->{samples} = ($info->{version} == 1) ? 1152 : 576;
-
+  if ($info->{layer} == '1') {
+    $info->{samples} = 384;
+  } elsif ($info->{layer} == '2') {
+    $info->{samples} = 1152;
+  } elsif ($info->{layer} == '3') {
+    $info->{samples} = ($info->{version} eq '1') ? 1152 : 576;
+  }
+  
   if ($info->{samplerate}) {
     $info->{framesize} = int(($info->{samples} * $info->{bitrate} * 1000 / $info->{samplerate}) / 8 + $info->{padding});
   } else {
