@@ -38,3 +38,6 @@ libtwolame/config.h
 libtwolame/config.h.in
 simplefrontend/stwolame
 frontend/twolame
+
+tests/*.mp2
+tests/*.raw
