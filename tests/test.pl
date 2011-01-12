@@ -4,12 +4,12 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 73;
+use Test::More tests => 77;
 
-my $TWOLAME_CMD = $ENV{TWOLAME_CMD};
-$TWOLAME_CMD = $ARGV[0] if ($ARGV[0]);
-die "Error: TWOLAME_CMD environment variable is not set and no argument given" unless ($TWOLAME_CMD);
+my $TWOLAME_CMD = "../frontend/twolame";
+my $STWOLAME_CMD = "../simplefrontend/stwolame";
 die "Error: twolame command not found: $TWOLAME_CMD" unless (-e $TWOLAME_CMD);
+die "Error: stwolame command not found: $STWOLAME_CMD" unless (-e $STWOLAME_CMD);
 
 
 my $encoding_parameters = [
@@ -158,6 +158,18 @@ SKIP: {
   is(md5_file($OUTPUT_FILENAME), '956f85e3647314750a1d3ed3fbf81ae3', "converting from STDIN - md5sum of output file");
 }
 
+
+# Test encoding using the simplefrontend
+{
+  my $OUTPUT_FILENAME = 'testcase-simple.mp2';
+  my $result = system("../simplefrontend/stwolame testcase-44100.wav $OUTPUT_FILENAME");
+  is($result, 0, "converting using simplefrontend - response code");
+
+  my $info = mpeg_audio_info($OUTPUT_FILENAME);
+  is($info->{total_frames}, 22, "converting using simplefrontend - total number of frames");
+  is($info->{total_bytes}, 13772, "converting using simplefrontend - total number of bytes");
+  is(md5_file($OUTPUT_FILENAME), '956f85e3647314750a1d3ed3fbf81ae3', "converting using simplefrontend - md5sum of output file");
+}
 
 
 ## END OF TESTS ##
