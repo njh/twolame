@@ -46,7 +46,7 @@ static enum byte_order DetermineByteOrder(void)
     probe.longval = 0x41424344L;    /* ABCD in ASCII */
     strncpy(s, probe.charval, sizeof(long));
     s[sizeof(long)] = '\0';
-    /* fprintf( stderr, "byte order is %s\n", s ); */
+    /* printf("byte order is %s\n", s ); */
 
     if (strcmp(s, "ABCD") == 0)
         return order_bigEndian;
@@ -122,7 +122,7 @@ wave_info_t *wave_init(char *inPath)
     FILE *file;
 
     if ((file = fopen(inPath, "rb")) == NULL) {
-        fprintf(stdout, "WAV: cannot open input file: %s\n", inPath);
+        printf("WAV: cannot open input file: %s\n", inPath);
         return (NULL);
     }
 
@@ -147,11 +147,11 @@ wave_info_t *wave_init(char *inPath)
 
     if (wave_header_buffer[8] == 'W' && wave_header_buffer[9] == 'A'
         && wave_header_buffer[10] == 'V' && wave_header_buffer[11] == 'E') {
-        fprintf(stderr, "Parsing Wave File Header\n");
+        printf("Parsing Wave File Header\n");
         if (NativeByteOrder == order_unknown) {
             NativeByteOrder = DetermineByteOrder();
             if (NativeByteOrder == order_unknown) {
-                fprintf(stderr, "byte order not determined\n");
+                printf("byte order not determined\n");
                 fclose(file);
                 return (NULL);
             }
@@ -174,45 +174,45 @@ wave_info_t *wave_init(char *inPath)
         case 24000:
         case 22050:
         case 16000:
-            fprintf(stderr, ">>> %ld Hz sampling freq selected\n", samplerate);
+            printf(">>> %ld Hz sampling freq selected\n", samplerate);
             break;
         default:
             /* Unknown Unsupported Frequency */
-            fprintf(stderr, ">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
-            fprintf(stderr, ">>> Default 44.1 kHz samp freq selected\n");
+            printf(">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
+            printf(">>> Default 44.1 kHz samp freq selected\n");
             samplerate = 44100;
             break;
         }
 
         if ((long) wave_header_buffer[22] == 1) {
-            fprintf(stderr, ">>> Input Wave File is Mono\n");
+            printf(">>> Input Wave File is Mono\n");
             wave_header_stereo = 0;
         }
         if ((long) wave_header_buffer[22] == 2) {
-            fprintf(stderr, ">>> Input Wave File is Stereo\n");
+            printf(">>> Input Wave File is Stereo\n");
             wave_header_stereo = 1;
         }
         if ((long) wave_header_buffer[32] == 1) {
-            fprintf(stderr, ">>> Input Wave File is 8 Bit\n");
+            printf(">>> Input Wave File is 8 Bit\n");
             wave_header_16bit = 0;
-            fprintf(stderr, "Input File must be 16 Bit! Please Re-sample");
+            printf("Input File must be 16 Bit! Please Re-sample");
             fclose(file);
             return (NULL);
         }
         if ((long) wave_header_buffer[32] == 2) {
             if (wave_header_stereo == 1) {
-                fprintf(stderr, ">>> Input Wave File is 8 Bit\n");
+                printf(">>> Input Wave File is 8 Bit\n");
                 wave_header_16bit = 0;
-                fprintf(stderr, "Input File must be 16 Bit! Please Re-sample");
+                printf("Input File must be 16 Bit! Please Re-sample");
                 fclose(file);
                 return (NULL);
             } else {
-                /* fprintf(stderr, ">>> Input Wave File is 16 Bit\n" ); */
+                /* printf(">>> Input Wave File is 16 Bit\n" ); */
                 wave_header_16bit = 1;
             }
         }
         if ((long) wave_header_buffer[32] == 4) {
-            /* fprintf(stderr, ">>> Input Wave File is 16 Bit\n" ); */
+            /* printf(">>> Input Wave File is 16 Bit\n" ); */
             wave_header_16bit = 1;
         }
 
@@ -220,7 +220,7 @@ wave_info_t *wave_init(char *inPath)
         if (fseek(file, 44, SEEK_SET) != 0) {
             /* there's a way of calculating the size of the wave header. i'll just jump 44 to start 
                with */
-            fprintf(stderr, "Could not seek to PCM sound data in \"%s\".\n", inPath);
+            printf("Could not seek to PCM sound data in \"%s\".\n", inPath);
             fclose(file);
             return (NULL);
         }

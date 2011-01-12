@@ -37,7 +37,7 @@
 
 static void usage(void)
 {
-    fprintf(stdout, "stwolame <input wavefile> <output mp2 file>\n");
+    printf("stwolame <input wavefile> <output mp2 file>\n");
     exit(1);
 }
 
@@ -61,13 +61,13 @@ int main(int argc, char **argv)
 
     /* Allocate some space for the PCM audio data */
     if ((pcmaudio = (short *) calloc(AUDIOBUFSIZE, sizeof(short))) == NULL) {
-        fprintf(stdout, "pcmaudio alloc failed\n");
+        printf("pcmaudio alloc failed\n");
         exit(99);
     }
 
     /* Allocate some space for the encoded MP2 audio data */
     if ((mp2buffer = (unsigned char *) calloc(MP2BUFSIZE, sizeof(unsigned char))) == NULL) {
-        fprintf(stdout, "mp2buffer alloc failed\n");
+        printf("mp2buffer alloc failed\n");
         exit(99);
     }
 
@@ -76,12 +76,12 @@ int main(int argc, char **argv)
 
     /* grab a set of default encode options */
     encodeOptions = twolame_init();
-    fprintf(stdout, "Using libtwolame version %s.\n", get_twolame_version());
+    printf("Using libtwolame version %s.\n", get_twolame_version());
 
 
     /* Open the wave file */
     if ((wave_info = wave_init(inputfilename)) == NULL) {
-        fprintf(stdout, "Not a recognised WAV file.\n");
+        printf("Not a recognised WAV file.\n");
         exit(99);
     }
     // Use sound file to over-ride preferences for
@@ -104,13 +104,13 @@ int main(int argc, char **argv)
 
     /* initialise twolame with this set of options */
     if (twolame_init_params(encodeOptions) != 0) {
-        fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
+        printf("Error: configuring libtwolame encoder failed.\n");
         exit(99);
     }
 
     /* Open the output file for the encoded MP2 data */
     if ((outfile = fopen(outputfilename, "wb")) == 0) {
-        fprintf(stdout, "error opening output file %s\n", outputfilename);
+        printf("error opening output file %s\n", outputfilename);
         exit(99);
     }
     // Read num_samples of audio data *per channel* from the input file
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 
         // Display the number of MPEG audio frames we have encoded
         frames += (num_samples / TWOLAME_SAMPLES_PER_FRAME);
-        fprintf(stdout, "[%04i]\r", frames);
+        printf("[%04i]\r", frames);
         fflush(stdout);
     }
 
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
     twolame_close(&encodeOptions);
     free(pcmaudio);
 
-    fprintf(stdout, "\nFinished nicely.\n");
+    printf("\nFinished nicely.\n");
 
 
     return (0);
