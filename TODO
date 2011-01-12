@@ -1,12 +1,6 @@
 TwoLAME TODO List
 =================
 
-- Fix bug with Padding and framesizes with samplerate of 44.1 and 22kHz
-
-- Don't disable frontend if libsndfile isn't available?
-
-
-
 - use Exact-width integer types (eg uint16_t)
 
 - Add libresample support to libtoolame (toolame_set_in_samplerate etc.)
