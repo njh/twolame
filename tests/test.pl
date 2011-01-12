@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 53;
+use Test::More tests => 73;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD};
 $TWOLAME_CMD = $ARGV[0] if ($ARGV[0]);
@@ -14,7 +14,7 @@ die "Error: twolame command not found: $TWOLAME_CMD" unless (-e $TWOLAME_CMD);
 
 my $encoding_parameters = [
   {
-    # Test Case 1
+    # Test Case 1 (default settings)
     'input_filename' => 'testcase-44100.wav',
     'input_md5sum' => 'f50499fded70a74c810dbcadb3f28062',
     'bitrate' => 192,
@@ -25,6 +25,7 @@ my $encoding_parameters = [
     'original' => 1,
     'copyright' => 0,
     'padding' => 0,
+    'protect' => 0,
     'deemphasis' => 'n',
     'total_frames' => 22,
     'total_bytes' => 13772,
@@ -43,6 +44,7 @@ my $encoding_parameters = [
     'original' => 0,
     'copyright' => 0,
     'padding' => 1,
+    'protect' => 0,
     'deemphasis' => 'n',
     'total_frames' => 22,
     'total_bytes' => 13792,
@@ -50,7 +52,7 @@ my $encoding_parameters = [
     'output_md5sum' => 'fef3bb4926978e56822d33eaa89208d2'
   },
   {
-    # Test Case 3
+    # Test Case 3 (MPEG-2 test)
     'input_filename' => 'testcase-22050.wav',
     'input_md5sum' => 'a5ec3077c2138a1023bcd980aec8e4b4',
     'bitrate' => 32,
@@ -61,11 +63,31 @@ my $encoding_parameters = [
     'original' => 0,
     'copyright' => 1,
     'padding' => 1,
+    'protect' => 0,
     'deemphasis' => '5',
     'total_frames' => 11,
     'total_bytes' => 2298,
     'total_samples' => 12672,
     'output_md5sum' => '3175f5332040aaad42b00823cd1ec913'
+  },
+  {
+    # Test Case 4 (error protection test)
+    'input_filename' => 'testcase-44100.wav',
+    'input_md5sum' => 'f50499fded70a74c810dbcadb3f28062',
+    'bitrate' => 192,
+    'samplerate' => 44100,
+    'version' => '1',
+    'mode' => 'stereo',
+    'psycmode' => 3,
+    'original' => 1,
+    'copyright' => 0,
+    'padding' => 0,
+    'protect' => 1,
+    'deemphasis' => 'n',
+    'total_frames' => 22,
+    'total_bytes' => 13772,
+    'total_samples' => 25344,
+    'output_md5sum' => '7e7aa8e3cfafdd1cd2eda53a9ab8bef3'
   },
 ];
 
@@ -85,6 +107,7 @@ foreach my $params (@$encoding_parameters) {
     '--psyc-mode', $params->{psycmode},
     $params->{copyright} ? '--copyright' : '--non-copyright',
     $params->{original} ? '--original' : '--non-original',
+    $params->{protect} ? '--protect' : '',
     $params->{padding} ? '--padding' : '',
     '--deemphasis', $params->{deemphasis},
     $INPUT_FILENAME, $OUTPUT_FILENAME
@@ -101,13 +124,14 @@ foreach my $params (@$encoding_parameters) {
   is($info->{bitrate}, $params->{bitrate}, "[$count] MPEG Audio Header - Bitrate");
   is($info->{copyright}, $params->{copyright}, "[$count] MPEG Audio Header - Copyright Flag");
   is($info->{original}, $params->{original}, "[$count] MPEG Audio Header - Original Flag");
+  is($info->{protect}, $params->{protect}, "[$count] MPEG Audio Header - Error Protection Flag");
   is($info->{deemphasis}, $params->{deemphasis}, "[$count] MPEG Audio Header - De-emphasis");
+
+  # FIXME: test that CRC is correct
 
   is($info->{total_frames}, $params->{total_frames}, "[$count] total number of frames");
   is($info->{total_bytes}, $params->{total_bytes}, "[$count] total number of bytes");
   is($info->{total_samples}, $params->{total_samples}, "[$count] total number of samples");
-
-  # FIXME: test error protection / CRC
 
   is(filesize($OUTPUT_FILENAME), $params->{total_bytes}, , "[$count] file size of output file");
   is(md5_file($OUTPUT_FILENAME), $params->{output_md5sum}, "[$count] md5sum of output file");
@@ -158,26 +182,26 @@ sub md5_file {
 
 sub mpeg_audio_info {
   my ($filename) = @_;
-  my $info;
+  my $info = undef;
 
   open(MPAFILE, $filename) or die "Failed to open file: $filename ($!)";
 
   until (eof(MPAFILE)) {
-    my $buffer = '';
-    my $bytes = read(MPAFILE, $buffer, 4);
+    my $header = '';
+    my $bytes = read(MPAFILE, $header, 4);
     if ($bytes != 4) {
       warn "Failed to read MPEG Audio header";
       last;
     }
 
-    my $frame_info = parse_mpeg_header($buffer);
-    $info = $frame_info unless ($info);
+    my $frame_info = parse_mpeg_header($header);
     if ($frame_info->{syncword} != 0xff) {
       warn "Lost MPEG Audio header sync";
       last;
     }
 
     # Now read in the rest of the frame
+    my $buffer = '';
     my $remaining = ($frame_info->{framesize}-4);
     $bytes = read(MPAFILE, $buffer, $remaining);
     if ($bytes != $remaining) {
@@ -185,6 +209,11 @@ sub mpeg_audio_info {
       last;
     }
 
+    if ($frame_info->{protect}) {
+      $frame_info->{crc} = unpack('n', $buffer);
+    }
+
+    $info = $frame_info unless ($info);
     $info->{total_frames} += 1;
     $info->{total_samples} += $frame_info->{samples};
     $info->{total_bytes} += $frame_info->{framesize};
@@ -242,7 +271,7 @@ sub parse_mpeg_header {
     $info->{layer} = 0;
   }
 
-  $info->{error_protection} = (($header >> 16) & 0x01) ? 0 : 1;
+  $info->{protect} = (($header >> 16) & 0x01) ? 0 : 1;
   $info->{padding} = ($header >> 9) & 0x01;
   $info->{extension} = ($header >> 8) & 0x01;
   $info->{mode_ext} = ($header >> 4) & 0x03;
@@ -290,7 +319,7 @@ sub parse_mpeg_header {
   } elsif ($info->{layer} == '3') {
     $info->{samples} = ($info->{version} eq '1') ? 1152 : 576;
   }
-  
+
   if ($info->{samplerate}) {
     $info->{framesize} = int(($info->{samples} * $info->{bitrate} * 1000 / $info->{samplerate}) / 8 + $info->{padding});
   } else {
