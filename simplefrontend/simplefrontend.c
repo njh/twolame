@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     if (wave_info->channels == 1) {
         twolame_set_mode(encodeOptions, TWOLAME_MONO);
     } else {
-        twolame_set_mode(encodeOptions, TWOLAME_JOINT_STEREO);
+        twolame_set_mode(encodeOptions, TWOLAME_STEREO);
     }
 
 
@@ -98,9 +98,8 @@ int main(int argc, char **argv)
     twolame_set_in_samplerate(encodeOptions, wave_info->samplerate);
     twolame_set_out_samplerate(encodeOptions, wave_info->samplerate);
 
-    /* Set the bitrate to 160 kbps */
-    twolame_set_bitrate(encodeOptions, 160);
-
+    /* Set the bitrate to 192 kbps */
+    twolame_set_bitrate(encodeOptions, 192);
 
     /* initialise twolame with this set of options */
     if (twolame_init_params(encodeOptions) != 0) {
