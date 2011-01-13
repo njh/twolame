@@ -49,18 +49,6 @@ AC_ARG_ENABLE(debug,
 )
 
 
-dnl ############## Compiler and Linker Flags
-
-# If debugging is enabled then make warnings errors
-if test "$Debugging" = "Enabled"; then
-	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
-	CFLAGS="$CFLAGS -Wunused -Wmissing-prototypes -Wmissing-declarations"
-else
-	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
-	CFLAGS="$CFLAGS -O3"
-fi
-
-
 dnl ############# Compiler and tools Checks
 
 AC_PROG_CC
@@ -138,6 +126,20 @@ else
 	AC_MSG_WARN([Not building twolame frontend because libsndfile is missing.])
 fi
 AC_SUBST(TWOLAME_BIN)
+
+
+
+dnl ############## Compiler and Linker Flags
+
+# If debugging is enabled then make warnings errors
+if test "$Debugging" = "Enabled"; then
+	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
+	CFLAGS="$CFLAGS -Wunused -Wmissing-prototypes -Wmissing-declarations"
+else
+	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
+	CFLAGS="$CFLAGS -O3"
+fi
+
 
 
 dnl ############## Output files
