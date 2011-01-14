@@ -14,6 +14,8 @@ AM_INIT_AUTOMAKE([1.10])
 LT_PREREQ([2.2])
 LT_INIT
 
+AM_MAINTAINER_MODE
+
 
 
 dnl ############# Library Version
@@ -36,17 +38,6 @@ dnl
 TWOLAME_SO_VERSION=0:0:0
 AC_SUBST(TWOLAME_SO_VERSION)
 
-
-
-
-dnl ############# Configure Arguments
-
-AC_ARG_ENABLE(debug,
-	  [  --enable-debug=[no/yes]   turn on debugging],
-	  [ Debugging="Enabled" 
-		AC_DEFINE(DEBUG, 1, [ Define if debugging is enabled. ]) ],
-	  [ Debugging="Disabled" ]
-)
 
 
 dnl ############# Compiler and tools Checks
@@ -131,8 +122,8 @@ AC_SUBST(TWOLAME_BIN)
 
 dnl ############## Compiler and Linker Flags
 
-# If debugging is enabled then make warnings errors
-if test "$Debugging" = "Enabled"; then
+# If maintainer mode is enabled then make warnings errors
+if test "$USE_MAINTAINER_MODE" = yes; then
 	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
 	CFLAGS="$CFLAGS -Wunused -Wmissing-prototypes -Wmissing-declarations"
 else

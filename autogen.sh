@@ -66,7 +66,7 @@ automake_args="--gnu --add-missing --force --copy -Wall"
 aclocal_args=
 autoconf_args=
 libtoolize_args="--force --copy --automake $ltdl_args"
-configure_args="--enable-debug"
+configure_args="--enable-maintainer-mode"
 
 
 # You should not need to edit below here
