@@ -11,6 +11,7 @@ libtwolame_la_SOURCES = \
 	availbits.h \
 	bitbuffer.c \
 	bitbuffer.h \
+	bitbuffer_inline.h \
 	common.h \
 	crc.c \
 	crc.h \

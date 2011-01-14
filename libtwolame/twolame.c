@@ -47,6 +47,8 @@
 #include "energy.h"
 #include "util.h"
 
+#include "bitbuffer_inline.h"
+
 
 /*
   twolame_init

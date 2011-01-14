@@ -28,27 +28,9 @@
 
 #ifdef _WIN32
 # include "../win32/configwin.h"
-/*
- * When building as a Win32 DLL, some functions are not allowed to be inlined,
- * otherwise the Microsoft Visual Studio 2005 linker will complain
- */
-# define NO_DLL_INLINE
 #else
 # include "config.h"
-/*
- * When building shared libraries, some functions can't be inlined otherwise
- * link errors will occur. In a new enough  GCC version they can be declared
- * extern inline. This fix appears earlier in Apple GCC than in main-line GCC
- */
-#if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))
-#define NO_DLL_INLINE extern inline
-#elif (__APPLE_CC__ >= 5465)
-#define NO_DLL_INLINE extern inline
-# else
-#  define NO_DLL_INLINE extern inline
-# endif
 #endif
-
 
 #include "twolame.h"
 

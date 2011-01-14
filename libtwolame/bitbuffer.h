@@ -42,9 +42,8 @@ typedef struct bit_stream_struc {
 bit_stream *buffer_init(unsigned char *buffer, int buffer_size);
 void buffer_deinit(bit_stream ** bs);
 
-NO_DLL_INLINE void buffer_put1bit(bit_stream *, int);
-NO_DLL_INLINE void buffer_putbits(bit_stream *, unsigned int, int);
-NO_DLL_INLINE unsigned long buffer_sstell(bit_stream *);
+/*return the current bit stream length (in bits)*/
+#define buffer_sstell(bs) (bs->totbit)
 
 #endif
 

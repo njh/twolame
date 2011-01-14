@@ -33,6 +33,8 @@
 #include "availbits.h"
 #include "encode.h"
 
+#include "bitbuffer_inline.h"
+
 
 static const FLOAT multiple[64] = {
     2.00000000000000, 1.58740105196820, 1.25992104989487,
