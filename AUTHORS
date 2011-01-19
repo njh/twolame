@@ -7,7 +7,7 @@ TwoLAME Authors
  -	New automake build system
  -	Added libsndfile support
  -  Reference documentation for API
- -	Lots of cleaning and improving !
+ -	Lots of cleaning and improving!
  -  New frontend
 
 
@@ -15,7 +15,7 @@ TwoLAME Authors
  -  Changes to make libtwolame thread-safe
 
 
-.'Mean' - <mean@users.sourceforge.net>
+.'Mean' - <mean at users.sourceforge.net>
  -  Fix for AMD64 processors
  -  Fix for CRC protection
 
