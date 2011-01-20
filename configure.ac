@@ -52,6 +52,12 @@ AC_C_BIGENDIAN
 AC_C_INLINE
 AC_C_CONST
 
+if test "$USE_MAINTAINER_MODE" = yes; then
+  AC_PATH_PROG([PATH_ASCIIDOC], [asciidoc])
+  AC_PATH_PROG([PATH_DOXYGEN], [doxygen])
+  AC_PATH_PROG([PATH_XMLTO], [xmlto])
+fi
+
 
 
 dnl ############## Check that types are the right size
@@ -141,6 +147,8 @@ AC_CONFIG_FILES([
 	Makefile \
 	twolame.pc \
 	doc/Makefile \
+	doc/html/Makefile \
+	doc/html/Doxyfile \
 	libtwolame/Makefile \
 	frontend/Makefile \
 	simplefrontend/Makefile \

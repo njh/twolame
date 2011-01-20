@@ -21,6 +21,7 @@ configure
 libtool
 Makefile
 Makefile.in
+Doxyfile
 stamp-h1
 twolame.pc
 
