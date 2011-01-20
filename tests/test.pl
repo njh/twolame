@@ -6,8 +6,8 @@ use strict;
 use Digest::MD5 qw(md5_hex);
 use Test::More tests => 77;
 
-my $TWOLAME_CMD = "../frontend/twolame";
-my $STWOLAME_CMD = "../simplefrontend/stwolame";
+my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
+my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
 die "Error: twolame command not found: $TWOLAME_CMD" unless (-e $TWOLAME_CMD);
 die "Error: stwolame command not found: $STWOLAME_CMD" unless (-e $STWOLAME_CMD);
 
@@ -94,8 +94,8 @@ my $encoding_parameters = [
 
 my $count = 1;
 foreach my $params (@$encoding_parameters) {
-  my $INPUT_FILENAME = $params->{input_filename};
-  (my $OUTPUT_FILENAME = $INPUT_FILENAME) =~ s/\.wav$/-$count.mp2/;
+  my $INPUT_FILENAME = input_filepath($params->{input_filename});
+  my $OUTPUT_FILENAME = "testcase-$count.mp2";
 
   die "Input file does not exist: $INPUT_FILENAME" unless (-e $INPUT_FILENAME);
   is(md5_file($INPUT_FILENAME), $params->{input_md5sum}, "[$count] MD5sum of $INPUT_FILENAME");
@@ -145,7 +145,8 @@ SKIP: {
   my $result = system("which sndfile-convert > /dev/null");
   skip("sndfile-convert is not available", 5) unless ($result == 0);
 
-  $result = system("sndfile-convert -pcm16 testcase-44100.wav testcase.raw");
+  my $INPUT_FILENAME = input_filepath('testcase-44100.wav');
+  $result = system("sndfile-convert -pcm16 $INPUT_FILENAME testcase.raw");
   is($result, 0, "sndfile-convert to raw response code");
 
   my $OUTPUT_FILENAME = 'testcase-stdin.mp2';
@@ -161,8 +162,9 @@ SKIP: {
 
 # Test encoding using the simplefrontend
 {
+  my $INPUT_FILENAME = input_filepath('testcase-44100.wav');
   my $OUTPUT_FILENAME = 'testcase-simple.mp2';
-  my $result = system("../simplefrontend/stwolame testcase-44100.wav $OUTPUT_FILENAME");
+  my $result = system("../simplefrontend/stwolame $INPUT_FILENAME $OUTPUT_FILENAME");
   is($result, 0, "converting using simplefrontend - response code");
 
   my $info = mpeg_audio_info($OUTPUT_FILENAME);
@@ -174,7 +176,14 @@ SKIP: {
 
 ## END OF TESTS ##
 
-
+sub input_filepath {
+  # Input test data files are in the same directory as the test script
+  my ($filename) = @_;
+  my $filepath = __FILE__;
+  $filepath =~ s/test.pl/$filename/;
+  warn "\$filepath = $filepath\n";
+  return $filepath;
+}
 
 sub filesize {
   return (stat(@_))[7];
