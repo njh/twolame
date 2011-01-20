@@ -11,11 +11,10 @@ pkghtmldir = $(pkgdocdir)/html
 doxygen_files = \
     doxygen.css \
     doxygen.png \
-    tab_b.gif \
-    tab_l.gif \
-    tab_r.gif \
+    nav_f.png \
+    nav_h.png \
     tabs.css \
-    twolame_8h-source.html \
+    twolame_8h_source.html \
     twolame_8h.html
 
 asciidoc_files = \
@@ -40,7 +39,7 @@ EXTRA_DIST = Doxyfile.in $(pkghtml_DATA)
 
 if MAINTAINER_MODE
 
-$(doxygen_files): $(top_srcdir)/libtwolame/twolame.h
+$(doxygen_files): Doxyfile $(top_srcdir)/libtwolame/twolame.h
 	@PATH_DOXYGEN@
 	rm -f index.html files.html globals*.html
 
