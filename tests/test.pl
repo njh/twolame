@@ -181,7 +181,6 @@ sub input_filepath {
   my ($filename) = @_;
   my $filepath = __FILE__;
   $filepath =~ s/test.pl/$filename/;
-  warn "\$filepath = $filepath\n";
   return $filepath;
 }
 
