@@ -30,6 +30,12 @@ pkgdoc_DATA = \
 EXTRA_DIST = \
 	$(man_MANS) \
 	$(pkgdoc_DATA) \
-	dist10-text/*.txt \
+	dist10-text/common.txt \
+	dist10-text/commonh.txt \
+	dist10-text/encode.txt \
+	dist10-text/encoderh.txt \
+	dist10-text/musicin.txt \
+	dist10-text/psy.txt \
+	dist10-text/tonal.txt \
 	index.txt \
 	twolame.1.txt
