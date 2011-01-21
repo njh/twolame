@@ -137,20 +137,20 @@ static int init_header_info(twolame_options * glopts)
     // Convert the sampling frequency to the required index
     header->samplerate_idx = twolame_get_samplerate_index(glopts->samplerate_out);
     if (header->samplerate_idx < 0) {
-        fprintf(stdout, "Not a valid samplerate: %i\n", glopts->samplerate_out);
+        fprintf(stderr, "Not a valid samplerate: %i\n", glopts->samplerate_out);
         return -1;
     }
     // Convert the bitrate to the an index 
     header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
     if (header->bitrate_index < 0) {
-        fprintf(stdout, "Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate,
+        fprintf(stderr, "Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate,
                 twolame_mpeg_version_name(glopts->version));
         return -1;
     }
     // Convert the max VBR bitrate to the an index 
     glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
     if (glopts->vbr_upper_index < 0) {
-        fprintf(stdout, "Not a valid max VBR bitrate for this version: %i\n",
+        fprintf(stderr, "Not a valid max VBR bitrate for this version: %i\n",
                 glopts->vbr_max_bitrate);
         return -1;
     }
@@ -196,7 +196,7 @@ int twolame_init_params(twolame_options * glopts)
         // Get the MPEG version for the chosen samplerate
         glopts->version = twolame_get_version_for_samplerate(glopts->samplerate_out);
         if (glopts->version < 0) {
-            fprintf(stdout, "twolame_init_params(): invalid samplerate: %i\n",
+            fprintf(stderr, "twolame_init_params(): invalid samplerate: %i\n",
                     glopts->samplerate_out);
             return -1;
         } else if (glopts->verbosity >= 3) {
@@ -598,7 +598,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         unsigned char *frame_ptr = bs->buf + (initial_bits >> 3);
         crc_writeheader(frame_ptr, glopts->num_crc_bits);
     }
-    // fprintf(stdout,"Frame size: %li\n\n",frameBits/8);
+    // fprintf(stderr,"Frame size: %li\n\n",frameBits/8);
 
     return frameBits / 8;
 }

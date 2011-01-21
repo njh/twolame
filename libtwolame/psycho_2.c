@@ -64,7 +64,7 @@ static void psycho_2_read_absthr(absthr, table)
 #include "psycho_2_absthr.h"
 
     if ((table < 0) || (table > 3)) {
-        printf("internal error: wrong table number");
+        fprintf(stderr, "internal error: wrong table number");
         return;
     }
 
@@ -238,14 +238,14 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
     }
 
     if (glopts->verbosity > 5) {
-        /* Dump All the Values to STDOUT and exit */
+        /* Dump All the Values to stderr and exit */
         int wlow, whigh = 0;
-        fprintf(stdout, "psy model 2 init\n");
-        fprintf(stdout, "index \tnlines \twlow \twhigh \tbval \tminval \ttmn\n");
+        fprintf(stderr, "psy model 2 init\n");
+        fprintf(stderr, "index \tnlines \twlow \twhigh \tbval \tminval \ttmn\n");
         for (i = 0; i < CBANDS; i++) {
             wlow = whigh + 1;
             whigh = wlow + numlines[i] - 1;
-            fprintf(stdout, "%i \t%i \t%i \t%i \t%5.2f \t%4.2f \t%4.2f\n", i + 1, numlines[i], wlow,
+            fprintf(stderr, "%i \t%i \t%i \t%i \t%5.2f \t%4.2f \t%4.2f\n", i + 1, numlines[i], wlow,
                     whigh, cbval[i], bmax[(int) (cbval[i] + 0.5)], tmn[i]);
         }
         exit(0);

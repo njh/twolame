@@ -491,12 +491,12 @@ static psycho_3_mem *psycho_3_init(twolame_options * glopts)
     }
 
     if (glopts->verbosity > 4) {
-        fprintf(stdout, "%i critical bands\n", cbands);
+        fprintf(stderr, "%i critical bands\n", cbands);
         for (i = 0; i < cbands; i++)
-            fprintf(stdout, "cband %i spectral line index %i\n", i, cbandindex[i]);
-        fprintf(stdout, "%i Subsampled spectral lines\n", SUBSIZE);
+            fprintf(stderr, "cband %i spectral line index %i\n", i, cbandindex[i]);
+        fprintf(stderr, "%i Subsampled spectral lines\n", SUBSIZE);
         for (i = 0; i < SUBSIZE; i++)
-            fprintf(stdout, "%i Spectral line %i Bark %.2f\n", i, freq_subset[i],
+            fprintf(stderr, "%i Spectral line %i Bark %.2f\n", i, freq_subset[i],
                     bark[freq_subset[i]]);
     }
 
@@ -507,19 +507,19 @@ static psycho_3_mem *psycho_3_init(twolame_options * glopts)
 static void psycho_3_dump(int *tonelabel, FLOAT * Xtm, int *noiselabel, FLOAT * Xnm)
 {
     int i;
-    fprintf(stdout, "3 Ton:");
+    fprintf(stderr, "3 Ton:");
     for (i = 1; i < HAN_SIZE; i++) {
         if (tonelabel[i] == TONE)
-            fprintf(stdout, "[%i] %3.0f ", i, Xtm[i]);
+            fprintf(stderr, "[%i] %3.0f ", i, Xtm[i]);
     }
-    fprintf(stdout, "\n");
+    fprintf(stderr, "\n");
 
-    fprintf(stdout, "3 Nos:");
+    fprintf(stderr, "3 Nos:");
     for (i = 1; i < HAN_SIZE; i++) {
         if (noiselabel[i] == NOISE)
-            fprintf(stdout, "[%i] %3.0f ", i, Xnm[i]);
+            fprintf(stderr, "[%i] %3.0f ", i, Xnm[i]);
     }
-    fprintf(stdout, "\n");
+    fprintf(stderr, "\n");
 }
 
 

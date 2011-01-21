@@ -35,7 +35,7 @@ static inline void buffer_put1bit(bit_stream * bs, int bit)
         bs->buf_byte_idx++;
         if (bs->buf_byte_idx >= bs->buf_size) {
             // empty_buffer (bs, minimum);
-            fprintf(stdout, "buffer_put1bit: error. bit_stream buffer needs to be bigger\n");
+            fprintf(stderr, "buffer_put1bit: error. bit_stream buffer needs to be bigger\n");
             exit(99);
         }
         bs->buf[bs->buf_byte_idx] = 0;
@@ -60,7 +60,7 @@ static inline void buffer_putbits(bit_stream * bs, unsigned int val, int N)
             bs->buf_byte_idx++;
             if (bs->buf_byte_idx >= bs->buf_size) {
                 // empty_buffer (bs, minimum);
-                fprintf(stdout, "buffer_putbits: error. bit_stream buffer needs to be bigger\n");
+                fprintf(stderr, "buffer_putbits: error. bit_stream buffer needs to be bigger\n");
                 exit(99);
             }
             bs->buf[bs->buf_byte_idx] = 0;

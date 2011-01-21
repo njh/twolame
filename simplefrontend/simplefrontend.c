@@ -61,13 +61,13 @@ int main(int argc, char **argv)
 
     /* Allocate some space for the PCM audio data */
     if ((pcmaudio = (short *) calloc(AUDIOBUFSIZE, sizeof(short))) == NULL) {
-        printf("pcmaudio alloc failed\n");
+        fprintf(stderr, "pcmaudio alloc failed\n");
         exit(99);
     }
 
     /* Allocate some space for the encoded MP2 audio data */
     if ((mp2buffer = (unsigned char *) calloc(MP2BUFSIZE, sizeof(unsigned char))) == NULL) {
-        printf("mp2buffer alloc failed\n");
+        fprintf(stderr, "mp2buffer alloc failed\n");
         exit(99);
     }
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
     /* Open the wave file */
     if ((wave_info = wave_init(inputfilename)) == NULL) {
-        printf("Not a recognised WAV file.\n");
+        fprintf(stderr, "Not a recognised WAV file.\n");
         exit(99);
     }
     // Use sound file to over-ride preferences for
@@ -103,13 +103,13 @@ int main(int argc, char **argv)
 
     /* initialise twolame with this set of options */
     if (twolame_init_params(encodeOptions) != 0) {
-        printf("Error: configuring libtwolame encoder failed.\n");
+        fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
         exit(99);
     }
 
     /* Open the output file for the encoded MP2 data */
     if ((outfile = fopen(outputfilename, "wb")) == 0) {
-        printf("error opening output file %s\n", outputfilename);
+        fprintf(stderr, "error opening output file %s\n", outputfilename);
         exit(99);
     }
     // Read num_samples of audio data *per channel* from the input file

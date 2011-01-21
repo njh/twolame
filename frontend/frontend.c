@@ -152,69 +152,69 @@ static void print_filenames(int verbosity)
 static void usage_long()
 {
 
-    fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
-    fprintf(stdout, "MPEG Audio Layer II (MP2) encoder\n");
-    fprintf(stdout, "Usage: \n");
+    fprintf(stderr, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
+    fprintf(stderr, "MPEG Audio Layer II (MP2) encoder\n");
+    fprintf(stderr, "Usage: \n");
 
-    fprintf(stdout, "\ttwolame [options] <infile> [outfile]\n");
-    fprintf(stdout, "\n");
-    fprintf(stdout, "Both input and output filenames can be set to - to use stdin/stdout.\n");
-    fprintf(stdout, "  <infile>       input sound file (any format supported by libsndfile)\n");
-    fprintf(stdout, "  <outfile>      output bit stream of encoded audio\n");
+    fprintf(stderr, "\ttwolame [options] <infile> [outfile]\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "Both input and output filenames can be set to - to use stdin/stdout.\n");
+    fprintf(stderr, "  <infile>       input sound file (any format supported by libsndfile)\n");
+    fprintf(stderr, "  <outfile>      output bit stream of encoded audio\n");
 
-    fprintf(stdout, "\nInput Options\n");
-    fprintf(stdout, "\t-r, --raw-input          input is raw signed PCM audio\n");
-    fprintf(stdout, "\t-x, --byte-swap          force byte-swapping of input\n");
-    fprintf(stdout, "\t-s, --samplerate srate   sampling frequency of raw input (Hz)\n");
-    fprintf(stdout,
+    fprintf(stderr, "\nInput Options\n");
+    fprintf(stderr, "\t-r, --raw-input          input is raw signed PCM audio\n");
+    fprintf(stderr, "\t-x, --byte-swap          force byte-swapping of input\n");
+    fprintf(stderr, "\t-s, --samplerate srate   sampling frequency of raw input (Hz)\n");
+    fprintf(stderr,
             "\t    --samplesize bits    size of raw input samples in bits (default 16-bit)\n");
-    fprintf(stdout, "\t-N, --channels nch       number of channels in raw input\n");
-    fprintf(stdout, "\t-g, --swap-channels      swap channels of input file\n");
-    fprintf(stdout, "\t    --scale value        scale input (multiply PCM data)\n");
-    fprintf(stdout, "\t    --scale-l value      scale channel 0 (left) input\n");
-    fprintf(stdout, "\t    --scale-r value      scale channel 1 (right) input\n");
+    fprintf(stderr, "\t-N, --channels nch       number of channels in raw input\n");
+    fprintf(stderr, "\t-g, --swap-channels      swap channels of input file\n");
+    fprintf(stderr, "\t    --scale value        scale input (multiply PCM data)\n");
+    fprintf(stderr, "\t    --scale-l value      scale channel 0 (left) input\n");
+    fprintf(stderr, "\t    --scale-r value      scale channel 1 (right) input\n");
 
 
-    fprintf(stdout, "\nOutput Options\n");
-    fprintf(stdout, "\t-m, --mode mode          (s)tereo, (j)oint, (d)ual, (m)ono or (a)uto\n");
-    fprintf(stdout,
+    fprintf(stderr, "\nOutput Options\n");
+    fprintf(stderr, "\t-m, --mode mode          (s)tereo, (j)oint, (d)ual, (m)ono or (a)uto\n");
+    fprintf(stderr,
             "\t-a, --downmix            downmix from stereo to mono file for mono encoding\n");
-    fprintf(stdout, "\t-b, --bitrate br         total bitrate in kbps (default 192 for 44.1kHz)\n");
-    fprintf(stdout, "\t-P, --psyc-mode psyc     psychoacoustic model -1 to 4 (default 3)\n");
-    fprintf(stdout, "\t-v, --vbr                enable VBR mode\n");
-    fprintf(stdout,
+    fprintf(stderr, "\t-b, --bitrate br         total bitrate in kbps (default 192 for 44.1kHz)\n");
+    fprintf(stderr, "\t-P, --psyc-mode psyc     psychoacoustic model -1 to 4 (default 3)\n");
+    fprintf(stderr, "\t-v, --vbr                enable VBR mode\n");
+    fprintf(stderr,
             "\t-V, --vbr-level lev      enable VBR and set VBR level -50 to 50 (default 5)\n");
-    fprintf(stdout, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
-    fprintf(stdout, "\t-l, --ath lev            ATH level (default 0.0)\n");
-    fprintf(stdout, "\t-q, --quick num          only calculate psy model every num frames\n");
-    fprintf(stdout, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
+    fprintf(stderr, "\t-B, --max-bitrate rate   set the upper bitrate when in VBR mode\n");
+    fprintf(stderr, "\t-l, --ath lev            ATH level (default 0.0)\n");
+    fprintf(stderr, "\t-q, --quick num          only calculate psy model every num frames\n");
+    fprintf(stderr, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
 
 
-    fprintf(stdout, "\nMiscellaneous Options\n");
-    fprintf(stdout, "\t-c, --copyright          mark as copyright\n");
-    fprintf(stdout, "\t    --non-copyright      mark as non-copyright (default)\n");
-    fprintf(stdout, "\t-o, --non-original       mark as non-original\n");
-    fprintf(stdout, "\t    --original           mark as original (default)\n");
-    fprintf(stdout, "\t-p, --protect            enable CRC error protection\n");
-    fprintf(stdout, "\t-d, --padding            force padding bit/frame on\n");
-    fprintf(stdout, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
-    fprintf(stdout, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
-    fprintf(stdout, "\t-E, --energy             turn on energy level extensions\n");
+    fprintf(stderr, "\nMiscellaneous Options\n");
+    fprintf(stderr, "\t-c, --copyright          mark as copyright\n");
+    fprintf(stderr, "\t    --non-copyright      mark as non-copyright (default)\n");
+    fprintf(stderr, "\t-o, --non-original       mark as non-original\n");
+    fprintf(stderr, "\t    --original           mark as original (default)\n");
+    fprintf(stderr, "\t-p, --protect            enable CRC error protection\n");
+    fprintf(stderr, "\t-d, --padding            force padding bit/frame on\n");
+    fprintf(stderr, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
+    fprintf(stderr, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
+    fprintf(stderr, "\t-E, --energy             turn on energy level extensions\n");
 
-    fprintf(stdout, "\nVerbosity Options\n");
-    fprintf(stdout, "\t-t, --talkativity num    talkativity 0-10 (default is 2)\n");
-    fprintf(stdout, "\t    --quiet              same as --talkativity=0\n");
-    fprintf(stdout, "\t    --brief              same as --talkativity=1\n");
-    fprintf(stdout, "\t    --verbose            same as --talkativity=4\n");
+    fprintf(stderr, "\nVerbosity Options\n");
+    fprintf(stderr, "\t-t, --talkativity num    talkativity 0-10 (default is 2)\n");
+    fprintf(stderr, "\t    --quiet              same as --talkativity=0\n");
+    fprintf(stderr, "\t    --brief              same as --talkativity=1\n");
+    fprintf(stderr, "\t    --verbose            same as --talkativity=4\n");
 
 
-    fprintf(stdout, "\n");
-    fprintf(stdout, "\nAllowable bitrates for 32, 44.1 and 48kHz sample input (MPEG-1)\n");
-    fprintf(stdout, "  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384\n");
-    fprintf(stdout, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input (MPEG-2)\n");
-    fprintf(stdout, "   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160\n");
+    fprintf(stderr, "\n");
+    fprintf(stderr, "\nAllowable bitrates for 32, 44.1 and 48kHz sample input (MPEG-1)\n");
+    fprintf(stderr, "  32,  48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384\n");
+    fprintf(stderr, "\nAllowable bitrates for 16, 22.05 and 24kHz sample input (MPEG-2)\n");
+    fprintf(stderr, "   8,  16,  24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160\n");
 
-    fprintf(stdout, "\n");
+    fprintf(stderr, "\n");
     exit(ERR_NO_ENCODE);
 }
 
@@ -227,7 +227,7 @@ static void usage_long()
 static void usage_short()
 {
     /* print a bit of info about the program */
-    fprintf(stdout, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
+    fprintf(stderr, "TwoLAME version %s (%s)\n", get_twolame_version(), get_twolame_url());
     fprintf(stderr, "MPEG Audio Layer II (MP2) encoder\n\n");
     fprintf(stderr, "Usage: twolame [options] <infile> [outfile]\n\n");
     fprintf(stderr, "Try \"twolame --help\" for more information.\n");
@@ -333,7 +333,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
 
     // Create a short options structure from the long one
     char *shortopts = build_shortopt_string(longopts);
-    // printf("shortopts: %s\n", shortopts);
+    // fprintf(stderr,"shortopts: %s\n", shortopts);
 
 
     // Input format defaults

@@ -50,7 +50,7 @@ int available_bits(twolame_options * glopts)
     slots.average = (1152.0 / ((FLOAT) glopts->samplerate_out / 1000.0))
         * ((FLOAT) glopts->bitrate / 8.0);
 
-    // fprintf(stdout,"availbits says: sampling freq is %i. version %i. bitrateindex %i slots
+    // fprintf(stderr,"availbits says: sampling freq is %i. version %i. bitrateindex %i slots
     // %f\n",header->sampling_frequency, header->version, header->bitrate_index, slots.average);
 
     slots.whole = (int) slots.average;

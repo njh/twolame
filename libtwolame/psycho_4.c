@@ -276,20 +276,20 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
 
 
     if (glopts->verbosity > 6) {
-        /* Dump All the Values to STDOUT */
+        /* Dump All the Values to STDERR */
         int wlow, whigh = 0;
         int ntot = 0;
-        fprintf(stdout, "psy model 4 init\n");
-        fprintf(stdout, "index \tnlines \twlow \twhigh \tbval \tminval \ttmn\n");
+        fprintf(stderr, "psy model 4 init\n");
+        fprintf(stderr, "index \tnlines \twlow \twhigh \tbval \tminval \ttmn\n");
         for (i = 0; i < CBANDS; i++)
             if (numlines[i] != 0) {
                 wlow = whigh + 1;
                 whigh = wlow + numlines[i] - 1;
-                fprintf(stdout, "%i \t%i \t%i \t%i \t%5.2f \t%4.2f \t%4.2f\n", i + 1, numlines[i],
+                fprintf(stderr, "%i \t%i \t%i \t%i \t%5.2f \t%4.2f \t%4.2f\n", i + 1, numlines[i],
                         wlow, whigh, cbval[i], minval[(int) cbval[i]], tmn[i]);
                 ntot += numlines[i];
             }
-        fprintf(stdout, "total lines %i\n", ntot);
+        fprintf(stderr, "total lines %i\n", ntot);
         exit(0);
     }
 
