@@ -290,7 +290,6 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
                 ntot += numlines[i];
             }
         fprintf(stderr, "total lines %i\n", ntot);
-        exit(0);
     }
 
     return (mem);

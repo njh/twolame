@@ -248,7 +248,6 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
             fprintf(stderr, "%i \t%i \t%i \t%i \t%5.2f \t%4.2f \t%4.2f\n", i + 1, numlines[i], wlow,
                     whigh, cbval[i], bmax[(int) (cbval[i] + 0.5)], tmn[i]);
         }
-        exit(0);
     }
 
     return (mem);

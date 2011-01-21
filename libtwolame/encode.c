@@ -175,7 +175,7 @@ static int get_js_bound(int m_ext)
 
     if (m_ext < 0 || m_ext > 3) {
         fprintf(stderr, "get_js_bound() bad modext (%d)\n", m_ext);
-        exit(1);
+        return -1;
     }
     return (jsb_table[m_ext]);
 }
