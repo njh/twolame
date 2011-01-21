@@ -1,4 +1,4 @@
-AM_CFLAGS = -I ../build/
+AM_CFLAGS = -I ../build/ $(WARNING_CFLAGS)
 
 lib_LTLIBRARIES = libtwolame.la
 include_HEADERS = twolame.h

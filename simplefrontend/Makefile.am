@@ -1,5 +1,5 @@
 
-AM_CFLAGS = -I$(top_srcdir)/libtwolame/
+AM_CFLAGS = -I$(top_srcdir)/libtwolame/ $(WARNING_CFLAGS)
 
 # This is just sample code - don't install it
 noinst_PROGRAMS = stwolame

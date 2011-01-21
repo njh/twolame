@@ -130,11 +130,9 @@ dnl ############## Compiler and Linker Flags
 
 # If maintainer mode is enabled then make warnings errors
 if test "$USE_MAINTAINER_MODE" = yes; then
-	CFLAGS="$CFLAGS -g -O0 -Wall -Werror -pedantic"
-	CFLAGS="$CFLAGS -Wunused -Wmissing-prototypes -Wmissing-declarations"
-else
-	# Optimize flag. 3 is about as high as you can sanely go with GCC3.2.
-	CFLAGS="$CFLAGS -O3"
+	WARNING_CFLAGS="-Wall -Werror -pedantic -Wunused"
+  WARNING_CFLAGS="$WARNING_CFLAGS -Wmissing-prototypes -Wmissing-declarations"
+	AC_SUBST(WARNING_CFLAGS)
 fi
 
 
