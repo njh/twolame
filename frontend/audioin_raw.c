@@ -84,7 +84,7 @@ audioin_t *open_audioin_raw(char *filename, SF_INFO * sfinfo, int samplesize)
 
 
     // Allocate memory for structure
-    audioin = malloc(sizeof(audioin_t));
+    audioin = (audioin_t *) malloc(sizeof(audioin_t));
     if (audioin == NULL) {
         fprintf(stderr, "Failed to allocate memory for audioin_t structure.\n");
         exit(ERR_MEM_ALLOC);
