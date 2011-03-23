@@ -99,7 +99,7 @@ static char *format_filesize_string(int filesize)
     static const int constKB = 1024;    // Kilobyte
     static const int constMB = 1024 * 1024; // Megabyte
     static const int constGB = 1024 * 1024 * 1024;  // Gigabyte
-    char *string = malloc(MAX_NAME_SIZE);
+    char *string = (char *) malloc(MAX_NAME_SIZE);
 
     if (filesize < constKB) {
         snprintf(string, MAX_NAME_SIZE, "%d bytes", filesize);
@@ -253,7 +253,7 @@ static char *build_shortopt_string(struct option *opts)
 
 
     // Allocate memory for the string
-    shortstr = malloc((count * 2) + 1);
+    shortstr = (char *) malloc((count * 2) + 1);
 
     // And loop through the options again
     for (n = 0; opts[n].val != 0; n++) {

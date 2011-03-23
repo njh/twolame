@@ -39,7 +39,7 @@ static char *format_duration_string(SF_INFO * sfinfo)
     char *string = NULL;
     int minutes = 0;
     
-    string = malloc(MAX_NAME_SIZE);
+    string = (char *) malloc(MAX_NAME_SIZE);
     if (!string) {
         return NULL;
     }
@@ -133,7 +133,7 @@ audioin_t *open_audioin_sndfile(char *filename, SF_INFO * sfinfo)
     audioin_t *audioin = NULL;
 
     // Allocate memory for structure
-    audioin = malloc(sizeof(audioin_t));
+    audioin = (audioin_t *) malloc(sizeof(audioin_t));
     if (audioin == NULL) {
         fprintf(stderr, "Failed to allocate memory for audioin_t structure.\n");
         exit(ERR_MEM_ALLOC);
