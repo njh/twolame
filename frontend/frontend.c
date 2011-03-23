@@ -555,7 +555,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
 
 static FILE *open_output_file(char *filename)
 {
-    FILE *file;
+    FILE *file = NULL;
 
 
     // Do they want STDOUT ?
@@ -736,8 +736,8 @@ int main(int argc, char **argv)
     // 
     mp2fill_size = twolame_encode_flush(encopts, mp2buffer, MP2_BUF_SIZE);
     if (mp2fill_size > 0) {
-        frame_count++;
         int bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);
+        frame_count++;
         if (bytes_out <= 0) {
             perror("error while writing to output file");
             exit(ERR_WRITING_OUTPUT);
