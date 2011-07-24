@@ -510,7 +510,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         }
     }
 
-
+    free(shortopts);
 
     // Look for the input and output file names
     argc -= optind;
