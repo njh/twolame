@@ -532,9 +532,9 @@ void psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2
     FLOAT sample[BLKSIZE];
 
     FLOAT energy[BLKSIZE];
-    FLOAT power[HBLKSIZE];
+    FLOAT power[HBLKSIZE] = {0};
     FLOAT Xtm[HBLKSIZE], Xnm[HBLKSIZE];
-    int tonelabel[HBLKSIZE], noiselabel[HBLKSIZE];
+    int tonelabel[HBLKSIZE], noiselabel[HBLKSIZE] = {0};
     FLOAT LTg[HBLKSIZE];
     FLOAT Lsb[SBLIMIT];
 
