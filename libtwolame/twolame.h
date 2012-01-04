@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef __TWOLAME_H__
-#define __TWOLAME_H__
+#ifndef TWOLAME_H
+#define TWOLAME_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -919,5 +919,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
-#endif                          /* _TWOLAME_H_ */
+#endif                          /* TWOLAME_H */
 // vim:ts=4:sw=4:nowrap:

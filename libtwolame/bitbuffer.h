@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef _BITBUFFER_H_
-#define _BITBUFFER_H_
+#ifndef TWOLAME_BITBUFFER_H
+#define TWOLAME_BITBUFFER_H
 
 #include "common.h"
 

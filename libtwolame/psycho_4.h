@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef	_PSYCHO_4_H_
-#define	_PSYCHO_4_H_
+#ifndef TWOLAME_PSYCHO_4_H
+#define TWOLAME_PSYCHO_4_H
 
 void psycho_4(twolame_options * glopts, short int buffer[2][1152], short int savebuf[2][1056],
               FLOAT smr[2][32]);

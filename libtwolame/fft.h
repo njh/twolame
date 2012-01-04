@@ -23,8 +23,8 @@
  */
 
 
-#ifndef	_FFT_H_
-#define	_FFT_H_
+#ifndef TWOLAME_FFT_H
+#define TWOLAME_FFT_H
 
 //void fft (FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], FLOAT[BLKSIZE], int);
 

@@ -23,8 +23,8 @@
  */
 
 
-#ifndef _ABSTHR_H_
-#define _ABSTHR_H_
+#ifndef TWOLAME_ABSTHR_H
+#define TWOLAME_ABSTHR_H
 
 static const FLOAT absthr_table[4][HBLKSIZE] = {
     {

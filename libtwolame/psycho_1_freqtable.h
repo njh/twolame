@@ -23,8 +23,8 @@
  */
 
 
-#ifndef _FREQTABLE_H
-#define _FREQTABLE_H
+#ifndef TWOLAME_FREQTABLE_H
+#define TWOLAME_FREQTABLE_H
 
 typedef struct {
     int line;

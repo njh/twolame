@@ -23,8 +23,8 @@
  */
 
 
-#ifndef	_ENCODE_H_
-#define	_ENCODE_H_
+#ifndef TWOLAME_ENCODE_H
+#define TWOLAME_ENCODE_H
 
 int encode_init(twolame_options * glopts);
 

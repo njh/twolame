@@ -23,8 +23,8 @@
  */
 
 
-#ifndef _CRITBAND_H_
-#define _CRITBAND_H_
+#ifndef TWOLAME_CRITBAND_H
+#define TWOLAME_CRITBAND_H
 
 static const int SecondCriticalBand[7][28] = {
     {

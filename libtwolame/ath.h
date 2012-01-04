@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef	_ATH_H_
-#define	_ATH_H_
+#ifndef TWOLAME_ATH_H
+#define TWOLAME_ATH_H
 
 FLOAT ath_db(FLOAT f, FLOAT value);
 FLOAT ath_energy(FLOAT f, FLOAT value);

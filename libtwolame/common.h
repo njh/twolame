@@ -23,8 +23,8 @@
  */
 
 
-#ifndef _COMMON_H
-#define _COMMON_H
+#ifndef TWOLAME_COMMON_H
+#define TWOLAME_COMMON_H
 
 #ifdef _WIN32
 # include "../win32/configwin.h"
@@ -369,7 +369,7 @@ struct twolame_options_struct {
     int vbrstats[15];
 };
 
-#endif                          // _COMMON_H
+#endif                          // TWOLAME_COMMON_H
 
 
 // vim:ts=4:sw=4:nowrap: 

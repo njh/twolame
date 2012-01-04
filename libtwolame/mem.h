@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef _MEM_H
-#define _MEM_H
+#ifndef TWOLAME_MEM_H
+#define TWOLAME_MEM_H
 
 
 #include "common.h"

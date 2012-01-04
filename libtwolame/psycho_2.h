@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef	_PSYCHO_2_H_
-#define	_PSYCHO_2_H_
+#ifndef TWOLAME_PSYCHO_2_H
+#define TWOLAME_PSYCHO_2_H
 
 psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq);
 void psycho_2(twolame_options * glopts, short int buffer[2][1152], short int savebuf[2][1056],

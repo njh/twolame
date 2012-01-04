@@ -23,8 +23,8 @@
  */
 
 
-#ifndef	_DAB_H_
-#define	_DAB_H_
+#ifndef TWOLAME_DAB_H
+#define TWOLAME_DAB_H
 
 void dab_crc_calc(twolame_options * glopts,
                   unsigned int bit_alloc[2][SBLIMIT],

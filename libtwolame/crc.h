@@ -22,8 +22,8 @@
  *
  */
 
-#ifndef	_CRC_H_
-#define	_CRC_H_
+#ifndef TWOLAME_CRC_H
+#define TWOLAME_CRC_H
 
 void crc_writeheader(unsigned char *bitstream, int bit_count);
 
