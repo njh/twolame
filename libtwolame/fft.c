@@ -777,7 +777,7 @@ void psycho_2_fft(FLOAT * x_real, FLOAT * energy, FLOAT * phi)
 
     if (!init) {
         atan_table_init();
-        init++;
+        init=1;
     }
 #endif
 

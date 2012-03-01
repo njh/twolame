@@ -82,7 +82,7 @@ static void psycho_3_fft(FLOAT sample[BLKSIZE], FLOAT energy[BLKSIZE])
         for (i = 0; i < BLKSIZE; i++) {
             window[i] = sqrt_8_over_3 * 0.5 * (1 - cos(2.0 * PI * i / (BLKSIZE))) / BLKSIZE;
         }
-        init++;
+        init=1;
     }
 
     /* convolve the samples with the hann window */
