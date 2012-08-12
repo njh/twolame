@@ -10,9 +10,7 @@ AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build-scripts)
 AC_CONFIG_MACRO_DIR(build-scripts)
 AM_INIT_AUTOMAKE([1.10])
-
 LT_PREREQ([2.2])
-LT_INIT
 
 AM_MAINTAINER_MODE
 
@@ -42,6 +40,7 @@ AC_SUBST(TWOLAME_SO_VERSION)
 
 dnl ############# Compiler and tools Checks
 
+AM_PROG_AR
 AC_PROG_CC
 AC_PROG_CC_C99
 AC_PROG_INSTALL
@@ -51,6 +50,8 @@ AC_PROG_LIBTOOL
 AC_C_BIGENDIAN
 AC_C_INLINE
 AC_C_CONST
+
+LT_INIT
 
 if test "$USE_MAINTAINER_MODE" = yes; then
   AC_PATH_PROG([PATH_ASCIIDOC], [asciidoc])
@@ -139,7 +140,7 @@ fi
 
 dnl ############## Output files
 
-AC_CONFIG_HEADERS([libtwolame/config.h])
+AM_CONFIG_HEADER([libtwolame/config.h])
 
 AC_CONFIG_FILES([
 	Makefile \
