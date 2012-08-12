@@ -184,9 +184,8 @@ static int get_js_bound(int m_ext)
 int encode_init(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
-    int bsp, br_per_ch, sfrq;
+    int br_per_ch, sfrq;
 
-    bsp = header->bitrate_index;
     br_per_ch = glopts->bitrate / glopts->num_channels_out;
     sfrq = (int) (glopts->samplerate_out / 1000.0);
 
@@ -893,9 +892,9 @@ void main_bit_allocation(twolame_options * glopts,
                          unsigned int bit_alloc[2][SBLIMIT], int *adb)
 {
     frame_header *header = &glopts->header;
-    int noisy_sbs;
+    //int noisy_sbs;            /* Not used NJH Aug 2012 */
     int mode = glopts->mode;
-    int mode_ext, lay;
+    int mode_ext;
     int rq_db;                  /* av_db = *adb; Not Used MFC Nov 99 */
     int guessindex = 0;
 
@@ -907,7 +906,6 @@ void main_bit_allocation(twolame_options * glopts,
         if ((rq_db = bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc)) > *adb) {
             header->mode = TWOLAME_JOINT_STEREO;
             mode_ext = 4;       /* 3 is least severe reduction */
-            lay = header->lay;
             do {
                 --mode_ext;
                 glopts->jsbound = get_js_bound(mode_ext);
@@ -921,7 +919,7 @@ void main_bit_allocation(twolame_options * glopts,
     /* decide on which bit allocation method to use */
     if (glopts->vbr == FALSE) {
         /* Just do the old bit allocation method */
-        noisy_sbs = a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        //noisy_sbs = a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     } else {
         /* do the VBR bit allocation method */
         header->bitrate_index = glopts->lower_index;
@@ -976,7 +974,7 @@ void main_bit_allocation(twolame_options * glopts,
 
         }
 
-        noisy_sbs = vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        //noisy_sbs = vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     }
 }
 
