@@ -164,7 +164,7 @@ SKIP: {
 {
   my $INPUT_FILENAME = input_filepath('testcase-44100.wav');
   my $OUTPUT_FILENAME = 'testcase-simple.mp2';
-  my $result = system("../simplefrontend/stwolame $INPUT_FILENAME $OUTPUT_FILENAME");
+  my $result = system("$STWOLAME_CMD $INPUT_FILENAME $OUTPUT_FILENAME");
   is($result, 0, "converting using simplefrontend - response code");
 
   my $info = mpeg_audio_info($OUTPUT_FILENAME);
