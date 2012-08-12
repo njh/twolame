@@ -26,6 +26,7 @@ stamp-h1
 twolame.pc
 
 doc/html/*.html
+doc/html/*.js
 doc/html/*.png
 doc/twolame.1
 doc/twolame.1.xml
