@@ -111,9 +111,7 @@ int wave_get_samples(wave_info_t * wave_info, short int pcm[], int numSamples)
 wave_info_t *wave_init(char *inPath)
 {
     unsigned char wave_header_buffer[40];   // HH fixed
-    int wave_header_read = 0;
     int wave_header_stereo = -1;
-    int wave_header_16bit = -1;
     unsigned long samplerate;
     enum byte_order NativeByteOrder = order_unknown;
 
@@ -158,7 +156,9 @@ wave_info_t *wave_init(char *inPath)
         }
 
         if (NativeByteOrder == order_littleEndian) {
-            samplerate = *(unsigned long *) (&wave_header_buffer[24]);
+            samplerate = wave_header_buffer[24] +
+                (wave_header_buffer[25] << 8) +
+                (wave_header_buffer[26] << 16) + (wave_header_buffer[27] << 24);
         } else {
             samplerate = wave_header_buffer[27] +
                 (wave_header_buffer[26] << 8) +
@@ -166,22 +166,21 @@ wave_info_t *wave_init(char *inPath)
         }
 
         /* Wave File */
-        wave_header_read = 1;
         switch (samplerate) {
-        case 44100:
-        case 48000:
-        case 32000:
-        case 24000:
-        case 22050:
-        case 16000:
-            printf(">>> %ld Hz sampling freq selected\n", samplerate);
-            break;
-        default:
-            /* Unknown Unsupported Frequency */
-            printf(">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
-            printf(">>> Default 44.1 kHz samp freq selected\n");
-            samplerate = 44100;
-            break;
+            case 44100:
+            case 48000:
+            case 32000:
+            case 24000:
+            case 22050:
+            case 16000:
+                printf(">>> %ld Hz sampling freq selected\n", samplerate);
+                break;
+            default:
+                /* Unknown Unsupported Frequency */
+                printf(">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
+                printf(">>> Default 44.1 kHz samp freq selected\n");
+                samplerate = 44100;
+                break;
         }
 
         if ((long) wave_header_buffer[22] == 1) {
@@ -194,7 +193,6 @@ wave_info_t *wave_init(char *inPath)
         }
         if ((long) wave_header_buffer[32] == 1) {
             printf(">>> Input Wave File is 8 Bit\n");
-            wave_header_16bit = 0;
             printf("Input File must be 16 Bit! Please Re-sample");
             fclose(file);
             return (NULL);
@@ -202,18 +200,10 @@ wave_info_t *wave_init(char *inPath)
         if ((long) wave_header_buffer[32] == 2) {
             if (wave_header_stereo == 1) {
                 printf(">>> Input Wave File is 8 Bit\n");
-                wave_header_16bit = 0;
                 printf("Input File must be 16 Bit! Please Re-sample");
                 fclose(file);
                 return (NULL);
-            } else {
-                /* printf(">>> Input Wave File is 16 Bit\n" ); */
-                wave_header_16bit = 1;
             }
-        }
-        if ((long) wave_header_buffer[32] == 4) {
-            /* printf(">>> Input Wave File is 16 Bit\n" ); */
-            wave_header_16bit = 1;
         }
 
         /* should probably use the wave header to determine size here FIXME MFC Feb 2003 */

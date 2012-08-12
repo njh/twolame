@@ -316,7 +316,6 @@ void psycho_4(twolame_options * glopts,
     int *partition;
     FLOAT *tmn;
     FCB *s;
-    FHBLK *lthr;
     F2HBLK *r, *phi_sav;
 
     int nch = glopts->num_channels_out;
@@ -352,7 +351,6 @@ void psycho_4(twolame_options * glopts,
         partition = mem->partition;
         tmn = mem->tmn;
         s = mem->s;
-        lthr = mem->lthr;
         r = mem->r;
         phi_sav = mem->phi_sav;
     }

@@ -892,7 +892,6 @@ void main_bit_allocation(twolame_options * glopts,
                          unsigned int bit_alloc[2][SBLIMIT], int *adb)
 {
     frame_header *header = &glopts->header;
-    //int noisy_sbs;            /* Not used NJH Aug 2012 */
     int mode = glopts->mode;
     int mode_ext;
     int rq_db;                  /* av_db = *adb; Not Used MFC Nov 99 */
@@ -919,7 +918,7 @@ void main_bit_allocation(twolame_options * glopts,
     /* decide on which bit allocation method to use */
     if (glopts->vbr == FALSE) {
         /* Just do the old bit allocation method */
-        //noisy_sbs = a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     } else {
         /* do the VBR bit allocation method */
         header->bitrate_index = glopts->lower_index;
@@ -974,7 +973,7 @@ void main_bit_allocation(twolame_options * glopts,
 
         }
 
-        //noisy_sbs = vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     }
 }
 

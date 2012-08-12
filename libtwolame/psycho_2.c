@@ -82,7 +82,6 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
     psycho_2_mem *mem;
     FLOAT *cbval, *rnorm;
     FLOAT *window;
-    FLOAT *ath;
     int *numlines;
     int *partition;
     FCB *s;
@@ -120,7 +119,6 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
         cbval = mem->cbval;
         rnorm = mem->rnorm;
         window = mem->window;
-        ath = mem->ath;
         numlines = mem->numlines;
         partition = mem->partition;
         s = mem->s;
@@ -266,7 +264,7 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
     FLOAT *nb, *cb, *ecb, *bc;
     FLOAT *cbval, *rnorm;
     FLOAT *wsamp_r, *phi, *energy, *window;
-    FLOAT *ath, *thr, *c;
+    FLOAT *c;
     FLOAT *fthr;
 
     FLOAT *snrtmp[2];
@@ -299,8 +297,6 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
         phi = mem->phi;
         energy = mem->energy;
         window = mem->window;
-        ath = mem->ath;
-        thr = mem->thr;
         c = mem->c;
 
         snrtmp[0] = mem->snrtmp[0];
