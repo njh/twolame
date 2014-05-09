@@ -416,13 +416,14 @@ const char *twolame_get_version_name(twolame_options * glopts)
 
 
 
-/* WARNING: DAB support is currently broken */
-
+/* Jörgen Scott 09May 2014. Added some utility methods to make DAB support easier.
+- twolame_set_DAB_scf_crc_length
+- twolame_set_DAB_scf_crc
+Supporting DAB requires the front-end to buffer at least two mp2 frames.
+However given this handling, DAB seems to work just fine. So I removed the previous warning message.
+*/
 int twolame_set_DAB(twolame_options * glopts, int dab)
 {
-
-    fprintf(stderr, "Warning: DAB support is currently broken in this version of TwoLAME.\n");
-
     if (dab)
         glopts->do_dab = TRUE;
     else
@@ -457,9 +458,53 @@ int twolame_set_DAB_crc_length(twolame_options * glopts, int length)
     return (0);
 }
 
+int twolame_set_DAB_scf_crc_length(twolame_options * glopts)
+{
+    if (glopts->version == TWOLAME_MPEG2) {
+        glopts->dab_crc_len = 4;
+    }
+    else if (glopts->mode == TWOLAME_MONO) {
+        if (glopts->bitrate >= 56)
+            glopts->dab_crc_len = 4;
+        else
+            glopts->dab_crc_len = 2;
+    }
+    else if (glopts->bitrate >= 112)
+        glopts->dab_crc_len = 4;
+    else
+        glopts->dab_crc_len = 2;
+    return (0);
+}
+
 int twolame_get_DAB_crc_length(twolame_options * glopts)
 {
     return (glopts->dab_crc_len);
+}
+
+int twolame_set_DAB_scf_crc(twolame_options * glopts,
+                             unsigned char *mp2buffer,
+                             int mp2buffer_size)
+{
+    /* ScF-CRC field precedes two bytes of F-PAD */
+    unsigned char *pTo = &mp2buffer[mp2buffer_size  - 3];
+
+    if (glopts->dab_crc_len == 4)
+    {
+        *pTo-- = glopts->dab_crc[0];
+        *pTo-- = glopts->dab_crc[1];
+        *pTo-- = glopts->dab_crc[2];;
+        *pTo-- = glopts->dab_crc[3];
+    }
+    else if (glopts->dab_crc_len == 2)
+    {
+        *pTo-- = glopts->dab_crc[0];
+        *pTo-- = glopts->dab_crc[1];
+    }
+    else
+    {
+        fprintf(stderr, "Invalid size of DAB scf-crc field\n");
+        return (-1);
+    }
 }
 
 
