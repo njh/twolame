@@ -850,7 +850,6 @@ extern "C" {
 
 
 
-/* WARNING: DAB support is currently broken */
 
 
 
