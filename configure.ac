@@ -82,17 +82,22 @@ AC_CHECK_LIB([m], [sqrt])
 AC_CHECK_LIB([m], [lrintf])
 AC_CHECK_LIB([mx], [powf])
 
-PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
-	[ HAVE_SNDFILE="yes" ],
-	[ AC_CHECK_LIB( [sndfile], [sf_command],
-		[ AC_CHECK_HEADER( [sndfile.h],
-			[ HAVE_SNDFILE="yes"
-			  SNDFILE_CFLAGS="" 
-			  SNDFILE_LIBS="-lsndfile" ],
-			[ AC_MSG_WARN([Can't find sndfile.h on your system]) ] ) ],
-		[ AC_MSG_WARN([Can't find libsndfile library on your system]) ]
-	) ]
-)
+AC_ARG_ENABLE(sndfile,
+	[  --enable-sndfile            libsndfile support (default: enabled)])
+
+if test "${enable_sndfile}" != "no" ; then
+	PKG_CHECK_MODULES(SNDFILE, sndfile >= 1.0.0,
+		[ HAVE_SNDFILE="yes" ],
+		[ AC_CHECK_LIB( [sndfile], [sf_command],
+			[ AC_CHECK_HEADER( [sndfile.h],
+				[ HAVE_SNDFILE="yes"
+				  SNDFILE_CFLAGS="" 
+				  SNDFILE_LIBS="-lsndfile" ],
+				[ AC_MSG_WARN([Can't find sndfile.h on your system]) ] ) ],
+			[ AC_MSG_WARN([Can't find libsndfile library on your system]) ]
+		) ]
+	)
+fi
 			
 AC_SUBST(SNDFILE_CFLAGS)
 AC_SUBST(SNDFILE_LIBS)
