@@ -460,17 +460,9 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     adb -= glopts->num_ancillary_bits;
 
 
-    /* MFC 26 July 2003 Doing DAB became a bit harder in the reorganisation of the code. Now there
-       is no guarantee that there is more than one frame in the bitbuffer. But DAB requires that
-       the CRC for the *current* frame be written at the end of the *previous* frame. Workaround:
-       Users (Nicholas?) wanting to implement DAB will have to do some work in the frontend. First: 
-       Reserve some bits for yourself (options->num_ancillary_bits) Second: Put the encoder into
-       "single frame mode" i.e. only read 1152 samples per channel.
-       (frontendoptions->singleFrameMode) Third: When you receive each mp2 frame back from the
-       library, you'll have to insert the options->dabCrc[i] values into the end of the frame
-       yourself. (DAB crc calc is done below) The frontend will have to keep the previous frame in
-       memory. As of 26July all that needs to be done is for the frontend to buffer one frame in
-       memory, such that the CRC for the next frame can be written in at the end of it. */
+    /* The DAB scf-crc calc is done below. The frontend will have to keep the previous frame in
+       memory. As of 09May 2014 all that needs to be done is for the frontend to buffer one frame in
+       memory and call twolame_set_DAB_scf_crc */
 
     {
         int gr, bl, ch;

@@ -850,7 +850,6 @@ extern "C" {
 
 
 
-/* WARNING: DAB support is currently broken */
 
 
 
@@ -896,6 +895,7 @@ extern "C" {
 
 
 /** Set the CRC error protection length for DAB.
+ * Note: Alternative method is: twolame_set_DAB_scf_crc_length.
  *
  *	Default: 2
  *
@@ -907,6 +907,15 @@ extern "C" {
     DLL_EXPORT int twolame_set_DAB_crc_length(twolame_options * glopts, int length);
 
 
+/** Method that calculates and sets the length of the ScF-CRC field.
+ * The method must be called after initialization of bitrate, mpeg version
+ * and mpeg mode. If these conditions are met, the method can be used instead
+ * of twolame_set_DAB_crc_length.
+ *
+ *	\param glopts	pointer to twolame options pointer
+ */
+    DLL_EXPORT int twolame_set_DAB_scf_crc_length(twolame_options * glopts);
+
 /** Get the CRC error protection length for DAB.
  *
  *	\param glopts	pointer to twolame options pointer
@@ -914,6 +923,27 @@ extern "C" {
  */
     DLL_EXPORT int twolame_get_DAB_crc_length(twolame_options * glopts);
 
+
+/** Set the DAB ScF-CRC error protection.
+ * The front-end is responsible for holding at least two mp2 frames in memory
+ * to invoke this method.
+ * For DAB to work properly follow these steps:
+ * First: 
+ * Reserve enough bits in ancillary data field (options->num_ancillary_bits).
+ * Second: 
+ * Put the encoder into "single frame mode" i.e. only read 1152 samples per channel.
+ * Third: 
+ * When you receive an mp2 frame back from the library, call this method to insert the 
+ * options->dabCrc[i] values to the previous mp2 frame.
+ *
+ *	\param glopts	pointer to twolame options pointer for the (N) encoded frame
+ *	\param mp2buffer	buffer to the (N-1) encoded frame
+ *	\return					0 if successful, 
+ *							non-zero on failure
+ */
+    DLL_EXPORT int twolame_set_DAB_scf_crc(twolame_options * glopts,
+											 unsigned char *mp2buffer,
+											 int mp2buffer_size);
 
 
 #ifdef __cplusplus
