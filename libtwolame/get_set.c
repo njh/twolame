@@ -505,6 +505,7 @@ int twolame_set_DAB_scf_crc(twolame_options * glopts,
         fprintf(stderr, "Invalid size of DAB scf-crc field\n");
         return (-1);
     }
+    return (0);
 }
 
 
