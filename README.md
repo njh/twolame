@@ -6,19 +6,19 @@ Based on tooLAME by Michael Cheng
 All changes to the ISO source are licensed under the LGPL  
 (see COPYING for details)
 
-  TwoLAME is free software; you can redistribute it and/or
-  modify it under the terms of the GNU Lesser General Public
-  License as published by the Free Software Foundation; either
-  version 2.1 of the License, or (at your option) any later version.
+    TwoLAME is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
 
-  TwoLAME is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  Lesser General Public License for more details.
+    TwoLAME is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
 
-  You should have received a copy of the GNU Lesser General Public
-  License along with TwoLAME; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+    You should have received a copy of the GNU Lesser General Public
+    License along with TwoLAME; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 
 INTRODUCTION
@@ -27,10 +27,10 @@ INTRODUCTION
 TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder. 
 It is based heavily on:
 
-- tooLAME by Michael Cheng
-- the ISO dist10 code 
-- improvement to algorithms as part of the LAME project (lame.sf.net)
-- other contributors (see AUTHORS)
+* tooLAME by Michael Cheng
+* the ISO dist10 code 
+* improvement to algorithms as part of the LAME project (lame.sf.net)
+* other contributors (see AUTHORS)
 
 TwoLAME should be able to be used as a drop-in replacement for 
 LAME (a MPEG Layer 3 encoder). The frontend takes very similar 
