@@ -11,6 +11,9 @@ INDENT = indent -npro -kr -nsob -fca -blf -ip1 -hnl -l100 -lc100 -nut -ts4 -v
 indent:
 	find $(top_srcdir) -type f -name "*.[ch]" -print -exec $(INDENT) {} ';'
 
+README: README.md
+	cp $< $@
+
 EXTRA_DIST = \
 	autogen.sh \
 	twolame.pc.in \
