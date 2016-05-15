@@ -46,7 +46,7 @@ $(doxygen_files): Doxyfile $(top_srcdir)/libtwolame/twolame.h
 index.html: $(top_srcdir)/doc/index.txt
 	$(asciidoc) -o $@ $<
 
-readme.html: $(top_srcdir)/README
+readme.html: $(top_srcdir)/README.md
 	$(asciidoc) -o $@ $<
 
 authors.html: $(top_srcdir)/AUTHORS
