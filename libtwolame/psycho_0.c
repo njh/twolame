@@ -33,7 +33,7 @@
 #include "psycho_0.h"
 
 /* MFC Mar 03
-   It's almost obscene how well this psycho model works for the amount of 
+   It's almost obscene how well this psycho model works for the amount of
    computational effort that's put in.
 
    I got the idea from:
@@ -44,9 +44,9 @@
    All this model does is look at the lowest ATH value within the subband, and then looks
    at the scalefactors. It combines the two in a real dodgy way to get the SMRs.
 
-   Although the output values aren't really close to any of the other psycho models, 
+   Although the output values aren't really close to any of the other psycho models,
    the spread of values and the relative sizes of the values for the different subbands
-   is about right 
+   is about right
 
    Feel free to make any sort of generic change you want. Add or subtract numbers, take
    logs, whatever. Fiddle with the numbers until we get a good SMR output */
@@ -110,7 +110,7 @@ void psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scal
                 if (minscaleindex[ch][sb] > scalar[ch][gr][sb])
                     minscaleindex[ch][sb] = scalar[ch][gr][sb];
 
-    /* Oh yeah. Fudge the hell out of the SMR calculations by combining the scalefactor table index 
+    /* Oh yeah. Fudge the hell out of the SMR calculations by combining the scalefactor table index
        and the min ATH in that subband There are probably more elegant/correct ways of combining
        these values, but who cares? It works pretty well MFC Mar 03 */
     for (ch = 0; ch < nch; ch++)
@@ -130,4 +130,4 @@ void psycho_0_deinit(psycho_0_mem ** mem)
 
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

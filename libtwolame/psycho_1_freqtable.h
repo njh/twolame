@@ -1737,4 +1737,4 @@ static const MaskingThreshold SecondFreqSubband[7][132] = {
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

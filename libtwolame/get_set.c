@@ -509,4 +509,4 @@ int twolame_set_DAB_scf_crc(twolame_options * glopts,
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

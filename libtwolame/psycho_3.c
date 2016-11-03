@@ -35,9 +35,9 @@
 #include "psycho_3.h"
 
 /* This is a reimplementation of psy model 1 using the ISO11172 standard.
-   I found the original dist10 code (which is full of pointers) to be 
+   I found the original dist10 code (which is full of pointers) to be
    a horrible thing to try and understand and debug.
-   This implementation is not built for speed, but is rather meant to 
+   This implementation is not built for speed, but is rather meant to
    clearly outline the steps specified by the standard (still, it's only
    a tiny fraction slower than the dist10 code, and nothing has been optimized)
    MFC Feb 2003 */
@@ -131,7 +131,7 @@ static void psycho_3_spl(FLOAT * Lsb, FLOAT * power, FLOAT * scale)
 }
 
 
-/* Sect D.1 Step4b 
+/* Sect D.1 Step4b
    A tone within the range (start -> end), must be 7.0 dB greater than
    all it's neighbours within +/- srange. Don't count its immediate neighbours. */
 static void psycho_3_tonal_label_range(psycho_3_mem * mem, FLOAT * power, int *tonelabel,
@@ -153,7 +153,7 @@ static void psycho_3_tonal_label_range(psycho_3_mem * mem, FLOAT * power, int *t
                 FLOAT temp = psycho_3_add_db(mem, power[k - 1], power[k]);
                 Xtm[k] = psycho_3_add_db(mem, temp, power[k + 1]);
 
-                /* *ALL* spectral lines within +/- srange are set to -inf dB So that when we do the 
+                /* *ALL* spectral lines within +/- srange are set to -inf dB So that when we do the
                    noise calculate, they are not counted */
                 for (j = -srange; j <= +srange; j++)
                     power[k + j] = DBMIN;
@@ -176,7 +176,7 @@ static void psycho_3_tonal_label(psycho_3_mem * mem, FLOAT power[HBLKSIZE], int 
     for (i = 1; i < HBLKSIZE - 1; i++) {
         tonelabel[i] = 0;
         Xtm[i] = DBMIN;
-        if (power[i] > power[i - 1] && power[i] > power[i + 1]) /* The first criteria for a maximum 
+        if (power[i] > power[i - 1] && power[i] > power[i + 1]) /* The first criteria for a maximum
                                                                  */
             maxima[i] = 1;
         else
@@ -210,8 +210,8 @@ static void psycho_3_init_add_db(psycho_3_mem * mem)
 }
 
 
-/* D.1 Step 4.c Labelling non-tonal (noise) components 
-   Sum the energies in each critical band (the tone energies have been removed 
+/* D.1 Step 4.c Labelling non-tonal (noise) components
+   Sum the energies in each critical band (the tone energies have been removed
    during the tone labelling).
    Find the "geometric mean" of these energies - i.e. find the best spot to put the
    sum of energies within this critical band. */
@@ -231,7 +231,7 @@ static void psycho_3_noise_label(psycho_3_mem * mem, FLOAT power[HBLKSIZE], FLOA
         int centre;
         for (j = cbandindex[i]; j < cbandindex[i + 1]; j++) {
             Xnm[j] = DBMIN;
-            /* go through all the spectral lines within the critical band, adding the energies. The 
+            /* go through all the spectral lines within the critical band, adding the energies. The
                tone energies have already been removed */
             if (power[j] != DBMIN) {
                 /* Found a noise energy, add it to the sum */
@@ -239,7 +239,7 @@ static void psycho_3_noise_label(psycho_3_mem * mem, FLOAT power[HBLKSIZE], FLOA
 
                 /* calculations for the geometric mean FIXME MFC Feb 2003: Would it just be easier
                    to do the *whole* of psycho_1 in the energy domain rather than in the dB domain?
-                   FIXME: This is just a lazy arsed arithmetic mean. Don't know if it's really going 
+                   FIXME: This is just a lazy arsed arithmetic mean. Don't know if it's really going
                    to make that much difference */
                 esum += energy[j];  /* Calculate the sum of energies */
                 centreweight += (j - cbandindex[i]) * energy[j];    /* And the energy moment */
@@ -296,8 +296,8 @@ static void psycho_3_decimation(FLOAT * ath, int *tonelabel, FLOAT * Xtm, int *n
 
 /* ISO11172 Sect D.1 Step 6
    Calculation of individual masking thresholds
-   Work out how each of the tones&noises maskes other frequencies 
-   NOTE: Only a subset of other frequencies is checked. According to the 
+   Work out how each of the tones&noises maskes other frequencies
+   NOTE: Only a subset of other frequencies is checked. According to the
    standard different subbands are subsampled to different amounts.
    See psycho_3_init and freq_subset */
 static void psycho_3_threshold(psycho_3_mem * mem, FLOAT * LTg, int *tonelabel, FLOAT * Xtm,
@@ -389,7 +389,7 @@ static void psycho_3_minimummasking(FLOAT * LTg, FLOAT * LTmin, int *freq_subset
 
 
 /* ISO11172 Sect D.1 Step 9
-   Calculate the signal-to-mask ratio 
+   Calculate the signal-to-mask ratio
    MFC FIXME Feb 2003 for better calling from
    twolame, add a "float SMR[]" array and return it */
 static void psycho_3_smr(FLOAT * LTmin, FLOAT * Lsb)
@@ -586,4 +586,4 @@ void psycho_3_deinit(psycho_3_mem ** mem)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

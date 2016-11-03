@@ -160,4 +160,4 @@ void window_filter_subband(subband_mem * smem, short *pBuffer, int ch, FLOAT s[S
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

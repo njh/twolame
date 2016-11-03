@@ -56,14 +56,14 @@ static const FLOAT multiple[64] = {
     1E-20
 };
 
-/* MFC May03 
+/* MFC May03
    Gosh. I should really document this mess.
-   This is a compact data format for all the info that is 
+   This is a compact data format for all the info that is
    in the bit allocation tables in the mpeg standards.
 
    All the allocation tables are here. There is just multiple
    redirections to find the number that you want.
-   
+
    I might have to reduce the number of index tables to make the code
    more readable.
 */
@@ -71,7 +71,7 @@ static const FLOAT multiple[64] = {
 
 #define NUMTABLES 5
 
-/* There are really only 9 distinct lines in the allocation tables 
+/* There are really only 9 distinct lines in the allocation tables
    each member of this table is an index into */
 /* step_index[linenumber][index] */
 static const int step_index[9][16] = {
@@ -113,10 +113,10 @@ static const int table_sblimit[5] = { 27, 30, 8, 12, 30 };
 
 /* Each table contains a list of allowable quantization steps.
    There are only 9 distinct lists of steps.
-   This table gives the index of which of the 9 lists is being used 
+   This table gives the index of which of the 9 lists is being used
    A "-1" entry means that it is above the sblimit for this table */
 static const int line[5][SBLIMIT] = {
-    /* 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 
+    /* 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
        31 */
     {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, -1, -1, -1,
      -1, -1},
@@ -151,9 +151,9 @@ static const FLOAT scalefactor[64] = {  /* Equation for nth element = 2 / (cuber
     1E-20
 };
 
-/* ISO11172 Table C.5 Layer II Signal to Noise Raios 
+/* ISO11172 Table C.5 Layer II Signal to Noise Raios
    MFC FIX find a reference for these in terms of bits->SNR value
-   Index into table is the steps index 
+   Index into table is the steps index
    index   steps	SNR
 	   0	   0	0.00
 	   1	   3	7.00
@@ -253,10 +253,10 @@ int encode_init(twolame_options * glopts)
 
 
 
-/* 
+/*
    scale_factor_calc
    pick_scale
-   if JOINTSTEREO 
+   if JOINTSTEREO
 		 combine_LR
 		 scale_factor_calc
    use psy model to determine SMR
@@ -339,9 +339,9 @@ void combine_lr(FLOAT sb_sample[2][3][SCALE_BLOCK][SBLIMIT],
    used by Psychoacoustic Model I.
    Someone in dist10 source code's history, somebody wrote the following:
    "(I would recommend changin max_sc to min_sc)"
-   
+
    In psy model 1, the *maximum* out of the scale picked here and
-   the maximum SPL within each subband is selected. So I'd think that 
+   the maximum SPL within each subband is selected. So I'd think that
    a maximum here makes heaps of sense.
 
    MFC FIX: Feb 2003 - is this only needed for psy model 1?
@@ -365,7 +365,7 @@ void find_sf_max(twolame_options * glopts,
         sf_max[0][sb] = sf_max[1][sb] = 1E-20;
 }
 
-/*	sf_transmission_pattern	 
+/*	sf_transmission_pattern
 	PURPOSE:For a given subband, determines whether to send 1, 2, or
 	all 3 of the scalefactors, and fills in the scalefactor
 	select information accordingly
@@ -523,7 +523,7 @@ void write_scalefactors(twolame_options * glopts,
     /* Write out the scalefactors */
     for (sb = 0; sb < sblimit; sb++)
         for (ch = 0; ch < nch; ch++)
-            if (bit_alloc[ch][sb])  // above jsbound, bit_alloc[0][i] == ba[1][i] 
+            if (bit_alloc[ch][sb])  // above jsbound, bit_alloc[0][i] == ba[1][i]
             {
                 switch (sf_selectinfo[ch][sb]) {
                 case 0:
@@ -606,7 +606,7 @@ subband_quantization(twolame_options * glopts,
                            result in a scaled sample being > 1.0 This error shouldn't ever happen
                            *unless* something went wrong in scalefactor calc
 
-                           if (mod (d) > 1.0) fprintf (stderr, "Not scaled properly %d %d %d %d\n", 
+                           if (mod (d) > 1.0) fprintf (stderr, "Not scaled properly %d %d %d %d\n",
                            ch, gr, j, sb); */
 
                         {
@@ -644,7 +644,7 @@ subband_quantization(twolame_options * glopts,
 }
 
 /************************************************************************
-	sample_encoding	 
+	sample_encoding
 
  PURPOSE:Put one frame of subband samples on to the bitstream
 
@@ -747,7 +747,7 @@ int bits_for_nonoise(twolame_options * glopts,
     else
         berr = 0;
 
-    /* Count the number of bits required to encode the quantization index for both channels in each 
+    /* Count the number of bits required to encode the quantization index for both channels in each
        subband. If we're above the jsbound, then pretend we only have one channel */
     for (sb = 0; sb < jsbound; ++sb)
         bbal += nch * nbal[line[glopts->tablenum][sb]]; // (*alloc)[sb][0].bits;
@@ -810,7 +810,7 @@ int init_bit_allocation(twolame_options * glopts)
        support a variable bitrate, but Layer3 decoders must do so. Hence, it is unlikely that a
        compliant layer2 decoder would be written to dynmically change allocation tables. *BUT* a
        layer3 encoder might handle it by default, meaning we could switch tables mid-encode and
-       enjoy a wider range of bitrates for the VBR encoding. None of this needs to be done for LSF, 
+       enjoy a wider range of bitrates for the VBR encoding. None of this needs to be done for LSF,
        since there is only *one* possible alloc table in LSF MFC Feb 2003 */
 
     static const int vbrlimits[2][3][2] = {
@@ -851,7 +851,7 @@ int init_bit_allocation(twolame_options * glopts)
 
 
     /* set up a conversion table for bitrateindex->bits for this version/sampl freq This will be
-       used to find the best bitrate to cope with the number of bits that are needed (as determined 
+       used to find the best bitrate to cope with the number of bits that are needed (as determined
        by vbr_bits_for_nonoise) */
     for (brindex = glopts->lower_index; brindex <= glopts->upper_index; brindex++) {
         glopts->bitrateindextobits[brindex] =
@@ -1018,7 +1018,7 @@ static void vbr_maxmnr(FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimit
 /********************
 MFC Feb 2003
 vbr_bit_allocation is different to the normal a_bit_allocation in that
-it is known beforehand that there are definitely enough bits to do what we 
+it is known beforehand that there are definitely enough bits to do what we
 have to - i.e. a bitrate was specificially chosen in main_bit_allocation so
 that we have enough bits to encode what we have to.
 This function should take that into account and just greedily assign
@@ -1077,7 +1077,7 @@ int vbr_bit_allocation(twolame_options * glopts,
                 increment = SCALE_BLOCK * group[nextstep_index] * bits[nextstep_index];
             }
             if (used[min_ch][min_sb]) {
-                /* If we've already increased the limit on this ch/sb, then subtract the last thing 
+                /* If we've already increased the limit on this ch/sb, then subtract the last thing
                    that we added */
                 thisstep_index = step_index[thisline][bit_alloc[min_ch][min_sb]];
                 increment -= SCALE_BLOCK * group[thisstep_index] * bits[thisstep_index];
@@ -1109,8 +1109,8 @@ int vbr_bit_allocation(twolame_options * glopts,
                 thisstep_index = step_index[thisline][ba];
                 mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
                 /* Check if this min_sb subband has been fully allocated max bits */
-                if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits) 
-                                                                            // 
+                if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits)
+                                                                            //
                     // - 1)
                     used[min_ch][min_sb] = 2;   /* don't let this sb get any more bits */
             } else {
@@ -1231,7 +1231,7 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
                 increment = SCALE_BLOCK * group[nextstep_index] * bits[nextstep_index];
             }
             if (used[min_ch][min_sb]) {
-                /* If we've already increased the limit on this ch/sb, then subtract the last thing 
+                /* If we've already increased the limit on this ch/sb, then subtract the last thing
                    that we added */
                 thisstep_index = step_index[thisline][bit_alloc[min_ch][min_sb]];
                 increment -= SCALE_BLOCK * group[thisstep_index] * bits[thisstep_index];
@@ -1263,8 +1263,8 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
                 thisstep_index = step_index[thisline][ba];
                 mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
                 /* Check if this min_sb subband has been fully allocated max bits */
-                if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits) 
-                                                                            // 
+                if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits)
+                                                                            //
                     // - 1)
                     used[min_ch][min_sb] = 2;   /* don't let this sb get any more bits */
             } else {
@@ -1294,4 +1294,4 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

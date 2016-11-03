@@ -35,4 +35,4 @@ void psycho_1_fft(FLOAT * x_real, FLOAT * energy, int N);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

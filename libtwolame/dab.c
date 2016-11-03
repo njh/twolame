@@ -87,4 +87,4 @@ void dab_crc_update(unsigned int data, unsigned int length, unsigned int *crc)
     *crc &= 0xff;
 }
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

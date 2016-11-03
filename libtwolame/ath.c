@@ -40,7 +40,7 @@ FLOAT ath_db(FLOAT f, FLOAT value)
 
 
        In the past LAME was using the Painter &Spanias formula. But we had some recurrent problems
-       with HF content. We measured real ATH values, and found the older formula to be inacurate in 
+       with HF content. We measured real ATH values, and found the older formula to be inacurate in
        the higher part. So we made this new formula and this solved most of HF problematic
        testcases. The tradeoff is that in VBR mode it increases a lot the bitrate. */
 
@@ -77,9 +77,9 @@ FLOAT ath_energy(FLOAT freq, FLOAT value)
     db = ath_db(freq, 0) + value;   // Originally: ath_db(freq,value)
     /* The values in the standard, and from the ATH formula are in dB. In the psycho model we are
        working in the energy domain. Hence the values that are in the absthr_X tables are not in
-       dB. This function converts from dB into the energy domain. As noted on the LAME mailing list 
-       from years ago (MFC FIX find the reference), the absolute threhsold of hearing values in the 
-       tables in the standard are dodgy - the ATH in the tables do not correspond to any previously 
+       dB. This function converts from dB into the energy domain. As noted on the LAME mailing list
+       from years ago (MFC FIX find the reference), the absolute threhsold of hearing values in the
+       tables in the standard are dodgy - the ATH in the tables do not correspond to any previously
        known values of the ATH. From ISO 11172 Tables D.4.x "A value of 0dB represents a level in
        the absolute threshold calculation of 96dB below the energy of a sine wave of amplitude
        32760." But I still don't know why the factor of 41.837375 is the value that it is. MFC Feb
@@ -89,7 +89,7 @@ FLOAT ath_energy(FLOAT freq, FLOAT value)
 
 
 /* Convert a frequency (in Hz) to a bark value
-   Taken from LAME. MFC Feb 2003 
+   Taken from LAME. MFC Feb 2003
    see for example "Zwicker: Psychoakustik, 1982; ISBN 3-540-11401-7 */
 FLOAT ath_freq2bark(FLOAT freq)
 {
@@ -99,4 +99,4 @@ FLOAT ath_freq2bark(FLOAT freq)
     return 13.0 * atan(.76 * freq) + 3.5 * atan(freq * freq / (7.5 * 7.5));
 }
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

@@ -48,4 +48,4 @@ void buffer_deinit(bit_stream ** bs);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

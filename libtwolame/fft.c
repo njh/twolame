@@ -27,10 +27,10 @@
 /*
 ** FFT and FHT routines
 **  Copyright 1988, 1993; Ron Mayer
-**  
+**
 **  fht(fz,n);
 **    Does a hartley transform of "n" points in the array "fz".
-**    
+**
 ** NOTE: This routine uses at least 2 patented algorithms, and may be
 **       under the restrictions of a bunch of different organizations.
 **       Although I wrote it completely myself; it is kind of a derivative
@@ -728,8 +728,8 @@ static void fht(FLOAT * fz)
 #define ATANSIZE 6000
 #define ATANSCALE 100.0
 /* Create a table of ATAN2 values.
-   Valid for ratios of (y/x) from 0 to ATANSIZE/ATANSCALE (60) 
-   Largest absolute error in angle: 0.0167 radians i.e. ATANSCALE/ATANSIZE 
+   Valid for ratios of (y/x) from 0 to ATANSIZE/ATANSCALE (60)
+   Largest absolute error in angle: 0.0167 radians i.e. ATANSCALE/ATANSIZE
    Depending on how you want to trade off speed/accuracy and mem usage, twiddle the defines
    MFC March 2003 */
 static FLOAT atan_t[ATANSIZE];
@@ -831,4 +831,4 @@ void psycho_1_fft(FLOAT * x_real, FLOAT * energy, int N)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

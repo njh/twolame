@@ -51,7 +51,7 @@ I've nicked a bunch of stuff from LAME to make this a bit easier to grok
   Not really sure if they help or hinder, so I've commented them out (#ifdef LAME)
 
 NB: Because of some of the tweaks to bark value calculation etc, it is now possible
-to have 64 CBANDS. There's no real limit on the actual number of paritions. 
+to have 64 CBANDS. There's no real limit on the actual number of paritions.
 I wonder if it's worth experimenting with really higher numbers? Probably won't make
 that much difference to the final SNR values, but it's something worth trying
 	Maybe CBANDS should be a dynamic value, calculated by the psycho_init function
@@ -60,16 +60,16 @@ that much difference to the final SNR values, but it's something worth trying
 ****************************************************************/
 
 
-/* The static variables "r", "phi_sav", "new", "old" and "oldest" have	  
- to be remembered for the unpredictability measure.	 For "r" and		
- "phi_sav", the first index from the left is the channel select and		
+/* The static variables "r", "phi_sav", "new", "old" and "oldest" have
+ to be remembered for the unpredictability measure.	 For "r" and
+ "phi_sav", the first index from the left is the channel select and
  the second index is the "age" of the data.								*/
 
 
 /* NMT is a constant 5.5dB. ISO11172 Sec D.2.4.h */
 static const FLOAT NMT = 5.5;
 
-/* The index into this array is a bark value 
+/* The index into this array is a bark value
    This array gives the 'minval' values from ISO11172 Tables D.3.x */
 static const FLOAT minval[27] = {
     0.0,                        /* bark = 0 */
@@ -88,8 +88,8 @@ static const FLOAT minval[27] = {
 };
 
 
-/* Table covers angles from	 0 to TRIGTABLESIZE/TRIGTABLESCALE (3.142) radians 
-   In steps of 1/TRIGTABLESCALE (0.0005) radians. 
+/* Table covers angles from	 0 to TRIGTABLESIZE/TRIGTABLESCALE (3.142) radians
+   In steps of 1/TRIGTABLESCALE (0.0005) radians.
    Largest absolute error: 0.0005
    Only create a table for cos, and then use trig to work out sin.
    sin(theta) = cos(PI/2 - theta)
@@ -111,7 +111,7 @@ static inline FLOAT psycho_4_cos(psycho_4_mem * p4mem, FLOAT phi)
 
     index = (int) (fabs(phi) * TRIGTABLESCALE);
     while (index >= TRIGTABLESIZE) {
-        /* If we're larger than PI, then subtract PI until we aren't each time the sign will flip - 
+        /* If we're larger than PI, then subtract PI until we aren't each time the sign will flip -
            Year 11 trig again. MFC March 2003 */
         index -= TRIGTABLESIZE;
         sign *= -1;
@@ -151,7 +151,7 @@ static FLOAT psycho_4_spreading_function(FLOAT bark)
     tempx = exp((x + tempy) * LN_TO_LOG10);
 
 #ifdef LAME
-    /* I'm not sure where the magic value of 0.6609193 comes from. twolame will just keep using the 
+    /* I'm not sure where the magic value of 0.6609193 comes from. twolame will just keep using the
        rnorm to normalise the spreading function MFC Feb 2003 */
     /* Normalization.  The spreading function should be normalized so that: +inf / | s3 [ bark ]
        d(bark) = 1 / -inf */
@@ -227,7 +227,7 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
     }
 
 
-    /* Work out the partitions Starting from line 0, all lines within 0.33 of the starting bark are 
+    /* Work out the partitions Starting from line 0, all lines within 0.33 of the starting bark are
        added to the same partition. When a line is greater by 0.33 of a bark, start a new
        partition. */
     {
@@ -381,7 +381,7 @@ void psycho_4(twolame_options * glopts,
             /* Compute FFT */
             psycho_2_fft(wsamp_r, energy, phi);
 
-            /* calculate the unpredictability measure, given energy[f] and phi[f] (the age pointers 
+            /* calculate the unpredictability measure, given energy[f] and phi[f] (the age pointers
                [new/old/oldest] are reset automatically on the second pass */
             {
                 if (mem->new == 0) {
@@ -459,7 +459,7 @@ void psycho_4(twolame_options * glopts,
                 grouped_c[partition[j]] += energy[j] * c[j];
             }
 
-            /* convolve the grouped energy-weighted unpredictability measure and the grouped energy 
+            /* convolve the grouped energy-weighted unpredictability measure and the grouped energy
                with the spreading function ISO 11172 D.2.4.f */
             for (j = 0; j < CBANDS; j++) {
                 ecb[j] = 0;
@@ -496,7 +496,7 @@ void psycho_4(twolame_options * glopts,
             }
 
             /* Calculate the permissible noise energy level in each of the frequency partitions.
-               This section used to have pre-echo control but only for LayerI ISO 11172 Sec D.2.4.k 
+               This section used to have pre-echo control but only for LayerI ISO 11172 Sec D.2.4.k
                - Spread the threshold energy over FFT lines */
             for (j = 0; j < CBANDS; j++) {
                 if (rnorm[j] && numlines[j])
@@ -561,4 +561,4 @@ void psycho_4_deinit(psycho_4_mem ** mem)
 
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

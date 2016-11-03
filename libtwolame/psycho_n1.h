@@ -30,4 +30,4 @@ void psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

@@ -36,4 +36,4 @@ void dab_crc_update(unsigned int, unsigned int, unsigned int *);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

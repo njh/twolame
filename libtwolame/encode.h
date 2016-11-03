@@ -64,7 +64,7 @@ void write_samples(twolame_options * glopts,
 
 
 /*******************************************************
-   Bit Allocation Stuff 
+   Bit Allocation Stuff
 ******************************************************/
 
 int bits_for_nonoise(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
@@ -87,4 +87,4 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

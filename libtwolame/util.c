@@ -126,7 +126,7 @@ int twolame_get_samplerate_index(long sample_rate)
         return 2;
     }
 
-    // Invalid choice of samplerate 
+    // Invalid choice of samplerate
     fprintf(stderr, "twolame_get_samplerate_index: %ld is not a legal sample rate\n", sample_rate);
     return -1;
 }
@@ -152,7 +152,7 @@ int twolame_get_version_for_samplerate(long sample_rate)
         return TWOLAME_MPEG2;
     }
 
-    // Invalid choice of samplerate 
+    // Invalid choice of samplerate
     fprintf(stderr, "twolame_get_version_for_samplerate: %ld is not a legal sample rate\n",
             sample_rate);
     return -1;
@@ -172,7 +172,7 @@ int twolame_get_framelength(twolame_options * glopts)
 
 
 
-// Print the library version and 
+// Print the library version and
 //  encoder parameter settings to STDERR
 void twolame_print_config(twolame_options * glopts)
 {

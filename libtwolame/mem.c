@@ -49,4 +49,4 @@ void *twolame_malloc(size_t size, int line, char *file)
 
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:
