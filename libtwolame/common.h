@@ -277,6 +277,7 @@ struct twolame_options_struct {
     int do_energy_levels;       // Write energy level information into the end of the frame [FALSE]
     int num_ancillary_bits;     // Number of reserved ancillary bits [0] (Currently only available
     // for non-VBR modes)
+    int freeformat;             // [FALSE] TRUE
 
     // Psychoacoustic Model options
     int psymodel;               // -1, 0, 1, 2, [3], 4 Psy model number

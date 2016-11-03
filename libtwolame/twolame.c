@@ -76,6 +76,7 @@ twolame_options *twolame_init(void)
     newoptions->psymodel = 3;
     newoptions->bitrate = -1;   // Default bitrate is set in init_params
     newoptions->vbr = FALSE;
+    newoptions->freeformat = FALSE;
     newoptions->vbrlevel = 5.0;
     newoptions->athlevel = 0.0;
 
@@ -141,11 +142,16 @@ static int init_header_info(twolame_options * glopts)
         return -1;
     }
     // Convert the bitrate to the an index 
-    header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
-    if (header->bitrate_index < 0) {
-        fprintf(stderr, "Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate,
-                twolame_mpeg_version_name(glopts->version));
-        return -1;
+    if (glopts->freeformat)
+        header->bitrate_index = 0;
+    else
+    {
+        header->bitrate_index = twolame_get_bitrate_index(glopts->bitrate, header->version);
+        if (header->bitrate_index < 0) {
+            fprintf(stderr, "Not a valid bitrate (%i) for MPEG version '%s'\n", glopts->bitrate,
+                    twolame_mpeg_version_name(glopts->version));
+            return -1;
+        }
     }
     // Convert the max VBR bitrate to the an index 
     glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
@@ -264,6 +270,7 @@ int twolame_init_params(twolame_options * glopts)
             fprintf(stderr, "Chosen bitrate of %dkbps for samplerate of %d Hz.\n",
                     glopts->bitrate, glopts->samplerate_out);
         }
+        glopts->freeformat = FALSE;   // no sense in requiring freeformat encoding without setting a bitrate
     }
 
     /* Can't do DAB and energylevel extensions at the same time Because both of them think they're

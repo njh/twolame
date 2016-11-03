@@ -371,6 +371,15 @@ extern "C" {
     DLL_EXPORT const char *twolame_get_version_name(twolame_options * glopts);
 
 
+/** Set the freeformat strem mode.
+ *
+ *	\param glopts	pointer to twolame options pointer
+ *	\param freef	freeformat mode ( TRUE / FALSE )
+ *	\return			0
+ */
+    DLL_EXPORT int twolame_set_freeformat(twolame_options * glopts, int freef);
+
+
 /** Get the number of bytes per MPEG audio frame, for current settings.
  *
  *	\param glopts			pointer to twolame options pointer

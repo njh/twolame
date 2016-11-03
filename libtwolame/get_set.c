@@ -411,6 +411,16 @@ const char *twolame_get_version_name(twolame_options * glopts)
     return twolame_mpeg_version_name(glopts->version);
 }
 
+int twolame_set_freeformat(twolame_options * glopts, int freef)
+{
+    if (freef) {
+        glopts->freeformat = TRUE;
+    } else {
+        glopts->freeformat = FALSE;
+    }
+
+    return (0);
+}
 
 
 
