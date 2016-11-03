@@ -185,7 +185,7 @@ sub input_filepath {
 }
 
 sub filesize {
-  return (stat(@_))[7];
+  return (stat($_[0]))[7];
 }
 
 sub md5_file {

@@ -59,9 +59,9 @@ INSTALLATION
 
 Standard automake process:
 
-  ./configure
-  make
-  make install
+    ./configure
+    make
+    make install
 
 
 
