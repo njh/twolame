@@ -202,7 +202,7 @@ int twolame_set_error_protection(twolame_options * glopts, int error_protection)
     if (error_protection)
         glopts->error_protection = TRUE;
     else
-        error_protection = FALSE;
+        glopts->error_protection = FALSE;
     return (0);
 }
 
@@ -416,7 +416,7 @@ const char *twolame_get_version_name(twolame_options * glopts)
 
 
 
-/* Jörgen Scott 09May 2014. Added some utility methods to make DAB support easier.
+/* JÃ¶rgen Scott 09May 2014. Added some utility methods to make DAB support easier.
 - twolame_set_DAB_scf_crc_length
 - twolame_set_DAB_scf_crc
 Supporting DAB requires the front-end to buffer at least two mp2 frames.
