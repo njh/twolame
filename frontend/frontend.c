@@ -188,6 +188,7 @@ static void usage_long()
     fprintf(stderr, "\t-l, --ath lev            ATH level (default 0.0)\n");
     fprintf(stderr, "\t-q, --quick num          only calculate psy model every num frames\n");
     fprintf(stderr, "\t-S, --single-frame       only encode a single frame of MPEG Audio\n");
+    fprintf(stderr, "\t    --freeformat         create a free format bitstream\n");
 
 
     fprintf(stderr, "\nMiscellaneous Options\n");
@@ -308,6 +309,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         {"ath", required_argument, NULL, 'l'},
         {"quick", required_argument, NULL, 'q'},
         {"single-frame", no_argument, NULL, 'S'},
+        {"freeformat", no_argument, NULL, 1009},
 
         // Misc
         {"copyright", no_argument, NULL, 'c'},
@@ -443,6 +445,9 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             single_frame_mode = TRUE;
             break;
 
+        case 1009:
+            twolame_set_freeformat(encopts, TRUE);
+            break;
 
             // Miscellaneous
         case 'c':
