@@ -28,12 +28,12 @@
 #include "common.h"
 #include "psycho_n1.h"
 
-/* this is the null psychoacoustic model 
+/* this is the null psychoacoustic model
    All it does it copy some predefined values.
    No actual modelling takes place */
 
-/* a bunch of SNR values I sort of made up	MFC 1 oct 99 
-   Found by averaging the SNR values over a sound file 
+/* a bunch of SNR values I sort of made up	MFC 1 oct 99
+   Found by averaging the SNR values over a sound file
    FIXME: Do a more rigourous investigation MFC Feb 2003 */
 
 // From Castanets.wav
@@ -71,4 +71,4 @@ void psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo)
             ltmin[k][i] = snrdef[i];
 }
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

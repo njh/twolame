@@ -154,11 +154,11 @@ static inline FLOAT add_db(psycho_1_mem * mem, FLOAT a, FLOAT b)
 }
 
 /****************************************************************
-*		Window the samples then, 
+*		Window the samples then,
 *		 Fast Fourier transform of the input samples.
-* 
+*
 *	(  call the FHT-based fft() in fft.c )
-*	 
+*
 *
 ****************************************************************/
 static void psycho_1_hann_fft_pickmax(FLOAT sample[FFT_SIZE], mask power[HAN_SIZE],
@@ -311,7 +311,7 @@ static void psycho_1_noise_label(psycho_1_mem * mem, int *noise, FLOAT energy[FF
                     sum = add_db(mem, power[j].x, sum);
                     /* Weight is used in finding the geometric mean of the noise energy within a
                        subband */
-                    weight += CF * energy[j] * (FLOAT) (j - cbound[i]) / (FLOAT) (cbound[i + 1] - cbound[i]);   /* correction 
+                    weight += CF * energy[j] * (FLOAT) (j - cbound[i]) / (FLOAT) (cbound[i + 1] - cbound[i]);   /* correction
                                                                                                                  */
                     power[j].x = DBMIN;
                 }
@@ -544,7 +544,7 @@ static void psycho_1_dump(mask power[HAN_SIZE], int *tone, int *noise) {
 	t = power[t].next;
   }
   fprintf(stderr,"\n");
-  
+
   fprintf(stderr,"1 Nos: ");
   t=*noise;
   while (t!=LAST && t!=STOP) {
@@ -646,4 +646,4 @@ void psycho_1_deinit(psycho_1_mem ** mem)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

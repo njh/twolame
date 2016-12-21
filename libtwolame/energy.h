@@ -33,4 +33,4 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

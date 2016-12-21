@@ -36,4 +36,4 @@ typedef struct wave_info_struct {
 wave_info_t *wave_init(char *inPath);
 int wave_get_samples(wave_info_t * wave_info, short int pcm[], int num_samples);
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

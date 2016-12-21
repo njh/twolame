@@ -33,7 +33,7 @@
 
 
 
-// Returns the desired number of ancillary bits to be 
+// Returns the desired number of ancillary bits to be
 // reserved at the end of the frame
 int get_required_energy_bits(twolame_options * glopts)
 {
@@ -120,4 +120,4 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

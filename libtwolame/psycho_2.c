@@ -321,7 +321,7 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
 	   * stagger input data by 256 samples to synchronize psychoacoustic model with*
 	   * filter bank outputs, then stagger so that center of 1024 FFT window lines *
 	   * up with center of 576 "new" audio samples.								   *
-	   
+
 		   flush = 384*3.0/2.0;	 = 576
 		   syncsize = 1056;
 		   sync_flush = syncsize - flush;	480
@@ -528,4 +528,4 @@ void psycho_2_deinit(psycho_2_mem ** mem)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

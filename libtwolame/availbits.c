@@ -75,4 +75,4 @@ int available_bits(twolame_options * glopts)
 }
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

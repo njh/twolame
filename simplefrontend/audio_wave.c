@@ -102,9 +102,9 @@ int wave_get_samples(wave_info_t * wave_info, short int pcm[], int numSamples)
 *  returns NULL if not open failed
 *  returns a wave_info_t * if wave header successfully parsed.
 *  needs to fill in : samplerate + channels
-*  
+*
 *  POST: wave_info->soundfile is set to be at the start of the
-*        PCM audio data 
+*        PCM audio data
 *
 *****************************************************************************/
 
@@ -209,7 +209,7 @@ wave_info_t *wave_init(char *inPath)
 
         /* should probably use the wave header to determine size here FIXME MFC Feb 2003 */
         if (fseek(file, 44, SEEK_SET) != 0) {
-            /* there's a way of calculating the size of the wave header. i'll just jump 44 to start 
+            /* there's a way of calculating the size of the wave header. i'll just jump 44 to start
                with */
             printf("Could not seek to PCM sound data in \"%s\".\n", inPath);
             fclose(file);
@@ -224,7 +224,7 @@ wave_info_t *wave_init(char *inPath)
             wave_info->channels = 1;
         wave_info->samplerate = samplerate;
 
-        // UNKNOWN. But we really should be able to work 
+        // UNKNOWN. But we really should be able to work
         // it out. FIX THIS. MFC May03.
         wave_info->num_samples = -1;
 

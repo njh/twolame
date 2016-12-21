@@ -33,7 +33,7 @@
 
 
 
-/* 
+/*
   Global Variables
 */
 int use_raw = FALSE;            // use raw input?
@@ -50,7 +50,7 @@ char outputfilename[MAX_NAME_SIZE] = "\0";
 
 
 
-/* 
+/*
   new_extension()
   Puts a new extension name on a file name <filename>.
   Removes the last extension name, if any.
@@ -87,7 +87,7 @@ static void new_extension(char *filename, char *extname, char *newname)
         strncpy(newname, filename, dotpos);
         newname[dotpos] = '\0';
     }
-    // Make sure there is room in the string for the 
+    // Make sure there is room in the string for the
     // new filename and the extension
     if (strlen(newname) + strlen(extname) + 1 < MAX_NAME_SIZE) {
         strcat(newname, extname);
@@ -145,8 +145,8 @@ static void print_filenames(int verbosity)
 
 
 
-/* 
-  usage_long() 
+/*
+  usage_long()
   Display the extended usage information
 */
 static void usage_long()
@@ -221,8 +221,8 @@ static void usage_long()
 
 
 
-/* 
-  usage_short() 
+/*
+  usage_short()
   Display the short usage information
 */
 static void usage_short()
@@ -276,8 +276,8 @@ static char *build_shortopt_string(struct option *opts)
 
 
 
-/* 
-  parse_args() 
+/*
+  parse_args()
   Parse the command line arguments
 */
 static void parse_args(int argc, char **argv, twolame_options * encopts)
@@ -449,7 +449,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             twolame_set_freeformat(encopts, TRUE);
             break;
 
-            // Miscellaneous 
+            // Miscellaneous
         case 'c':
             twolame_set_copyright(encopts, TRUE);
             break;
@@ -541,7 +541,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         usage_short();
     }
     if (outputfilename[0] == '\0' && strcmp(inputfilename, "-") != 0) {
-        // Create output filename from the inputfilename 
+        // Create output filename from the inputfilename
         // and change the suffix
         new_extension(inputfilename, OUTPUT_SUFFIX, outputfilename);
     }
@@ -606,7 +606,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
         exit(ERR_MEM_ALLOC);
     }
-    // Initialise Encoder Options Structure 
+    // Initialise Encoder Options Structure
     encopts = twolame_init();
     if (encopts == NULL) {
         fprintf(stderr, "Error: initializing libtwolame encoder failed.\n");
@@ -631,7 +631,7 @@ int main(int argc, char **argv)
     if (twolame_get_verbosity(encopts) > 1) {
         inputfile->print_info(inputfile);
     }
-    // Use information from input file to configure libtwolame 
+    // Use information from input file to configure libtwolame
     twolame_set_num_channels(encopts, sfinfo.channels);
     twolame_set_in_samplerate(encopts, sfinfo.samplerate);
 
@@ -734,11 +734,11 @@ int main(int argc, char **argv)
     if (inputfile->error_str(inputfile)) {
         fprintf(stderr, "Error reading from input file: %s\n", inputfile->error_str(inputfile));
     }
-    // 
+    //
     // flush any remaining audio. (don't send any new audio data) There
     // should only ever be a max of 1 frame on a flush. There may be zero
     // frames if the audio data was an exact multiple of 1152
-    // 
+    //
     mp2fill_size = twolame_encode_flush(encopts, mp2buffer, MP2_BUF_SIZE);
     if (mp2fill_size > 0) {
         int bytes_out = fwrite(mp2buffer, sizeof(unsigned char), mp2fill_size, outputfile);

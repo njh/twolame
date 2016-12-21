@@ -53,7 +53,7 @@
 /*
   twolame_init
   Create a set of encoding options and return a pointer to this structure
-  
+
   Returns NULL if unsuccessful (can't allocate memory)
   Otherwise returns pointer to memory block
 */
@@ -141,6 +141,7 @@ static int init_header_info(twolame_options * glopts)
         fprintf(stderr, "Not a valid samplerate: %i\n", glopts->samplerate_out);
         return -1;
     }
+
     // Convert the bitrate to the an index 
     if (glopts->freeformat)
         header->bitrate_index = 0;
@@ -153,14 +154,14 @@ static int init_header_info(twolame_options * glopts)
             return -1;
         }
     }
-    // Convert the max VBR bitrate to the an index 
+    // Convert the max VBR bitrate to the an index
     glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
     if (glopts->vbr_upper_index < 0) {
         fprintf(stderr, "Not a valid max VBR bitrate for this version: %i\n",
                 glopts->vbr_max_bitrate);
         return -1;
     }
-    // Copy accross the other settings 
+    // Copy accross the other settings
     header->padding = glopts->padding;
     header->private_bit = glopts->private_bit;
     header->mode = glopts->mode;
@@ -177,7 +178,7 @@ static int init_header_info(twolame_options * glopts)
 
 /**
  * This function should actually *check* the parameters to see if they
- * make sense. 
+ * make sense.
  */
 
 int twolame_init_params(twolame_options * glopts)
@@ -299,7 +300,7 @@ int twolame_init_params(twolame_options * glopts)
         }
     }
 
-    /* 
+    /*
      * MFC Feb 2003: in VBR mode, joint
      * stereo doesn't make any sense at
      * the moment, as there are no noisy
@@ -347,7 +348,7 @@ int twolame_init_params(twolame_options * glopts)
     glopts->psycount = 0;
 
 
-    // Allocate memory to larger buffers 
+    // Allocate memory to larger buffers
     glopts->subband = (subband_t *) TWOLAME_MALLOC(sizeof(subband_t));
     glopts->j_sample = (jsb_sample_t *) TWOLAME_MALLOC(sizeof(jsb_sample_t));
     glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof(sb_sample_t));
@@ -375,14 +376,14 @@ int twolame_init_params(twolame_options * glopts)
 
 /* Scale the samples in the frame sample buffer
    using the user specified values
-   and downmix/upmix according to the number of input/output channels 
+   and downmix/upmix according to the number of input/output channels
 */
 static void scale_and_mix_samples(twolame_options * glopts)
 {
     int num_samples = glopts->samples_in_buffer;
     int i;
 
-    // apply scaling to both channels 
+    // apply scaling to both channels
     if (glopts->scale != 0 && glopts->scale != 1.0) {
         for (i = 0; i < num_samples; ++i) {
             glopts->buffer[0][i] *= glopts->scale;
@@ -390,19 +391,19 @@ static void scale_and_mix_samples(twolame_options * glopts)
                 glopts->buffer[1][i] *= glopts->scale;
         }
     }
-    // apply scaling to channel 0 (left) 
+    // apply scaling to channel 0 (left)
     if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
         for (i = 0; i < num_samples; ++i) {
             glopts->buffer[0][i] *= glopts->scale_left;
         }
     }
-    // apply scaling to channel 1 (right) 
+    // apply scaling to channel 1 (right)
     if (glopts->scale_right != 0 && glopts->scale_right != 1.0) {
         for (i = 0; i < num_samples; ++i) {
             glopts->buffer[1][i] *= glopts->scale_right;
         }
     }
-    // Downmix to Mono if 2 channels in and 1 channel out 
+    // Downmix to Mono if 2 channels in and 1 channel out
     if (glopts->num_channels_in == 2 && glopts->num_channels_out == 1) {
         for (i = 0; i < num_samples; ++i) {
             glopts->buffer[0][i] = ((long) glopts->buffer[0][i] + glopts->buffer[1][i]) / 2;
@@ -423,7 +424,7 @@ static void scale_and_mix_samples(twolame_options * glopts)
 	Audio samples are taken from glopts->buffer
 	Encoded bit stream is placed in to parameter bs
 	(not intended for use outside the library)
-	
+
 	Returns the size of the frame
 	or -1 if there is an error
 */
@@ -485,7 +486,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
     find_sf_max(glopts, glopts->scalar, glopts->max_sc);
     if (glopts->mode == TWOLAME_JOINT_STEREO) {
-        // this way we calculate more mono than we need but it is cheap 
+        // this way we calculate more mono than we need but it is cheap
         combine_lr(*glopts->sb_sample, *glopts->j_sample, glopts->sblimit);
         scalefactor_calc(glopts->j_sample, &glopts->j_scale, 1, glopts->sblimit);
     }
@@ -499,7 +500,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
             }
         }
     } else {
-        // calculate the psymodel 
+        // calculate the psymodel
         switch (glopts->psymodel) {
         case -1:
             psycho_n1(glopts, glopts->smr, nch);
@@ -528,7 +529,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         }
 
         if (glopts->quickmode == TRUE) {
-            // copy the smr values and reuse them later 
+            // copy the smr values and reuse them later
             for (ch = 0; ch < nch; ch++) {
                 for (sb = 0; sb < SBLIMIT; sb++)
                     glopts->smrdef[ch][sb] = glopts->smr[ch][sb];
@@ -553,7 +554,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
                          *glopts->j_sample, glopts->bit_alloc, *glopts->subband);
     write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
 
-    // If not all the bits were used, write out a stack of zeros 
+    // If not all the bits were used, write out a stack of zeros
     for (i = 0; i < adb; i++)
         buffer_put1bit(bs, 0);
 
@@ -566,7 +567,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
 
     if (glopts->do_dab) {
         // Do the CRC calc for DAB stuff if required.
-        // It will be up to the frontend to insert it into the end of the 
+        // It will be up to the frontend to insert it into the end of the
         // previous frame.
         for (i = glopts->dab_crc_len - 1; i >= 0; i--) {
             dab_crc_calc(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar,
@@ -611,7 +612,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
   num_samples - the number of samples in each channel
   mp2buffer - a pointer to the place where we want the mpeg data to be written
   mp2buffer_size - how much space the user allocated for this buffer
-  mp2fill_size - how much mpeg data the library has put into the mp2buffer 
+  mp2fill_size - how much mpeg data the library has put into the mp2buffer
 */
 
 int twolame_encode_buffer(twolame_options * glopts,
@@ -628,7 +629,7 @@ int twolame_encode_buffer(twolame_options * glopts,
 
 
     // now would be a great time to validate the size of the buffer.
-    // samples/1152 * sizeof(frame) < mp2buffer_size 
+    // samples/1152 * sizeof(frame) < mp2buffer_size
     mybs = buffer_init(mp2buffer, mp2buffer_size);
 
 
@@ -685,7 +686,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
 
 
     // now would be a great time to validate the size of the buffer.
-    // samples/1152 * sizeof(frame) < mp2buffer_size 
+    // samples/1152 * sizeof(frame) < mp2buffer_size
     mybs = buffer_init(mp2buffer, mp2buffer_size);
 
     // Use up all the samples in in_buffer
@@ -753,7 +754,7 @@ static void float32_to_short(const float in[], short out[], int num_samples, int
   num_samples - the number of samples in each channel
   mp2buffer - a pointer to the place where we want the mpeg data to be written
   mp2buffer_size - how much space the user allocated for this buffer
-  mp2fill_size - how much mpeg data the library has put into the mp2buffer 
+  mp2fill_size - how much mpeg data the library has put into the mp2buffer
 */
 
 int twolame_encode_buffer_float32(twolame_options * glopts,
@@ -769,7 +770,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
 
 
     // now would be a great time to validate the size of the buffer.
-    // samples/1152 * sizeof(frame) < mp2buffer_size 
+    // samples/1152 * sizeof(frame) < mp2buffer_size
     mybs = buffer_init(mp2buffer, mp2buffer_size);
 
 
@@ -827,7 +828,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
 
 
     // now would be a great time to validate the size of the buffer.
-    // samples/1152 * sizeof(frame) < mp2buffer_size 
+    // samples/1152 * sizeof(frame) < mp2buffer_size
     mybs = buffer_init(mp2buffer, mp2buffer_size);
 
     // Use up all the samples in in_buffer
@@ -891,7 +892,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
         glopts->buffer[0][i] = glopts->buffer[1][i] = 0;
     }
 
-    // Encode the frame 
+    // Encode the frame
     mp2_size = encode_frame(glopts, mybs);
     glopts->samples_in_buffer = 0;
 
@@ -930,4 +931,4 @@ void twolame_close(twolame_options ** glopts)
     TWOLAME_FREE(opts);
 }
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

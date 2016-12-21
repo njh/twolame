@@ -2086,4 +2086,4 @@ static const FLOAT absthr_table[4][HBLKSIZE] = {
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:

@@ -29,8 +29,8 @@
 
 
 
-/* 
-  format_duration_string() 
+/*
+  format_duration_string()
   Create human readable duration string from libsndfile info
 */
 static char *format_duration_string(SF_INFO * sfinfo)
@@ -38,7 +38,7 @@ static char *format_duration_string(SF_INFO * sfinfo)
     float seconds = 0.0f;
     char *string = NULL;
     int minutes = 0;
-    
+
     string = (char *) malloc(MAX_NAME_SIZE);
     if (!string) {
         return NULL;
@@ -62,8 +62,8 @@ static char *format_duration_string(SF_INFO * sfinfo)
 
 
 
-/* 
-  print_info_sndfile() 
+/*
+  print_info_sndfile()
   Display information about input file
 */
 static void print_info_sndfile(struct audioin_s *audioin)

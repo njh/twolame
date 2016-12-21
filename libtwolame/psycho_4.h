@@ -32,4 +32,4 @@ void psycho_4_deinit(psycho_4_mem ** mem);
 #endif
 
 
-// vim:ts=4:sw=4:nowrap: 
+// vim:ts=4:sw=4:nowrap:
