@@ -80,7 +80,6 @@ const char *twolame_mpeg_version_name(int version)
 int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
 {
     int index = 0;
-    int found = 0;
 
     // MFC sanity check.
     if (version != 0 && version != 1) {
@@ -88,21 +87,20 @@ int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
         return -1;
     }
 
-    while (!found && index < 15) {
+    while (index < 15) {
         if (bitrate_table[version][index] == bitrate)
-            found = 1;
+            break;
         else
             ++index;
     }
 
-    if (found)
-        return (index);
-    else {
+    if (index == 15) {
         fprintf(stderr,
                 "twolame_get_bitrate_index: %d is not a legal bitrate for version '%s'\n",
                 bitrate, twolame_mpeg_version_name(version));
         return -1;
     }
+    return (index);
 }
 
 // convert samp frq in Hz to index
