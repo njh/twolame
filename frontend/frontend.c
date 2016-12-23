@@ -588,7 +588,7 @@ int main(int argc, char **argv)
     short int *pcmaudio = NULL;
     unsigned int frame_count = 0;
     unsigned int total_frames = 0;
-    unsigned int frame_len = 0;
+    unsigned int total_samples = 0;
     unsigned int total_bytes = 0;
     unsigned char *mp2buffer = NULL;
     int samples_read = 0;
@@ -655,9 +655,8 @@ int main(int argc, char **argv)
         audioReadSize = AUDIO_BUF_SIZE;
 
     // Calculate the size and number of frames we are going to encode
-    frame_len = twolame_get_framelength(encopts);
     if (sfinfo.frames)
-        total_frames = sfinfo.frames / TWOLAME_SAMPLES_PER_FRAME;
+        total_frames = (sfinfo.frames -1) / TWOLAME_SAMPLES_PER_FRAME +1;
 
 
     // Now do the reading/encoding/writing
@@ -677,6 +676,7 @@ int main(int argc, char **argv)
         }
         // Calculate the number of samples we have (per channel)
         samples_read /= sfinfo.channels;
+        total_samples += (unsigned int)samples_read;
 
         // Do swapping of left and right channels if requested
         if (channelswap && sfinfo.channels == 2) {
@@ -720,7 +720,7 @@ int main(int argc, char **argv)
 
 
         // Display Progress
-        frame_count += (mp2fill_size / frame_len);
+        frame_count = total_samples / TWOLAME_SAMPLES_PER_FRAME;
         if (twolame_get_verbosity(encopts) > 0) {
             fprintf(stderr, "\rEncoding frame: %i", frame_count);
             if (total_frames) {
@@ -746,6 +746,13 @@ int main(int argc, char **argv)
         if (bytes_out <= 0) {
             perror("error while writing to output file");
             exit(ERR_WRITING_OUTPUT);
+        }
+        else {
+            fprintf(stderr, "\rEncoding frame: %i", frame_count);
+            if (total_frames) {
+                fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
+            }
+            fflush(stderr);
         }
         total_bytes += bytes_out;
     }
