@@ -51,14 +51,7 @@ static void create_dct_matrix(FLOAT filter[16][32])
 
 int init_subband(subband_mem * smem)
 {
-    register int i, j;
-    smem->off[0] = 0;
-    smem->off[1] = 0;
-    smem->half[0] = 0;
-    smem->half[1] = 0;
-    for (i = 0; i < 2; i++)
-        for (j = 0; j < 512; j++)
-            smem->x[i][j] = 0;
+    memset(smem, 0, sizeof(subband_mem));
     create_dct_matrix(smem->m);
 
     return 0;
