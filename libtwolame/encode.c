@@ -32,6 +32,7 @@
 #include "bitbuffer.h"
 #include "availbits.h"
 #include "encode.h"
+#include "util.h"
 
 #include "bitbuffer_inline.h"
 
@@ -828,7 +829,7 @@ int init_bit_allocation(twolame_options * glopts)
     for (brindex = 0; brindex < 15; brindex++)
         glopts->bitrateindextobits[brindex] = 0;
 
-    if (header->version == 0) {
+    if (header->version == TWOLAME_MPEG2) {
         /* LSF: so can use any bitrate index from 1->15 */
         glopts->lower_index = 1;
         glopts->upper_index = 14;
@@ -848,6 +849,14 @@ int init_bit_allocation(twolame_options * glopts)
         } else
             glopts->upper_index = glopts->vbr_upper_index;
     }
+    /* when vbr is requested, check glopts->bitrate and fix it eventually */
+    if (glopts->vbr) {
+        /* the specified bitrate will be used as a lower bound when valid */
+        if (glopts->bitrate < twolame_index_bitrate((int)glopts->version, glopts->lower_index))
+            glopts->bitrate = twolame_index_bitrate((int)glopts->version, glopts->lower_index);
+        else
+            glopts->lower_index = twolame_get_bitrate_index(glopts->bitrate, glopts->version);
+    }
 
 
     /* set up a conversion table for bitrateindex->bits for this version/sampl freq This will be
@@ -855,7 +864,7 @@ int init_bit_allocation(twolame_options * glopts)
        by vbr_bits_for_nonoise) */
     for (brindex = glopts->lower_index; brindex <= glopts->upper_index; brindex++) {
         glopts->bitrateindextobits[brindex] =
-            (int) (1152.0 / (glopts->samplerate_out / 1000.0) * (FLOAT) glopts->bitrate);
+            (int) (1152.0 / (glopts->samplerate_out / 1000.0) * (FLOAT) twolame_index_bitrate((int)glopts->version, brindex));
     }
 
     return 0;
@@ -921,11 +930,8 @@ void main_bit_allocation(twolame_options * glopts,
         a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     } else {
         /* do the VBR bit allocation method */
-        header->bitrate_index = glopts->lower_index;
-        *adb = available_bits(glopts);
         {
             int brindex;
-            int found = FALSE;
 
             /* Work out how many bits are needed for there to be no noise (ie all MNR > VBRLEVEL) */
             int req = bits_for_nonoise(glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc);
@@ -939,16 +945,16 @@ void main_bit_allocation(twolame_options * glopts,
                        actually required. e.g. on "messages from earth" track 6, the guess was
                        wrong on 75/36341 frames. each time it guessed higher. MFC Feb 2003 */
                     guessindex = brindex;
-                    found = TRUE;
                     break;
                 }
             }
             /* Just for sanity */
-            if (found == FALSE)
+            if (brindex == glopts->upper_index+1)
                 guessindex = glopts->upper_index;
         }
 
         header->bitrate_index = guessindex;
+        glopts->bitrate = twolame_index_bitrate((int)glopts->version, guessindex);
         *adb = available_bits(glopts);
 
         /* update the statistics */
