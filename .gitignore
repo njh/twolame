@@ -5,6 +5,9 @@
 *.la
 *.lo
 *.o
+*.log
+*.trs
+
 aclocal.m4
 autom4te.cache
 build-scripts/*.m4

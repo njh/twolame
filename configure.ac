@@ -59,6 +59,10 @@ if test "$USE_MAINTAINER_MODE" = yes; then
   AC_PATH_PROG([PATH_XMLTO], [xmlto])
 fi
 
+AC_PATH_PROG(PERL, perl)
+if test -z "$PERL"; then
+  AC_MSG_WARN([perl is needed to run the test suite])
+fi
 
 
 dnl ############## Check that types are the right size
