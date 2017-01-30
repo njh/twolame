@@ -11,8 +11,9 @@ INDENT = indent -npro -kr -nsob -fca -blf -ip1 -hnl -l100 -lc100 -nut -ts4 -v
 indent:
 	find $(top_srcdir) -type f -name "*.[ch]" -print -exec $(INDENT) {} ';'
 
-README: README.md
-	cp $< $@
+# Copy README.md to README when building distribution
+dist-hook:
+	[ -f README.md ] && cat README.md > README || true
 
 EXTRA_DIST = \
 	autogen.sh \
