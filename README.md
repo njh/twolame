@@ -1,6 +1,8 @@
 TwoLAME
 =======
 
+[![Travis Build Status](https://travis-ci.org/njh/twolame.svg?branch=master)](https://travis-ci.org/njh/twolame)
+
 Based on tooLAME by Michael Cheng
 
 All changes to the ISO source are licensed under the LGPL  

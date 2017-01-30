@@ -13,7 +13,7 @@ indent:
 
 # Copy README.md to README when building distribution
 README:
-	[ -f README.md ] && cat README.md > README || true
+	[ -f README.md ] && fgrep -v "Build Status]" $(top_srcdir)/README.md > $@ || true
 
 EXTRA_DIST = \
 	autogen.sh \
