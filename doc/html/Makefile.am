@@ -55,9 +55,6 @@ authors.html: $(top_srcdir)/AUTHORS
 changelog.html: $(top_srcdir)/ChangeLog
 	$(asciidoc) -o $@ $<
 
-todo.html: $(top_srcdir)/TODO
-	$(asciidoc) -o $@ $<
-
 api.html: $(top_srcdir)/doc/api.txt
 	$(asciidoc) -o $@ $<
 
