@@ -1,5 +1,5 @@
 dnl Require autoconf version >= 2.60
-AC_PREREQ(2.60)
+AC_PREREQ([2.69])
 
 
 dnl ############# Initialization
@@ -45,7 +45,7 @@ AC_PROG_CC
 AC_PROG_CC_C99
 AC_PROG_INSTALL
 AC_PROG_LN_S
-AC_PROG_LIBTOOL
+LT_INIT
 
 AC_C_BIGENDIAN
 AC_C_INLINE
@@ -145,7 +145,7 @@ fi
 
 dnl ############## Output files
 
-AM_CONFIG_HEADER([libtwolame/config.h])
+AC_CONFIG_HEADERS([libtwolame/config.h])
 
 AC_CONFIG_FILES([
 	Makefile \
