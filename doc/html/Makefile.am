@@ -24,7 +24,6 @@ asciidoc_files = \
     index.html \
     psycho.html \
     readme.html \
-    todo.html \
     twolame.1.html \
     vbr.html
 
