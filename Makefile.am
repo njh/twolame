@@ -12,7 +12,7 @@ indent:
 	find $(top_srcdir) -type f -name "*.[ch]" -print -exec $(INDENT) {} ';'
 
 # Copy README.md to README when building distribution
-dist-hook:
+README:
 	[ -f README.md ] && cat README.md > README || true
 
 EXTRA_DIST = \
