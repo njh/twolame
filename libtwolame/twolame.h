@@ -82,9 +82,9 @@ extern "C" {
  *	MPEG2 is for Lower Sampling Frequencies - LSF < 32000.
  */
     typedef enum {
-        TWOLAME_MPEG2 = 0,
-                        /**< MPEG-2	 - for sample rates less than 32k */
-        TWOLAME_MPEG1   /**< MPEG-1 */
+        TWOLAME_MPEG_UNKNOWN = -1,
+        TWOLAME_MPEG2 = 0, /**< MPEG-2 - for sample rates less than 32k */
+        TWOLAME_MPEG1 = 1  /**< MPEG-1 */
     } TWOLAME_MPEG_version;
 
 
