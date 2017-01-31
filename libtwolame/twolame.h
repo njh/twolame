@@ -947,6 +947,7 @@ extern "C" {
  *
  *	\param glopts	pointer to twolame options pointer for the (N) encoded frame
  *	\param mp2buffer	buffer to the (N-1) encoded frame
+ *	\param mp2buffer_size	the length (in bytes) of mp2buffer
  *	\return					0 if successful,
  *							non-zero on failure
  */
