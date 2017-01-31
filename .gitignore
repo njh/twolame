@@ -31,6 +31,8 @@ Doxyfile
 stamp-h1
 twolame.pc
 
+README
+
 doc/html/*.html
 doc/html/*.js
 doc/html/*.png
