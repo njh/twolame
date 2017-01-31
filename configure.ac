@@ -1,4 +1,4 @@
-dnl Require autoconf version >= 2.80
+dnl Require autoconf version >= 2.68
 AC_PREREQ([2.68])
 
 
