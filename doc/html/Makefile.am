@@ -1,9 +1,9 @@
 
 asciidoc=@PATH_ASCIIDOC@ -b xhtml11 \
 	-a revision="@PACKAGE_VERSION@" \
-	-a theme=twolame \
+	-a stylesheet=twolame.css \
 	-a linkcss \
-	-a stylesdir=$(srcdir)
+	-a stylesdir='.'
 
 pkgdocdir = @docdir@
 pkghtmldir = $(pkgdocdir)/html
