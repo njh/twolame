@@ -202,11 +202,10 @@ void twolame_print_config(twolame_options * glopts)
                 twolame_get_in_samplerate(glopts), twolame_get_num_channels(glopts));
         fprintf(fd, "Output: %d Hz, %s\n",
                 twolame_get_out_samplerate(glopts), twolame_get_mode_name(glopts));
-        fprintf(fd, "%d kbps ", twolame_get_bitrate(glopts));
         if (twolame_get_VBR(glopts))
             fprintf(fd, "VBR ");
         else
-            fprintf(fd, "CBR ");
+            fprintf(fd, "%d kbps CBR ", twolame_get_bitrate(glopts));
         fprintf(fd, "%s Layer II ", twolame_get_version_name(glopts));
         fprintf(fd, "psycho model=%d \n", twolame_get_psymodel(glopts));
 
