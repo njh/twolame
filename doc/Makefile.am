@@ -12,7 +12,7 @@ man_MANS = twolame.1
 if MAINTAINER_MODE
 
 twolame.1.xml: twolame.1.txt
-	asciidoc -d manpage -b docbook -o twolame.1.xml twolame.1.txt
+	@PATH_ASCIIDOC@ -d manpage -b docbook -o twolame.1.xml twolame.1.txt
 
 twolame.1: twolame.1.xml
 	@PATH_XMLTO@ man twolame.1.xml
