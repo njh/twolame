@@ -479,13 +479,8 @@ void write_bit_alloc(twolame_options * glopts, unsigned int bit_alloc[2][SBLIMIT
     int sb, ch;
 
     for (sb = 0; sb < sblimit; sb++) {
-        if (sb < jsbound) {
-            for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++) {
-                buffer_putbits(bs, bit_alloc[ch][sb], nbal[line[glopts->tablenum][sb]]);
-                glopts->num_crc_bits += nbal[line[glopts->tablenum][sb]];
-            }
-        } else {
-            buffer_putbits(bs, bit_alloc[0][sb], nbal[line[glopts->tablenum][sb]]);
+        for (ch = 0; ch < ((sb < jsbound) ? nch : 1); ch++) {
+            buffer_putbits(bs, bit_alloc[ch][sb], nbal[line[glopts->tablenum][sb]]);
             glopts->num_crc_bits += nbal[line[glopts->tablenum][sb]];
         }
     }
