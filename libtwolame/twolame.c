@@ -282,6 +282,29 @@ int twolame_init_params(twolame_options * glopts)
         glopts->freeformat = FALSE;   // no sense in requiring freeformat encoding without setting a bitrate
     }
 
+    /* Check for bitrate validity */
+    if (glopts->version == TWOLAME_MPEG1
+        &&
+        !glopts->freeformat
+        &&
+        !glopts->vbr) {
+        /* some limitation apply for MPEG1 when CBR and freeformat is not selected */
+        if (glopts->mode == TWOLAME_MONO) {
+            if (glopts->bitrate > 192) {
+                fprintf(stderr, "twolame_init_params(): %dkbps is an invalid bitrate for mono encoding.\n",
+                        glopts->bitrate);
+                return -1;
+            }
+        }
+        else {
+            if (glopts->bitrate < 64 || glopts->bitrate == 80) {
+                fprintf(stderr, "twolame_init_params(): %dkbps is an invalid bitrate for 2ch encoding.\n",
+                        glopts->bitrate);
+                return -1;
+            }
+        }
+    }
+
     /* Can't do DAB and energylevel extensions at the same time Because both of them think they're
        the only ones inserting information into the ancillary section of the frame */
     if (glopts->do_dab && glopts->do_energy_levels) {
