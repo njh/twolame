@@ -393,11 +393,14 @@ static void scale_and_mix_samples(twolame_options * glopts)
 
     // apply scaling to both channels
     if (glopts->scale != 0 && glopts->scale != 1.0) {
-        for (i = 0; i < num_samples; ++i) {
-            glopts->buffer[0][i] *= glopts->scale;
-            if (glopts->num_channels_in == 2)
+        if (glopts->num_channels_in == 2)
+            for (i = 0; i < num_samples; ++i) {
+                glopts->buffer[0][i] *= glopts->scale;
                 glopts->buffer[1][i] *= glopts->scale;
-        }
+            }
+        else
+            for (i = 0; i < num_samples; ++i)
+                glopts->buffer[0][i] *= glopts->scale;
     }
     // apply scaling to channel 0 (left)
     if (glopts->scale_left != 0 && glopts->scale_left != 1.0) {
@@ -650,11 +653,14 @@ int twolame_encode_buffer(twolame_options * glopts,
             samples_to_copy = num_samples;
 
         /* Copy across samples */
-        for (i = 0; i < samples_to_copy; i++) {
-            glopts->buffer[0][glopts->samples_in_buffer + i] = *leftpcm++;
-            if (glopts->num_channels_in == 2)
+        if (glopts->num_channels_in == 2)
+            for (i = 0; i < samples_to_copy; i++) {
+                glopts->buffer[0][glopts->samples_in_buffer + i] = *leftpcm++;
                 glopts->buffer[1][glopts->samples_in_buffer + i] = *rightpcm++;
-        }
+            }
+        else
+            for (i = 0; i < samples_to_copy; i++)
+                glopts->buffer[0][glopts->samples_in_buffer + i] = *leftpcm++;
 
 
         /* Update sample counts */
@@ -706,11 +712,14 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
             samples_to_copy = num_samples;
 
         /* Copy across samples */
-        for (i = 0; i < samples_to_copy; i++) {
-            glopts->buffer[0][glopts->samples_in_buffer + i] = *pcm++;
-            if (glopts->num_channels_in == 2)
+        if (glopts->num_channels_in == 2)
+            for (i = 0; i < samples_to_copy; i++) {
+                glopts->buffer[0][glopts->samples_in_buffer + i] = *pcm++;
                 glopts->buffer[1][glopts->samples_in_buffer + i] = *pcm++;
-        }
+            }
+        else
+            for (i = 0; i < samples_to_copy; i++)
+                glopts->buffer[0][glopts->samples_in_buffer + i] = *pcm++;
 
 
         /* Update sample counts */
