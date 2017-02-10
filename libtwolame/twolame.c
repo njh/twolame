@@ -190,8 +190,16 @@ int twolame_init_params(twolame_options * glopts)
     }
     // Check the number of channels
     if (glopts->num_channels_in != 1 && glopts->num_channels_in != 2) {
-        fprintf(stderr,
-                "twolame_init_params(): must specify number of input channels using twolame_set_num_channels().\n");
+        if (glopts->num_channels_in == 0) {
+            /* this error is due to the caller frontend */
+            fprintf(stderr,
+                    "twolame_init_params(): must specify number of input channels using twolame_set_num_channels().\n");
+        }
+        else {
+            /* this error is due to the user feeding a wrong file */
+            fprintf(stderr,
+                    "Error: twolame cannot encode files with more than 2 channels.\n");
+        }
         return -1;
     }
     // If not output samplerate has been set, then set it to the input sample rate
