@@ -169,6 +169,15 @@ int twolame_get_framelength(twolame_options * glopts)
 }
 
 
+// Get the bitrate corrensponding to a given index
+int twolame_index_bitrate(int mpeg_ver, int index)
+{
+    if (index>0 && index<15) {
+        return (bitrate_table[mpeg_ver][index]);
+    }
+    return 0;
+}
+
 
 // Print the library version and
 //  encoder parameter settings to STDERR

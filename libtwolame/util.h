@@ -31,6 +31,7 @@ const char *twolame_mpeg_version_name(int version);
 int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version);
 int twolame_get_samplerate_index(long sample_rate);
 int twolame_get_version_for_samplerate(long sample_rate);
+int twolame_index_bitrate(int mpeg_ver, int index);
 
 #endif                          /* TWOLAME_UTIL_H_ */
 

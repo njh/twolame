@@ -142,7 +142,7 @@ static int init_header_info(twolame_options * glopts)
         return -1;
     }
 
-    // Convert the bitrate to the an index 
+    // Convert the bitrate to the an index
     if (glopts->freeformat)
         header->bitrate_index = 0;
     else
@@ -231,7 +231,7 @@ int twolame_init_params(twolame_options * glopts)
         }
     }
     // Choose the bitrate (if none chosen)
-    if (glopts->bitrate <= 0) {
+    if (glopts->bitrate < 0 && !glopts->vbr) {
         if (glopts->mode == TWOLAME_MONO) {
             switch (glopts->samplerate_out) {
             case 48000:
@@ -280,6 +280,10 @@ int twolame_init_params(twolame_options * glopts)
                     glopts->bitrate, glopts->samplerate_out);
         }
         glopts->freeformat = FALSE;   // no sense in requiring freeformat encoding without setting a bitrate
+    }
+    if (glopts->bitrate < 0 && glopts->vbr) {
+        /* set the minimum bitrate - 'init_bit_allocation' will fix it if needed */
+        glopts->bitrate = twolame_index_bitrate((int)glopts->version, 1);
     }
 
     /* Check for bitrate validity */
@@ -359,12 +363,12 @@ int twolame_init_params(twolame_options * glopts)
     if (init_header_info(glopts) < 0) {
         return -1;
     }
-    // Select table number and sblimit
-    if (encode_init(glopts) < 0) {
-        return -1;
-    }
     // initialise bitrate allocation
     if (init_bit_allocation(glopts) < 0) {
+        return -1;
+    }
+    // Select table number and sblimit
+    if (encode_init(glopts) < 0) {
         return -1;
     }
     // Check input samplerate is same as output samplerate
