@@ -748,11 +748,13 @@ int main(int argc, char **argv)
             exit(ERR_WRITING_OUTPUT);
         }
         else {
-            fprintf(stderr, "\rEncoding frame: %i", frame_count);
-            if (total_frames) {
-                fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
+            if (twolame_get_verbosity(encopts) > 0) {
+                fprintf(stderr, "\rEncoding frame: %i", frame_count);
+                if (total_frames) {
+                    fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
+                }
+                fflush(stderr);
             }
-            fflush(stderr);
         }
         total_bytes += bytes_out;
     }
