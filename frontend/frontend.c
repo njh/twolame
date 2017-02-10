@@ -635,10 +635,6 @@ int main(int argc, char **argv)
     twolame_set_num_channels(encopts, sfinfo.channels);
     twolame_set_in_samplerate(encopts, sfinfo.samplerate);
 
-
-    // Open the output file
-    outputfile = open_output_file(outputfilename);
-
     // initialise twolame with this set of options
     if (twolame_init_params(encopts) != 0) {
         fprintf(stderr, "Error: configuring libtwolame encoder failed.\n");
@@ -647,6 +643,9 @@ int main(int argc, char **argv)
     // display encoder settings
     twolame_print_config(encopts);
 
+
+    // Open the output file
+    outputfile = open_output_file(outputfilename);
 
     // Only encode a single frame of mpeg audio ?
     if (single_frame_mode)
