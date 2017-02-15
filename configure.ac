@@ -6,7 +6,7 @@ dnl ############# Initialization
 
 AC_INIT(
   [TwoLAME],
-  [0.3.13],
+  [0.4.0],
   [twolame-discuss@lists.sourceforge.net],
   [twolame],
   [http://www.twolame.org/])
