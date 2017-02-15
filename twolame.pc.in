@@ -5,7 +5,7 @@ includedir=@includedir@
 
 Name: twolame
 Description: An optimized MPEG Audio Layer 2 encoder
-Requires: 
+Requires:
 Version: @VERSION@
 Libs: -L${libdir} -ltwolame
-Cflags: -I${includedir} 
+Cflags: -I${includedir}

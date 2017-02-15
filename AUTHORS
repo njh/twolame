@@ -31,7 +31,7 @@ TwoLAME Authors
 .LAME specific contributions
  -	fht routines from Ron Mayer <mayer at acuson.com>
  -	fht tweaking by Mathew Hendry <math at vissci.com>
- -	window_subband & filter subband from LAME circa v3.30 
+ -	window_subband & filter subband from LAME circa v3.30
 		(multiple LAME authors)
 		(before Takehiro's window/filter/mdct combination)
 

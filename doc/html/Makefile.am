@@ -7,7 +7,7 @@ asciidoc=@PATH_ASCIIDOC@ -b xhtml11 \
 
 pkgdocdir = @docdir@
 pkghtmldir = $(pkgdocdir)/html
-    
+
 doxygen_files = \
     doxygen.css \
     doxygen.png \
@@ -30,7 +30,7 @@ asciidoc_files = \
 stylesheet_files = \
     twolame-manpage.css \
     twolame.css
-    
+
 
 pkghtml_DATA = $(doxygen_files) $(asciidoc_files) $(stylesheet_files)
 EXTRA_DIST = Doxyfile.in $(pkghtml_DATA)

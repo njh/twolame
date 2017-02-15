@@ -50,11 +50,11 @@
  * 2/12/92  Masahiro Iwadare    Fixed some potential bugs in          *
  *          Davis Pan           subsampling()                         *
  * 2/25/92  Masahiro Iwadare    Fixed some more potential bugs        *
- * 6/24/92  Tan Ah Peng         Modified window for FFT               * 
+ * 6/24/92  Tan Ah Peng         Modified window for FFT               *
  *                              (denominator N-1 to N)                *
  *                              Updated all critical band rate &      *
  *                              absolute threshold tables and critical*
- *                              boundaries for use with Layer I & II  *  
+ *                              boundaries for use with Layer I & II  *
  *                              Corrected boundary limits for tonal   *
  *                              component computation                 *
  *                              Placement of non-tonal component at   *

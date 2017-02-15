@@ -2,7 +2,7 @@ dist_check_SCRIPTS = test.pl
 dist_check_DATA = testcase-44100.wav testcase-22050.wav
 
 TESTS = $(dist_check_SCRIPTS)
-LOG_COMPILER = $(PERL) 
+LOG_COMPILER = $(PERL)
 AM_LOG_FLAGS = -Mstrict -w
 
 TESTS_ENVIRONMENT = \

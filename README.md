@@ -5,7 +5,7 @@ TwoLAME
 
 Based on tooLAME by Michael Cheng
 
-All changes to the ISO source are licensed under the LGPL  
+All changes to the ISO source are licensed under the LGPL
 (see COPYING for details)
 
     TwoLAME is free software; you can redistribute it and/or
@@ -26,17 +26,17 @@ All changes to the ISO source are licensed under the LGPL
 INTRODUCTION
 ------------
 
-TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder. 
+TwoLAME is an optimized MPEG Audio Layer 2 (MP2) encoder.
 It is based heavily on:
 
 * tooLAME by Michael Cheng
-* the ISO dist10 code 
+* the ISO dist10 code
 * improvement to algorithms as part of the LAME project (lame.sf.net)
 * other contributors (see AUTHORS)
 
-TwoLAME should be able to be used as a drop-in replacement for 
-LAME (a MPEG Layer 3 encoder). The frontend takes very similar 
-command line options to LAME, and the backend library has a very 
+TwoLAME should be able to be used as a drop-in replacement for
+LAME (a MPEG Layer 3 encoder). The frontend takes very similar
+command line options to LAME, and the backend library has a very
 similar API to LAME.
 
 For the latest version of TwoLAME, visit the project homepage:
@@ -47,12 +47,12 @@ MPEG Audio Layer 2 (MP2)
 ------------------------
 (taken from Wikipedia article on MP2)
 
-MP2 (sometimes incorrectly named Musicam) is a short form of MPEG Audio Layer II, 
-and it is also used as a file extension for files containing audio data of this 
-type. While it has largely been superseded by MP3 for PC and Internet applications, 
-it remains a dominant standard for audio broadcasting as part of the DAB digital 
-radio and DVB digital television standards. It is also used internally within the 
-radio industry, for example in NPR's PRSS Content Depot programming distribution 
+MP2 (sometimes incorrectly named Musicam) is a short form of MPEG Audio Layer II,
+and it is also used as a file extension for files containing audio data of this
+type. While it has largely been superseded by MP3 for PC and Internet applications,
+it remains a dominant standard for audio broadcasting as part of the DAB digital
+radio and DVB digital television standards. It is also used internally within the
+radio industry, for example in NPR's PRSS Content Depot programming distribution
 system.
 
 
@@ -72,14 +72,14 @@ REFERENCE PAPERS
 
 (Specifically Layer II Papers)
 
-Kumar, M & Zubair, M., A high performance software implementation of mpeg audio 
+Kumar, M & Zubair, M., A high performance software implementation of mpeg audio
 encoder, 1996, ICASSP Conf Proceedings (I think)
 
-Fischer, K.A., Calculation of the psychoacoustic simultaneous masked threshold 
+Fischer, K.A., Calculation of the psychoacoustic simultaneous masked threshold
 based on MPEG/Audio Encoder Model One, ICSI Technical Report, 1997
-ftp://ftp.icsi.berkeley.edu/pub/real/kyrill/PsychoMpegOne.tar.Z 
+ftp://ftp.icsi.berkeley.edu/pub/real/kyrill/PsychoMpegOne.tar.Z
 
-Hyen-O et al, New Implementation techniques of a real-time mpeg-2 audio encoding 
+Hyen-O et al, New Implementation techniques of a real-time mpeg-2 audio encoding
 system. p2287, ICASSP 99.
 
 Imai, T., et al, MPEG-1 Audio real-time encoding system, IEEE Trans on Consumer
@@ -91,6 +91,6 @@ Electronics Letters, v34, n8, p721
 Murphy, C & Anandakumar, K, Real-time MPEG-1 audio coding and decoding on a DSP
 Chip, IEEE Trans on Consumer Electronics, v43, n1, 1997 p40
 
-Hans, M & Bhaskaran, V., A compliant MPEG-1 layer II audio decoder with 16-B 
+Hans, M & Bhaskaran, V., A compliant MPEG-1 layer II audio decoder with 16-B
 arithmetic operations, IEEE Signal Proc Letters v4 n5 1997 p121
 

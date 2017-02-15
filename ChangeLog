@@ -1,4 +1,4 @@
-What is new in TwoLAME 
+What is new in TwoLAME
 ======================
 
 Version 0.3.13 (2010-01-21)
@@ -60,13 +60,13 @@ Version 0.3.9 (2006-12-31)
 - Buffer overrun fix in new_extension()
 - (libtwolame) Added warning that DAB support is still broken
 - (libtwolame) Added twolame_get_framelength() to return number of bytes per frame
-- Added TWOLAME_SAMPLES_PER_FRAME macro, clarifying that there are 
+- Added TWOLAME_SAMPLES_PER_FRAME macro, clarifying that there are
   always 1152 samples per frame in Layer 2
 - Frontend now displays extra information
    * Duration of input file (if known)
    * Total number of frames to be encoded and percentage complete
    * The filesize of the output file
- - Cleaned up source files so that it is consistent and all uses tabs (tab width 4)  
+ - Cleaned up source files so that it is consistent and all uses tabs (tab width 4)
 
 
 

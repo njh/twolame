@@ -36,7 +36,7 @@ dnl increment age.
 dnl
 dnl If any interfaces have been removed since the last public release, then set
 dnl age to 0.
-dnl 
+dnl
 
 TWOLAME_SO_VERSION=0:0:0
 AC_SUBST(TWOLAME_SO_VERSION)
@@ -100,14 +100,14 @@ if test "${enable_sndfile}" != "no" ; then
 		[ AC_CHECK_LIB( [sndfile], [sf_command],
 			[ AC_CHECK_HEADER( [sndfile.h],
 				[ HAVE_SNDFILE="yes"
-				  SNDFILE_CFLAGS="" 
+				  SNDFILE_CFLAGS=""
 				  SNDFILE_LIBS="-lsndfile" ],
 				[ AC_MSG_WARN([Can't find sndfile.h on your system]) ] ) ],
 			[ AC_MSG_WARN([Can't find libsndfile library on your system]) ]
 		) ]
 	)
 fi
-			
+
 AC_SUBST(SNDFILE_CFLAGS)
 AC_SUBST(SNDFILE_LIBS)
 
@@ -117,7 +117,7 @@ dnl ############## Header Checks
 
 AC_HEADER_STDC
 AC_CHECK_HEADERS(malloc.h assert.h unistd.h inttypes.h)
-AC_CHECK_HEADER(getopt.h, 
+AC_CHECK_HEADER(getopt.h,
 	[ HAVE_GETOPT_H="yes" ],
 	[ HAVE_GETOPT_H="no"
 	  AC_MSG_WARN([getopt.h is unavailable on your system]) ]
@@ -134,7 +134,7 @@ if test "x$HAVE_SNDFILE" = "xyes"; then
 	else
 		AC_MSG_WARN([Not building twolame frontend because getopt.h is missing.])
 	fi
-else 
+else
 	AC_MSG_WARN([Not building twolame frontend because libsndfile is missing.])
 fi
 AC_SUBST(TWOLAME_BIN)
