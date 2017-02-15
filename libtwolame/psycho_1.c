@@ -396,7 +396,7 @@ static void psycho_1_subsampling(mask power[HAN_SIZE], g_thres * ltg, int *tone,
         if (power[i].next == LAST)
             break;              /* tonal component */
         if (ltg[power[power[i].next].map].bark -    /* is less than .5 */
-            ltg[power[i].map].bark < 0.5) { /* bark, take the */
+                ltg[power[i].map].bark < 0.5) { /* bark, take the */
             if (power[power[i].next].x > power[i].x) {  /* maximum */
                 if (old == STOP)
                     *tone = power[i].next;

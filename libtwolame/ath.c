@@ -58,9 +58,9 @@ FLOAT ath_db(FLOAT f, FLOAT value)
     f = MIN(18.0, f);
 
     ath = 3.640 * pow(f, -0.8)
-        - 6.800 * exp(-0.6 * pow(f - 3.4, 2.0))
-        + 6.000 * exp(-0.15 * pow(f - 8.7, 2.0))
-        + (0.6 + 0.04 * valueold) * 0.001 * pow(f, 4.0);
+          - 6.800 * exp(-0.6 * pow(f - 3.4, 2.0))
+          + 6.000 * exp(-0.15 * pow(f - 8.7, 2.0))
+          + (0.6 + 0.04 * valueold) * 0.001 * pow(f, 4.0);
 
     /* MFC Feb 2003 I've changed the fudge technique on the code. The "-l [float]" value
        raises/lowers the ATH by this many dB */

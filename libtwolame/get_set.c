@@ -55,7 +55,7 @@ TWOLAME_MPEG_mode twolame_get_mode(twolame_options * glopts)
 const char *twolame_get_mode_name(twolame_options * glopts)
 {
     static const char *mode_name[6] =
-        { "Auto", "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode" };
+    { "Auto", "Stereo", "J-Stereo", "Dual-Channel", "Mono", "Illegal Mode" };
     int mode = glopts->mode;
     if (mode >= TWOLAME_AUTO_MODE && mode <= TWOLAME_MONO)
         return (mode_name[mode + 1]);
@@ -184,7 +184,7 @@ int twolame_get_bitrate(twolame_options * glopts)
 int twolame_set_emphasis(twolame_options * glopts, TWOLAME_Emphasis emphasis)
 {
     if (emphasis != TWOLAME_EMPHASIS_N &&
-        emphasis != TWOLAME_EMPHASIS_5 && emphasis != TWOLAME_EMPHASIS_C)
+            emphasis != TWOLAME_EMPHASIS_5 && emphasis != TWOLAME_EMPHASIS_C)
         return (-1);
     glopts->emphasis = emphasis;
     return (0);
@@ -490,8 +490,8 @@ int twolame_get_DAB_crc_length(twolame_options * glopts)
 }
 
 int twolame_set_DAB_scf_crc(twolame_options * glopts,
-                             unsigned char *mp2buffer,
-                             int mp2buffer_size)
+                            unsigned char *mp2buffer,
+                            int mp2buffer_size)
 {
     /* ScF-CRC field precedes two bytes of F-PAD */
     unsigned char *pTo = &mp2buffer[mp2buffer_size  - 3];

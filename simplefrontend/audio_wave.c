@@ -143,7 +143,7 @@ wave_info_t *wave_init(char *inPath)
         return (NULL);
 
     if (wave_header_buffer[8] == 'W' && wave_header_buffer[9] == 'A'
-        && wave_header_buffer[10] == 'V' && wave_header_buffer[11] == 'E') {
+            && wave_header_buffer[10] == 'V' && wave_header_buffer[11] == 'E') {
         printf("Parsing Wave File Header\n");
         if (NativeByteOrder == order_unknown) {
             NativeByteOrder = DetermineByteOrder();
@@ -156,30 +156,30 @@ wave_info_t *wave_init(char *inPath)
 
         if (NativeByteOrder == order_littleEndian) {
             samplerate = wave_header_buffer[24] +
-                (wave_header_buffer[25] << 8) +
-                (wave_header_buffer[26] << 16) + (wave_header_buffer[27] << 24);
+                         (wave_header_buffer[25] << 8) +
+                         (wave_header_buffer[26] << 16) + (wave_header_buffer[27] << 24);
         } else {
             samplerate = wave_header_buffer[27] +
-                (wave_header_buffer[26] << 8) +
-                (wave_header_buffer[25] << 16) + (wave_header_buffer[24] << 24);
+                         (wave_header_buffer[26] << 8) +
+                         (wave_header_buffer[25] << 16) + (wave_header_buffer[24] << 24);
         }
 
         /* Wave File */
         switch (samplerate) {
-            case 44100:
-            case 48000:
-            case 32000:
-            case 24000:
-            case 22050:
-            case 16000:
-                printf(">>> %ld Hz sampling freq selected\n", samplerate);
-                break;
-            default:
-                /* Unknown Unsupported Frequency */
-                printf(">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
-                printf(">>> Default 44.1 kHz samp freq selected\n");
-                samplerate = 44100;
-                break;
+        case 44100:
+        case 48000:
+        case 32000:
+        case 24000:
+        case 22050:
+        case 16000:
+            printf(">>> %ld Hz sampling freq selected\n", samplerate);
+            break;
+        default:
+            /* Unknown Unsupported Frequency */
+            printf(">>> Unknown samp freq %ld Hz in Wave Header\n", samplerate);
+            printf(">>> Default 44.1 kHz samp freq selected\n");
+            samplerate = 44100;
+            break;
         }
 
         if ((long) wave_header_buffer[22] == 1) {

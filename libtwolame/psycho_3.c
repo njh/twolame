@@ -431,10 +431,10 @@ static psycho_3_mem *psycho_3_init(twolame_options * glopts)
         ath[i] = ath_db(freq, glopts->athlevel);
     }
 
-    {                           /* Work out the critical bands Starting from line 0, all lines
-                                   within 1 bark of the starting bark are added to the same
-                                   critical band. When a line is greater by 1.0 of a bark, start a
-                                   new critical band.  */
+    {   /* Work out the critical bands Starting from line 0, all lines
+           within 1 bark of the starting bark are added to the same
+           critical band. When a line is greater by 1.0 of a bark, start a
+           new critical band.  */
 
         cbandindex[0] = 1;
         for (i = 1; i < HBLKSIZE; i++) {

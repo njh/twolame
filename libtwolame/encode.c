@@ -92,10 +92,10 @@ static const int nbal[9] = { 4, 4, 3, 2, 4, 3, 4, 3, 2 };
 /* 0, 1, 2, 3, 4,  5,  6,  7,  8,    9,     10,   11,     12,   13,     14,   15,      16,     17 */
 /* The number of steps allowed */
 static const int steps[18] =
-    { 0, 3, 5, 7, 9, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535 };
+{ 0, 3, 5, 7, 9, 15, 31, 63, 127, 255, 511, 1023, 2047, 4095, 8191, 16383, 32767, 65535 };
 /* The power of 2 just under the steps value */
 static const int steps2n[18] =
-    { 0, 2, 4, 4, 8, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 };
+{ 0, 2, 4, 4, 8, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 };
 /* The bits per codeword from TableB.4 */
 static const int bits[18] = { 0, 5, 7, 3, 10, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 
@@ -117,14 +117,18 @@ static const int table_sblimit[5] = { 27, 30, 8, 12, 30 };
 static const int line[5][SBLIMIT] = {
     /* 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
        31 */
-    {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, -1, -1, -1,
-     -1, -1},
-    {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, -1,
-     -1},
-    {4, 4, 5, 5, 5, 5, 5, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1, -1, -1, -1, -1},
-    {4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-     -1, -1, -1, -1, -1},
+    {   0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, -1, -1, -1,
+        -1, -1
+    },
+    {   0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, -1,
+        -1
+    },
+    {   4, 4, 5, 5, 5, 5, 5, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1, -1
+    },
+    {   4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+        -1, -1, -1, -1, -1
+    },
     /* LSF Table */
     {6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}
 };
@@ -191,7 +195,7 @@ int encode_init(twolame_options * glopts)
     /* decision rules refer to per-channel bitrates (kbits/sec/chan) */
     if (header->version == TWOLAME_MPEG1) { /* MPEG-1 */
         if ((sfrq == 48 && br_per_ch >= 56)
-            || (br_per_ch >= 56 && br_per_ch <= 80))
+                || (br_per_ch >= 56 && br_per_ch <= 80))
             glopts->tablenum = 0;
         else if (sfrq != 48 && br_per_ch >= 96)
             glopts->tablenum = 1;
@@ -809,13 +813,15 @@ int init_bit_allocation(twolame_options * glopts)
 
     static const int vbrlimits[2][3][2] = {
         /* MONO */
-        { /* 44 */ {6, 10},
-         /* 48 */ {3, 10},
-         /* 32 */ {6, 10}},
+        {   /* 44 */ {6, 10},
+            /* 48 */ {3, 10},
+            /* 32 */ {6, 10}
+        },
         /* STEREO */
-        { /* 44 */ {10, 14},
-         /* 48 */ {7, 14},
-         /* 32 */ {10, 14}}
+        {   /* 44 */ {10, 14},
+            /* 48 */ {7, 14},
+            /* 32 */ {10, 14}
+        }
     };
 
 
@@ -835,7 +841,7 @@ int init_bit_allocation(twolame_options * glopts)
     if (glopts->vbr_upper_index > 0) {
         /* User is requesting a specific upperbitrate */
         if ((glopts->vbr_upper_index < glopts->lower_index) ||
-            (glopts->vbr_upper_index > glopts->upper_index)) {
+                (glopts->vbr_upper_index > glopts->upper_index)) {
             fprintf(stderr, "Can't satisfy upper bitrate index constraint. out of bounds. %i\n",
                     glopts->vbr_upper_index);
             return -2;
@@ -1070,7 +1076,8 @@ int vbr_bit_allocation(twolame_options * glopts,
         vbr_maxmnr(mnr, used, sblimit, nch, &min_sb, &min_ch, glopts->vbrlevel);
 
         if (min_sb > -1) {      /* there was something to find */
-            int thisline = line[glopts->tablenum][min_sb]; {
+            int thisline = line[glopts->tablenum][min_sb];
+            {
                 /* find increase in bit allocation in subband [min] */
                 int nextstep_index = step_index[thisline][bit_alloc[min_ch][min_sb] + 1];
                 increment = SCALE_BLOCK * group[nextstep_index] * bits[nextstep_index];
@@ -1109,7 +1116,7 @@ int vbr_bit_allocation(twolame_options * glopts,
                 mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
                 /* Check if this min_sb subband has been fully allocated max bits */
                 if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits)
-                                                                            //
+                    //
                     // - 1)
                     used[min_ch][min_sb] = 2;   /* don't let this sb get any more bits */
             } else {
@@ -1224,7 +1231,8 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
         maxmnr(mnr, used, sblimit, nch, &min_sb, &min_ch);
 
         if (min_sb > -1) {      /* there was something to find */
-            int thisline = line[glopts->tablenum][min_sb]; {
+            int thisline = line[glopts->tablenum][min_sb];
+            {
                 /* find increase in bit allocation in subband [min] */
                 int nextstep_index = step_index[thisline][bit_alloc[min_ch][min_sb] + 1];
                 increment = SCALE_BLOCK * group[nextstep_index] * bits[nextstep_index];
@@ -1263,7 +1271,7 @@ int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
                 mnr[min_ch][min_sb] = SNR[thisstep_index] - SMR[min_ch][min_sb];
                 /* Check if this min_sb subband has been fully allocated max bits */
                 if (ba >= (1 << nbal[line[glopts->tablenum][min_sb]]) - 1)  // (*alloc)[min_sb][0].bits)
-                                                                            //
+                    //
                     // - 1)
                     used[min_ch][min_sb] = 2;   /* don't let this sb get any more bits */
             } else {

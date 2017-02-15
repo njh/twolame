@@ -347,7 +347,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
     while ((ch = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1) {
         switch (ch) {
 
-            // Input
+        // Input
         case 'r':
             use_raw = 1;
             break;
@@ -387,7 +387,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
 
 
 
-            // Output
+        // Output
         case 'm':
             if (*optarg == 's') {
                 twolame_set_mode(encopts, TWOLAME_STEREO);
@@ -447,7 +447,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             twolame_set_freeformat(encopts, TRUE);
             break;
 
-            // Miscellaneous
+        // Miscellaneous
         case 'c':
             twolame_set_copyright(encopts, TRUE);
             break;
@@ -486,7 +486,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             break;
 
 
-            // Verbosity
+        // Verbosity
         case 't':
             twolame_set_verbosity(encopts, atoi(optarg));
             break;

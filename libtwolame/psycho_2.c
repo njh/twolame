@@ -43,20 +43,20 @@
 static const FLOAT nmt = 5.5;
 
 static const FLOAT crit_band[27] = { 0, 100, 200, 300, 400, 510, 630, 770,
-    920, 1080, 1270, 1480, 1720, 2000, 2320, 2700,
-    3150, 3700, 4400, 5300, 6400, 7700, 9500, 12000,
-    15500, 25000, 30000
-};
+                                     920, 1080, 1270, 1480, 1720, 2000, 2320, 2700,
+                                     3150, 3700, 4400, 5300, 6400, 7700, 9500, 12000,
+                                     15500, 25000, 30000
+                                   };
 
 static const FLOAT bmax[27] = { 20.0, 20.0, 20.0, 20.0, 20.0, 17.0, 15.0,
-    10.0, 7.0, 4.4, 4.5, 4.5, 4.5, 4.5,
-    4.5, 4.5, 4.5, 4.5, 4.5, 4.5, 4.5,
-    4.5, 4.5, 4.5, 3.5, 3.5, 3.5
-};
+                                10.0, 7.0, 4.4, 4.5, 4.5, 4.5, 4.5,
+                                4.5, 4.5, 4.5, 4.5, 4.5, 4.5, 4.5,
+                                4.5, 4.5, 4.5, 3.5, 3.5, 3.5
+                              };
 
 static void psycho_2_read_absthr(absthr, table)
- FLOAT *absthr;
- int table;
+FLOAT *absthr;
+int table;
 {
     int j;
 #include "psycho_2_absthr.h"
@@ -157,15 +157,15 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
         mem->lthr[0][i] = 60802371420160.0;
         mem->lthr[1][i] = 60802371420160.0;
     }
-  /*****************************************************************************
-   * Initialization: Compute the following constants for use later               *
-   *    partition[HBLKSIZE] = the partition number associated with each           *
-   *                          frequency line                                   *
-   *    cbval[CBANDS]        = the center (average) bark value of each           *
-   *                          partition                                           *
-   *    numlines[CBANDS]    = the number of frequency lines in each partition  *
-   *    tmn[CBANDS]            = tone masking noise                               *
-   *****************************************************************************/
+    /*****************************************************************************
+     * Initialization: Compute the following constants for use later               *
+     *    partition[HBLKSIZE] = the partition number associated with each           *
+     *                          frequency line                                   *
+     *    cbval[CBANDS]        = the center (average) bark value of each           *
+     *                          partition                                           *
+     *    numlines[CBANDS]    = the number of frequency lines in each partition  *
+     *    tmn[CBANDS]            = tone masking noise                               *
+     *****************************************************************************/
     /* compute fft frequency multiplicand */
     freq_mult = (FLOAT) sfreq / (FLOAT) BLKSIZE;
 
@@ -199,10 +199,10 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
     numlines[partition[i - 1]] = itemp2;
     cbval[partition[i - 1]] = cbval[partition[i - 1]] / itemp2;
 
-  /************************************************************************
-   * Now compute the spreading function, s[j][i], the value of the spread-*
-   * ing function, centered at band j, for band i, store for later use      *
-   ************************************************************************/
+    /************************************************************************
+     * Now compute the spreading function, s[j][i], the value of the spread-*
+     * ing function, centered at band j, for band i, store for later use      *
+     ************************************************************************/
     for (j = 0; j < CBANDS; j++) {
         for (i = 0; i < CBANDS; i++) {
             temp1 = (cbval[i] - cbval[j]) * 1.05;
@@ -314,17 +314,17 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
 
     for (ch = 0; ch < nch; ch++) {
         for (i = 0; i < 2; i++) {
-      /*****************************************************************************
-       * Net offset is 480 samples (1056-576) for layer 2; this is because one must*
-       * stagger input data by 256 samples to synchronize psychoacoustic model with*
-       * filter bank outputs, then stagger so that center of 1024 FFT window lines *
-       * up with center of 576 "new" audio samples.                                   *
+            /*****************************************************************************
+             * Net offset is 480 samples (1056-576) for layer 2; this is because one must*
+             * stagger input data by 256 samples to synchronize psychoacoustic model with*
+             * filter bank outputs, then stagger so that center of 1024 FFT window lines *
+             * up with center of 576 "new" audio samples.                                   *
 
-           flush = 384*3.0/2.0;     = 576
-           syncsize = 1056;
-           sync_flush = syncsize - flush;    480
-           BLKSIZE = 1024
-       *****************************************************************************/
+                 flush = 384*3.0/2.0;     = 576
+                 syncsize = 1056;
+                 sync_flush = syncsize - flush;    480
+                 BLKSIZE = 1024
+             *****************************************************************************/
             {
                 short int *bufferp = buffer[ch];
                 for (j = 0; j < 480; j++) {
@@ -339,11 +339,11 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                     savebuf[ch][j] = *bufferp++;
             }
 
-      /**Compute FFT****************************************************************/
+            /**Compute FFT****************************************************************/
             psycho_2_fft(wsamp_r, energy, phi);
-      /*****************************************************************************
-       * calculate the unpredictability measure, given energy[f] and phi[f]           *
-       *****************************************************************************/
+            /*****************************************************************************
+             * calculate the unpredictability measure, given energy[f] and phi[f]           *
+             *****************************************************************************/
             /* only update data "age" pointers after you are done with both channels */
             /* for layer 1 computations, for the layer 2 FLOAT computations, the pointers */
             /* are reset automatically on the second pass */
@@ -392,10 +392,10 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                 else
                     c[j] = 0;
             }
-      /*****************************************************************************
-       * Calculate the grouped, energy-weighted, unpredictability measure,           *
-       * grouped_c[], and the grouped energy. grouped_e[]                           *
-       *****************************************************************************/
+            /*****************************************************************************
+             * Calculate the grouped, energy-weighted, unpredictability measure,           *
+             * grouped_c[], and the grouped energy. grouped_e[]                           *
+             *****************************************************************************/
 
             for (j = 1; j < CBANDS; j++) {
                 grouped_e[j] = 0;
@@ -408,10 +408,10 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                 grouped_c[partition[j]] += energy[j] * c[j];
             }
 
-      /*****************************************************************************
-       * convolve the grouped energy-weighted unpredictability measure               *
-       * and the grouped energy with the spreading function, s[j][k]               *
-       *****************************************************************************/
+            /*****************************************************************************
+             * convolve the grouped energy-weighted unpredictability measure               *
+             * and the grouped energy with the spreading function, s[j][k]               *
+             *****************************************************************************/
             for (j = 0; j < CBANDS; j++) {
                 ecb[j] = 0;
                 cb[j] = 0;
@@ -427,10 +427,10 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                     cb[j] = 0;
             }
 
-      /*****************************************************************************
-       * Calculate the required SNR for each of the frequency partitions           *
-       *         this whole section can be accomplished by a table lookup           *
-       *****************************************************************************/
+            /*****************************************************************************
+             * Calculate the required SNR for each of the frequency partitions           *
+             *         this whole section can be accomplished by a table lookup           *
+             *****************************************************************************/
             for (j = 0; j < CBANDS; j++) {
                 if (cb[j] < .05)
                     cb[j] = 0.05;
@@ -444,11 +444,11 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                 bc[j] = exp((FLOAT) - bc[j] * LN_TO_LOG10);
             }
 
-      /*****************************************************************************
-       * Calculate the permissible noise energy level in each of the frequency       *
-       * partitions. Include absolute threshold and pre-echo controls               *
-       *         this whole section can be accomplished by a table lookup           *
-       *****************************************************************************/
+            /*****************************************************************************
+             * Calculate the permissible noise energy level in each of the frequency       *
+             * partitions. Include absolute threshold and pre-echo controls               *
+             *         this whole section can be accomplished by a table lookup           *
+             *****************************************************************************/
             for (j = 0; j < CBANDS; j++)
                 if (rnorm[j] && numlines[j])
                     nb[j] = ecb[j] * bc[j] / (rnorm[j] * numlines[j]);
@@ -474,9 +474,9 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
 #endif
             }
 
-      /*****************************************************************************
-       * Translate the 512 threshold values to the 32 filter bands of the coder       *
-       *****************************************************************************/
+            /*****************************************************************************
+             * Translate the 512 threshold values to the 32 filter bands of the coder       *
+             *****************************************************************************/
             for (j = 0; j < 193; j += 16) {
                 minthres = 60802371420160.0;
                 sum_energy = 0.0;
@@ -498,9 +498,9 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
                 snrtmp[i][j / 16] = sum_energy / minthres;
                 snrtmp[i][j / 16] = 4.342944819 * log((FLOAT) snrtmp[i][j / 16]);
             }
-      /*****************************************************************************
-       * End of Psychoacuostic calculation loop                                       *
-       *****************************************************************************/
+            /*****************************************************************************
+             * End of Psychoacuostic calculation loop                                       *
+             *****************************************************************************/
         }
         for (i = 0; i < 32; i++) {
             smr[ch][i] = (snrtmp[0][i] > snrtmp[1][i]) ? snrtmp[0][i] : snrtmp[1][i];

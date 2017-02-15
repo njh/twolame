@@ -286,10 +286,10 @@ int twolame_init_params(twolame_options * glopts)
 
     /* Check for bitrate validity */
     if (glopts->version == TWOLAME_MPEG1
-        &&
-        !glopts->freeformat
-        &&
-        !glopts->vbr) {
+            &&
+            !glopts->freeformat
+            &&
+            !glopts->vbr) {
         /* some limitation apply for MPEG1 when CBR and freeformat is not selected */
         if (glopts->mode == TWOLAME_MONO) {
             if (glopts->bitrate > 192) {
@@ -858,9 +858,9 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
 
 
 int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
-                                              const float pcm[],
-                                              int num_samples,
-                                              unsigned char *mp2buffer, int mp2buffer_size)
+        const float pcm[],
+        int num_samples,
+        unsigned char *mp2buffer, int mp2buffer_size)
 {
     int mp2_size = 0;
     bit_stream *mybs;
