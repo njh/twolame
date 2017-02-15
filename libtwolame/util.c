@@ -37,7 +37,7 @@
 // of this library
 const char *get_twolame_version(void)
 {
-    const char *str = PACKAGE_VERSION;
+    static const char *str = PACKAGE_VERSION;
 
     return str;
 }
@@ -46,7 +46,7 @@ const char *get_twolame_version(void)
 // of this library
 const char *get_twolame_url(void)
 {
-    const char *str = "http://www.twolame.org";
+    static const char *str = PACKAGE_URL;
 
     return str;
 }

@@ -4,7 +4,12 @@ AC_PREREQ([2.68])
 
 dnl ############# Initialization
 
-AC_INIT([twolame],[0.3.13],[twolame-discuss@lists.sourceforge.net])
+AC_INIT(
+  [TwoLAME],
+  [0.3.13],
+  [twolame-discuss@lists.sourceforge.net],
+  [twolame],
+  [http://www.twolame.org/])
 
 AC_CONFIG_SRCDIR(libtwolame/twolame.h)
 AC_CONFIG_AUX_DIR(build-scripts)
