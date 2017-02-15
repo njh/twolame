@@ -1,22 +1,22 @@
 /*
- *	TwoLAME: an optimized MPEG Audio Layer Two encoder
+ *    TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *	Copyright (C) 2001-2004 Michael Cheng
- *	Copyright (C) 2004-2017 The TwoLAME Project
+ *    Copyright (C) 2001-2004 Michael Cheng
+ *    Copyright (C) 2004-2017 The TwoLAME Project
  *
- *	This library is free software; you can redistribute it and/or
- *	modify it under the terms of the GNU Lesser General Public
- *	License as published by the Free Software Foundation; either
- *	version 2.1 of the License, or (at your option) any later version.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License as published by the Free Software Foundation; either
+ *    version 2.1 of the License, or (at your option) any later version.
  *
- *	This library is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *	Lesser General Public License for more details.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *	You should have received a copy of the GNU Lesser General Public
- *	License along with this library; if not, write to the Free Software
- *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
 
@@ -33,7 +33,7 @@
 
 /**********************************************************************
 
-		This module implements the psychoacoustic model I for the
+        This module implements the psychoacoustic model I for the
  MPEG encoder layer II. It uses simplified tonal and noise masking
  threshold analysis to generate SMR for the encoder bit allocation
  routine.
@@ -42,7 +42,7 @@
 
 
 static int *psycho_1_read_cbound(int lay, int freq, int *crit_band)
-/* this function reads in critical	band boundaries */
+/* this function reads in critical    band boundaries */
 {
 
 #include "psycho_1_critband.h"
@@ -152,10 +152,10 @@ static inline FLOAT add_db(psycho_1_mem * mem, FLOAT a, FLOAT b)
 }
 
 /****************************************************************
-*		Window the samples then,
-*		 Fast Fourier transform of the input samples.
+*        Window the samples then,
+*         Fast Fourier transform of the input samples.
 *
-*	(  call the FHT-based fft() in fft.c )
+*    (  call the FHT-based fft() in fft.c )
 *
 *
 ****************************************************************/
@@ -196,7 +196,7 @@ static void psycho_1_hann_fft_pickmax(FLOAT sample[FFT_SIZE], mask power[HAN_SIZ
     /* Calculate the sum of spectral component in each subband from bound 4-16 */
 
 #define CF 1073741824           /* pow(10, 0.1*POWERNORM) */
-#define DBM	 1E-20              /* pow(10.0, 0.1*DBMIN */
+#define DBM     1E-20              /* pow(10.0, 0.1*DBMIN */
     for (i = 0; i < HAN_SIZE; spike[i >> 4] = 10.0 * log10(sum), i += 16) {
         for (j = 0, sum = DBM; j < 16; j++)
             sum += CF * energy[i + j];
@@ -205,7 +205,7 @@ static void psycho_1_hann_fft_pickmax(FLOAT sample[FFT_SIZE], mask power[HAN_SIZ
 
 /****************************************************************
 *
-*		 This function labels the tonal component in the power
+*         This function labels the tonal component in the power
 * spectrum.
 *
 ****************************************************************/
@@ -288,7 +288,7 @@ static void psycho_1_tonal_label(psycho_1_mem * mem, int *tone)
 
 /****************************************************************
 *
-*		 This function groups all the remaining non-tonal
+*         This function groups all the remaining non-tonal
 * spectral lines into critical band where they are replaced by
 * one single line.
 *
@@ -352,7 +352,7 @@ static void psycho_1_noise_label(psycho_1_mem * mem, int *noise, FLOAT energy[FF
 
 /****************************************************************
 *
-*		 This function reduces the number of noise and tonal
+*         This function reduces the number of noise and tonal
 * component for further threshold analysis.
 *
 ****************************************************************/
@@ -420,7 +420,7 @@ static void psycho_1_subsampling(mask power[HAN_SIZE], g_thres * ltg, int *tone,
 
 /****************************************************************
 *
-*		 This function calculates the individual threshold and
+*         This function calculates the individual threshold and
 * sum with the quiet threshold to find the global threshold.
 *
 ****************************************************************/
@@ -483,7 +483,7 @@ static void psycho_1_threshold(psycho_1_mem * mem, int *tone, int *noise, int bi
 
 /****************************************************************
 *
-*		 This function finds the minimum masking threshold and
+*         This function finds the minimum masking threshold and
 * return the value to the encoder.
 *
 ****************************************************************/
@@ -510,7 +510,7 @@ static void psycho_1_minimum_mask(int sub_size, g_thres * ltg, FLOAT ltmin[SBLIM
 
 /*****************************************************************
 *
-*		 This procedure is called in musicin to pick out the
+*         This procedure is called in musicin to pick out the
 * smaller of the scalefactor or threshold.
 *
 *****************************************************************/
@@ -538,16 +538,16 @@ static void psycho_1_dump(mask power[HAN_SIZE], int *tone, int *noise) {
   fprintf(stderr,"1 Ton: ");
   t=*tone;
   while (t!=LAST && t!=STOP) {
-	fprintf(stderr,"[%i] %3.0f ",t, power[t].x);
-	t = power[t].next;
+    fprintf(stderr,"[%i] %3.0f ",t, power[t].x);
+    t = power[t].next;
   }
   fprintf(stderr,"\n");
 
   fprintf(stderr,"1 Nos: ");
   t=*noise;
   while (t!=LAST && t!=STOP) {
-	fprintf(stderr,"[%i] %3.0f ",t, power[t].x);
-	t = power[t].next;
+    fprintf(stderr,"[%i] %3.0f ",t, power[t].x);
+    t = power[t].next;
   }
   fprintf(stderr,"\n");
 }

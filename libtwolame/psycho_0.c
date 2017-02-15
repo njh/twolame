@@ -36,8 +36,8 @@
 
    I got the idea from:
    Hyen-O Oh et al "Low power mpeg audio encoders using simplified psychoacoustic model
-					and fast bit allocation"
-					IEEE Trans on Consumer Electronics v47 n3 August 2001. p613
+                    and fast bit allocation"
+                    IEEE Trans on Consumer Electronics v47 n3 August 2001. p613
 
    All this model does is look at the lowest ATH value within the subband, and then looks
    at the scalefactors. It combines the two in a real dodgy way to get the SMRs.

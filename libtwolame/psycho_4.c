@@ -1,22 +1,22 @@
 /*
- *	TwoLAME: an optimized MPEG Audio Layer Two encoder
+ *    TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *	Copyright (C) 2001-2004 Michael Cheng
- *	Copyright (C) 2004-2017 The TwoLAME Project
+ *    Copyright (C) 2001-2004 Michael Cheng
+ *    Copyright (C) 2004-2017 The TwoLAME Project
  *
- *	This library is free software; you can redistribute it and/or
- *	modify it under the terms of the GNU Lesser General Public
- *	License as published by the Free Software Foundation; either
- *	version 2.1 of the License, or (at your option) any later version.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License as published by the Free Software Foundation; either
+ *    version 2.1 of the License, or (at your option) any later version.
  *
- *	This library is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *	Lesser General Public License for more details.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *	You should have received a copy of the GNU Lesser General Public
- *	License along with this library; if not, write to the Free Software
- *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
 
@@ -52,16 +52,16 @@ NB: Because of some of the tweaks to bark value calculation etc, it is now possi
 to have 64 CBANDS. There's no real limit on the actual number of paritions.
 I wonder if it's worth experimenting with really higher numbers? Probably won't make
 that much difference to the final SNR values, but it's something worth trying
-	Maybe CBANDS should be a dynamic value, calculated by the psycho_init function
-	CBANDS definition has been changed in encoder.h from 63 to 64
+    Maybe CBANDS should be a dynamic value, calculated by the psycho_init function
+    CBANDS definition has been changed in encoder.h from 63 to 64
 
 ****************************************************************/
 
 
 /* The static variables "r", "phi_sav", "new", "old" and "oldest" have
- to be remembered for the unpredictability measure.	 For "r" and
+ to be remembered for the unpredictability measure.     For "r" and
  "phi_sav", the first index from the left is the channel select and
- the second index is the "age" of the data.								*/
+ the second index is the "age" of the data.                                */
 
 
 /* NMT is a constant 5.5dB. ISO11172 Sec D.2.4.h */
@@ -86,7 +86,7 @@ static const FLOAT minval[27] = {
 };
 
 
-/* Table covers angles from	 0 to TRIGTABLESIZE/TRIGTABLESCALE (3.142) radians
+/* Table covers angles from     0 to TRIGTABLESIZE/TRIGTABLESCALE (3.142) radians
    In steps of 1/TRIGTABLESCALE (0.0005) radians.
    Largest absolute error: 0.0005
    Only create a table for cos, and then use trig to work out sin.
@@ -118,7 +118,7 @@ static inline FLOAT psycho_4_cos(psycho_4_mem * p4mem, FLOAT phi)
 }
 #endif
 
-/* The spreading function.	Values returned in units of energy
+/* The spreading function.    Values returned in units of energy
    Argument 'bark' is the difference in bark values between the
    centre of two partitions.
    This has been taken from LAME. MFC Feb 2003 */

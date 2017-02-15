@@ -1,21 +1,21 @@
 /*
- *	TwoLAME: an optimized MPEG Audio Layer Two encoder
+ *    TwoLAME: an optimized MPEG Audio Layer Two encoder
  *
- *	Copyright (C) 2004-2017 The TwoLAME Project
+ *    Copyright (C) 2004-2017 The TwoLAME Project
  *
- *	This library is free software; you can redistribute it and/or
- *	modify it under the terms of the GNU Lesser General Public
- *	License as published by the Free Software Foundation; either
- *	version 2.1 of the License, or (at your option) any later version.
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License as published by the Free Software Foundation; either
+ *    version 2.1 of the License, or (at your option) any later version.
  *
- *	This library is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *	Lesser General Public License for more details.
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
  *
- *	You should have received a copy of the GNU Lesser General Public
- *	License along with this library; if not, write to the Free Software
- *	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  */
 
@@ -113,8 +113,8 @@ static char *format_filesize_string(int filesize)
 }
 
 /*
-	print_filenames()
-	Display the input and output filenames
+    print_filenames()
+    Display the input and output filenames
 */
 static void print_filenames(int verbosity)
 {
@@ -235,9 +235,9 @@ static void usage_short()
 
 
 /*
-	build_shortopt_string()
-	Creates a short args string from the options structure
-	for use with getopt_long
+    build_shortopt_string()
+    Creates a short args string from the options structure
+    for use with getopt_long
 */
 static char *build_shortopt_string(struct option *opts)
 {
