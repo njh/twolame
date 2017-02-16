@@ -60,8 +60,19 @@ LT_INIT
 
 if test "$USE_MAINTAINER_MODE" = yes; then
   AC_PATH_PROG([PATH_ASCIIDOC], [asciidoc])
+  if test -z "$PATH_ASCIIDOC"; then
+    AC_MSG_ERROR([asciidoc is not available and maintainer mode is enabled])
+  fi
+
   AC_PATH_PROG([PATH_DOXYGEN], [doxygen])
+  if test -z "$PATH_DOXYGEN"; then
+    AC_MSG_ERROR([doxygen is not available and maintainer mode is enabled])
+  fi
+
   AC_PATH_PROG([PATH_XMLTO], [xmlto])
+  if test -z "$PATH_XMLTO"; then
+    AC_MSG_ERROR([xmlto is not available and maintainer mode is enabled])
+  fi
 fi
 
 AC_PATH_PROG(PERL, perl)
