@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 77;
+use Test::More tests => 99;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
 my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
@@ -23,6 +23,7 @@ my $encoding_parameters = [
     'mode' => 'stereo',
     'psycmode' => 3,
     'original' => 1,
+    'extension' => 0,
     'copyright' => 0,
     'padding' => 0,
     'protect' => 0,
@@ -42,6 +43,7 @@ my $encoding_parameters = [
     'mode' => 'joint',
     'psycmode' => 1,
     'original' => 0,
+    'extension' => 0,
     'copyright' => 0,
     'padding' => 1,
     'protect' => 0,
@@ -61,6 +63,7 @@ my $encoding_parameters = [
     'mode' => 'mono',
     'psycmode' => 4,
     'original' => 0,
+    'extension' => 0,
     'copyright' => 1,
     'padding' => 1,
     'protect' => 0,
@@ -80,6 +83,7 @@ my $encoding_parameters = [
     'mode' => 'stereo',
     'psycmode' => 3,
     'original' => 1,
+    'extension' => 0,
     'copyright' => 0,
     'padding' => 0,
     'protect' => 1,
@@ -88,6 +92,26 @@ my $encoding_parameters = [
     'total_bytes' => 13772,
     'total_samples' => 25344,
     'output_md5sum' => '7e7aa8e3cfafdd1cd2eda53a9ab8bef3'
+  },
+  {
+    # Test Case 5 (private bit set)
+    'input_filename' => 'testcase-44100.wav',
+    'input_md5sum' => 'f50499fded70a74c810dbcadb3f28062',
+    'bitrate' => 192,
+    'samplerate' => 44100,
+    'version' => '1',
+    'mode' => 'stereo',
+    'psycmode' => 3,
+    'original' => 1,
+    'extension' => 1,
+    'copyright' => 0,
+    'padding' => 0,
+    'protect' => 0,
+    'deemphasis' => 'n',
+    'total_frames' => 22,
+    'total_bytes' => 13772,
+    'total_samples' => 25344,
+    'output_md5sum' => '695bb8ebb85e79442ff309c733e7551a'
   },
 ];
 
@@ -107,6 +131,7 @@ foreach my $params (@$encoding_parameters) {
     '--psyc-mode', $params->{psycmode},
     $params->{copyright} ? '--copyright' : '--non-copyright',
     $params->{original} ? '--original' : '--non-original',
+    $params->{extension} ? '--private-ext' : '',
     $params->{protect} ? '--protect' : '',
     $params->{padding} ? '--padding' : '',
     '--deemphasis', $params->{deemphasis},
@@ -124,6 +149,7 @@ foreach my $params (@$encoding_parameters) {
   is($info->{bitrate}, $params->{bitrate}, "[$count] MPEG Audio Header - Bitrate");
   is($info->{copyright}, $params->{copyright}, "[$count] MPEG Audio Header - Copyright Flag");
   is($info->{original}, $params->{original}, "[$count] MPEG Audio Header - Original Flag");
+  is($info->{extension}, $params->{extension}, "[$count] MPEG Audio Header - Private Extension Bit");
   is($info->{protect}, $params->{protect}, "[$count] MPEG Audio Header - Error Protection Flag");
   is($info->{deemphasis}, $params->{deemphasis}, "[$count] MPEG Audio Header - De-emphasis");
 

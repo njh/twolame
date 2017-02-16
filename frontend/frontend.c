@@ -194,6 +194,7 @@ static void usage_long()
     fprintf(stderr, "\t    --non-copyright      mark as non-copyright (default)\n");
     fprintf(stderr, "\t-o, --non-original       mark as non-original\n");
     fprintf(stderr, "\t    --original           mark as original (default)\n");
+    fprintf(stderr, "\t    --private-ext        set the private extension bit\n");
     fprintf(stderr, "\t-p, --protect            enable CRC error protection\n");
     fprintf(stderr, "\t-d, --padding            force padding bit/frame on\n");
     fprintf(stderr, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
@@ -314,6 +315,7 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         {"non-copyright", no_argument, NULL, 1004},
         {"non-original", no_argument, NULL, 'o'},
         {"original", no_argument, NULL, 1005},
+        {"private-ext", no_argument, NULL, 1011},
         {"protect", no_argument, NULL, 'p'},
         {"padding", no_argument, NULL, 'd'},
         {"reserve-bits", required_argument, NULL, 'R'},
@@ -459,6 +461,9 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
             break;
         case 1005:             // --original
             twolame_set_original(encopts, TRUE);
+            break;
+        case 1011:             // --private-ext
+            twolame_set_extension(encopts, TRUE);
             break;
         case 'p':
             twolame_set_error_protection(encopts, TRUE);
