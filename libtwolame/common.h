@@ -236,7 +236,7 @@ typedef struct {
     int bitrate_index;
     int samplerate_idx;
     int padding;
-    int private_bit;
+    int private_extension;
     int mode;
     int mode_ext;
     int copyright;
@@ -294,7 +294,7 @@ struct twolame_options_struct {
     TWOLAME_Emphasis emphasis;  // [n]one, 5(50/15 microseconds), c(ccitt j.17)
     int copyright;              // [FALSE]
     int original;               // [FALSE]
-    int private_bit;            // [0] Your very own bit in the header.
+    int private_extension;      // [0] Your very own bit in the header.
     int error_protection;       // [FALSE]
 
     // Digital Audio Broadcasting Extensions

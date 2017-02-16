@@ -458,7 +458,7 @@ void write_header(twolame_options * glopts, bit_stream * bs)
     buffer_putbits(bs, header->bitrate_index, 4);
     buffer_putbits(bs, header->samplerate_idx, 2);
     buffer_put1bit(bs, header->padding);
-    buffer_put1bit(bs, header->private_bit);    /* private_bit */
+    buffer_put1bit(bs, header->private_extension);    /* private extension bit */
     buffer_putbits(bs, header->mode, 2);
     buffer_putbits(bs, header->mode_ext, 2);
     buffer_put1bit(bs, header->copyright);

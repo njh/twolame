@@ -81,7 +81,7 @@ twolame_options *twolame_init(void)
     newoptions->quickmode = FALSE;
     newoptions->quickcount = 10;
     newoptions->emphasis = TWOLAME_EMPHASIS_N;
-    newoptions->private_bit = 0;
+    newoptions->private_extension = 0;
     newoptions->copyright = FALSE;
     newoptions->original = TRUE;
     newoptions->error_protection = FALSE;
@@ -161,7 +161,7 @@ static int init_header_info(twolame_options * glopts)
     }
     // Copy accross the other settings
     header->padding = glopts->padding;
-    header->private_bit = glopts->private_bit;
+    header->private_extension = glopts->private_extension;
     header->mode = glopts->mode;
     header->mode_ext = 0;
     header->copyright = glopts->copyright;

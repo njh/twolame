@@ -237,6 +237,20 @@ int twolame_get_original(twolame_options * glopts)
     return (glopts->original);
 }
 
+int twolame_set_extension(twolame_options * glopts, int extension)
+{
+    if (extension)
+        glopts->private_extension = TRUE;
+    else
+        glopts->private_extension = FALSE;
+    return (0);
+}
+
+int twolame_get_extension(twolame_options * glopts)
+{
+    return (glopts->private_extension);
+}
+
 int twolame_set_padding(twolame_options * glopts, TWOLAME_Padding padding)
 {
     if (padding)

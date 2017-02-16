@@ -722,6 +722,25 @@ DLL_EXPORT int twolame_set_original(twolame_options * glopts, int original);
 DLL_EXPORT int twolame_get_original(twolame_options * glopts);
 
 
+/** Set the MPEG Audio Private Extension flag.
+ *
+ *    Default: FALSE
+ *
+ *    \param glopts            pointer to twolame options pointer
+ *    \param extension         extension flag state (TRUE/FALSE)
+ *    \return                  0 if successful, non-zero on failure
+ */
+DLL_EXPORT int twolame_set_extension(twolame_options * glopts, int extension);
+
+
+/** Get the MPEG Audio Private Extension flag state.
+ *
+ *    \param glopts    pointer to twolame options pointer
+ *    \return          state of the extension flag (TRUE/FALSE)
+ */
+DLL_EXPORT int twolame_get_extension(twolame_options * glopts);
+
+
 /** Enable/Disable VBR (Variable Bit Rate) mode.
  *
  *    Default: FALSE
