@@ -33,7 +33,6 @@ struct slotinfo {
     FLOAT frac;
     int whole;
     FLOAT lag;
-    int extra;
 } slots;
 
 
@@ -42,8 +41,6 @@ int available_bits(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
     int adb;
-
-    slots.extra = 0;            /* be default, no extra slots */
 
     slots.average = (1152.0 / ((FLOAT) glopts->samplerate_out / 1000.0))
                     * ((FLOAT) glopts->bitrate / 8.0);
@@ -58,16 +55,14 @@ int available_bits(twolame_options * glopts)
     if (slots.frac != 0 && glopts->padding && glopts->vbr == FALSE) {
         if (slots.lag > (slots.frac - 1.0)) {   /* no padding for this frame */
             slots.lag -= slots.frac;
-            slots.extra = 0;
             header->padding = 0;
         } else {                /* padding */
-            slots.extra = 1;
             header->padding = 1;
             slots.lag += (1 - slots.frac);
         }
     }
 
-    adb = (slots.whole + slots.extra) * 8;
+    adb = slots.whole * 8;
 
     return adb;
 }
