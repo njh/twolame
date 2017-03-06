@@ -599,16 +599,6 @@ int main(int argc, char **argv)
     int audioReadSize = 0;
 
 
-    // Allocate memory for the PCM audio data
-    if ((pcmaudio = (short int *) calloc(AUDIO_BUF_SIZE, sizeof(short int))) == NULL) {
-        fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
-        exit(ERR_MEM_ALLOC);
-    }
-    // Allocate memory for the encoded MP2 audio data
-    if ((mp2buffer = (unsigned char *) calloc(MP2_BUF_SIZE, sizeof(unsigned char))) == NULL) {
-        fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
-        exit(ERR_MEM_ALLOC);
-    }
     // Initialise Encoder Options Structure
     encopts = twolame_init();
     if (encopts == NULL) {
@@ -647,6 +637,16 @@ int main(int argc, char **argv)
     twolame_print_config(encopts);
 
 
+    // Allocate memory for the PCM audio data
+    if ((pcmaudio = (short int *) calloc(AUDIO_BUF_SIZE, sizeof(short int))) == NULL) {
+        fprintf(stderr, "Error: pcmaudio memory allocation failed\n");
+        exit(ERR_MEM_ALLOC);
+    }
+    // Allocate memory for the encoded MP2 audio data
+    if ((mp2buffer = (unsigned char *) calloc(MP2_BUF_SIZE, sizeof(unsigned char))) == NULL) {
+        fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
+        exit(ERR_MEM_ALLOC);
+    }
     // Open the output file
     outputfile = open_output_file(outputfilename);
 
