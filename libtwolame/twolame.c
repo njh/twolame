@@ -160,7 +160,7 @@ static int init_header_info(twolame_options * glopts)
         return -1;
     }
     // Copy accross the other settings
-    header->padding = glopts->padding;
+    header->padding = 0; /* when requested, padding will be evaluated later for this frame */
     header->private_extension = glopts->private_extension;
     header->mode = glopts->mode;
     header->mode_ext = 0;
