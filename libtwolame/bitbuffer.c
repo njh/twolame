@@ -35,13 +35,15 @@ bit_stream *buffer_init(unsigned char *buffer, int buffer_size)
 {
     bit_stream *bs = (bit_stream *) TWOLAME_MALLOC(sizeof(bit_stream));
 
-    bs->buf = buffer;
-    bs->buf_size = buffer_size;
-    bs->buf_byte_idx = 0;
-    bs->buf_bit_idx = 8;
-    bs->totbit = 0;
-    bs->eob = FALSE;
-    bs->eobs = FALSE;
+    if (bs != NULL) {
+        bs->buf = buffer;
+        bs->buf_size = buffer_size;
+        bs->buf_byte_idx = 0;
+        bs->buf_bit_idx = 8;
+        bs->totbit = 0;
+        bs->eob = FALSE;
+        bs->eobs = FALSE;
+    }
 
     return bs;
 }
