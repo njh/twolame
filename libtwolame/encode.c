@@ -194,15 +194,19 @@ int encode_init(twolame_options * glopts)
 
     /* decision rules refer to per-channel bitrates (kbits/sec/chan) */
     if (header->version == TWOLAME_MPEG1) { /* MPEG-1 */
-        if ((sfrq == 48 && br_per_ch >= 56)
-                || (br_per_ch >= 56 && br_per_ch <= 80))
-            glopts->tablenum = 0;
-        else if (sfrq != 48 && br_per_ch >= 96)
-            glopts->tablenum = 1;
-        else if (sfrq != 32 && br_per_ch <= 48)
-            glopts->tablenum = 2;
-        else
-            glopts->tablenum = 3;
+        if (glopts->freeformat) {
+            glopts->tablenum = (sfrq == 48) ? 0 : 1;
+        } else {
+            if ((sfrq == 48 && br_per_ch >= 56)
+                    || (br_per_ch >= 56 && br_per_ch <= 80))
+                glopts->tablenum = 0;
+            else if (sfrq != 48 && br_per_ch >= 96)
+                glopts->tablenum = 1;
+            else if (sfrq != 32 && br_per_ch <= 48)
+                glopts->tablenum = 2;
+            else
+                glopts->tablenum = 3;
+        }
     } else {                    /* MPEG-2 LSF */
         glopts->tablenum = 4;
     }

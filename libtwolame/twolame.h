@@ -714,7 +714,7 @@ DLL_EXPORT int twolame_get_copyright(twolame_options * glopts);
 DLL_EXPORT int twolame_set_original(twolame_options * glopts, int original);
 
 
-/** Get the origianl flag state.
+/** Get the MPEG Audio Original flag state.
  *
  *    \param glopts    pointer to twolame options pointer
  *    \return            state of the original flag (TRUE/FALSE)
@@ -747,8 +747,7 @@ DLL_EXPORT int twolame_get_extension(twolame_options * glopts);
  *
  *    \param glopts            pointer to twolame options pointer
  *    \param vbr                VBR state (TRUE/FALSE)
- *    \return                    0 if successful,
- *                            non-zero on failure
+ *    \return                    0 if successful, non-zero on failure
  */
 DLL_EXPORT int twolame_set_VBR(twolame_options * glopts, int vbr);
 
