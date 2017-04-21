@@ -51,7 +51,7 @@ my $encoding_parameters = [
     'total_frames' => 22,
     'total_bytes' => 13792,
     'total_samples' => 25344,
-    'output_md5sum' => 'fef3bb4926978e56822d33eaa89208d2'
+    'output_md5sum' => 'b7937b5f2ea56460afaeee6f1a5dc77f'
   },
   {
     # Test Case 3 (MPEG-2 test)
@@ -71,7 +71,7 @@ my $encoding_parameters = [
     'total_frames' => 11,
     'total_bytes' => 2298,
     'total_samples' => 12672,
-    'output_md5sum' => '3175f5332040aaad42b00823cd1ec913'
+    'output_md5sum' => '336027628adcfd5f0bb02863920fd6f1'
   },
   {
     # Test Case 4 (error protection test)
