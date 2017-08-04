@@ -6,10 +6,13 @@ SUBDIRS=html
 ##    xmlto:	http://cyberelk.net/tim/xmlto/
 ##
 
-## Man Page
-man_MANS = twolame.1
+EXTRA_DIST =
+MAINTAINERCLEANFILES =
 
 if MAINTAINER_MODE
+
+## Man Page
+man_MANS = twolame.1
 
 twolame.1.xml: twolame.1.txt
 	@PATH_ASCIIDOC@ -d manpage -b docbook -o twolame.1.xml twolame.1.txt
@@ -17,9 +20,10 @@ twolame.1.xml: twolame.1.txt
 twolame.1: twolame.1.xml
 	@PATH_XMLTO@ man twolame.1.xml
 
-endif
+EXTRA_DIST += twolame.1 twolame.1.xml
+MAINTAINERCLEANFILES = twolame.1 twolame.1.xml
 
-MAINTAINERCLEANFILES=twolame.1 twolame.1.xml
+endif
 
 pkgdocdir = @docdir@
 pkgdoc_DATA = \
@@ -27,8 +31,7 @@ pkgdoc_DATA = \
 	psycho.txt \
 	vbr.txt
 
-EXTRA_DIST = \
-	$(man_MANS) \
+EXTRA_DIST += \
 	$(pkgdoc_DATA) \
 	dist10-text/common.txt \
 	dist10-text/commonh.txt \
@@ -37,5 +40,4 @@ EXTRA_DIST = \
 	dist10-text/musicin.txt \
 	dist10-text/psy.txt \
 	dist10-text/tonal.txt \
-	index.txt \
-	twolame.1.txt
+	index.txt
