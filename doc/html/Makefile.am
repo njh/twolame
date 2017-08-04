@@ -20,7 +20,7 @@ doxygen_files = \
 asciidoc_files = \
     api.html \
     authors.html \
-    changelog.html \
+    news.html \
     index.html \
     psycho.html \
     readme.html \
@@ -51,7 +51,7 @@ readme.html: $(top_srcdir)/README
 authors.html: $(top_srcdir)/AUTHORS
 	$(asciidoc) -o $@ $<
 
-changelog.html: $(top_srcdir)/ChangeLog
+news.html: $(top_srcdir)/NEWS
 	$(asciidoc) -o $@ $<
 
 api.html: $(top_srcdir)/doc/api.txt
