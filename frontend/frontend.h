@@ -43,8 +43,8 @@
 #define ERR_MEM_ALLOC        (6) // Error allocating memory
 #define ERR_INVALID_PARAM    (8) // Error in chosen encoding parameters
 #define ERR_READING_INPUT    (10)    // Error reading input
-#define ERR_ENCODING         (12)    // Error occured during encoding
-#define ERR_WRITING_OUTPUT   (14)    // Error occured writing to output file
+#define ERR_ENCODING         (12)    // Error occurred during encoding
+#define ERR_WRITING_OUTPUT   (14)    // Error occurred writing to output file
 
 
 
