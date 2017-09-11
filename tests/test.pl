@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 99;
+use Test::More tests => 117;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
 my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
@@ -112,6 +112,26 @@ my $encoding_parameters = [
     'total_bytes' => 13772,
     'total_samples' => 25344,
     'output_md5sum' => '695bb8ebb85e79442ff309c733e7551a'
+  },
+  {
+    # Test Case 6 (32-bit floating point input)
+    'input_filename' => 'testcase-float32.wav',
+    'input_md5sum' => '7c4f7598df7d31223463b3b1bbc03d35',
+    'bitrate' => 192,
+    'samplerate' => 44100,
+    'version' => '1',
+    'mode' => 'stereo',
+    'psycmode' => 3,
+    'original' => 1,
+    'extension' => 0,
+    'copyright' => 0,
+    'padding' => 0,
+    'protect' => 0,
+    'deemphasis' => 'n',
+    'total_frames' => 22,
+    'total_bytes' => 13772,
+    'total_samples' => 25344,
+    'output_md5sum' => 'b9e7341a171c619006fa44a075d3ced5'
   },
 ];
 
