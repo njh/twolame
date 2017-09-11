@@ -153,6 +153,8 @@ audioin_t *open_audioin_sndfile(char *filename, SF_INFO * sfinfo)
     audioin->error_str = error_str_sndfile;
     audioin->close = close_sndfile;
 
+    /* enable scaling for floating point input files */
+    sf_command(audioin->file, SFC_SET_SCALE_FLOAT_INT_READ, NULL, SF_TRUE);
 
     return audioin;
 }
