@@ -85,12 +85,9 @@ int twolame_get_bitrate_index(int bitrate, TWOLAME_MPEG_version version)
         return -1;
     }
 
-    while (index < 15) {
+    while (++index < 15)
         if (bitrate_table[version][index] == bitrate)
             break;
-        else
-            ++index;
-    }
 
     if (index == 15) {
         fprintf(stderr,
