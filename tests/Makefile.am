@@ -1,5 +1,5 @@
 dist_check_SCRIPTS = test.pl
-dist_check_DATA = testcase-44100.wav testcase-22050.wav
+dist_check_DATA = testcase-44100.wav testcase-22050.wav testcase-float32.wav
 
 TESTS = $(dist_check_SCRIPTS)
 LOG_COMPILER = $(PERL)

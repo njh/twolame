@@ -207,7 +207,7 @@ However if encoding is not successful, then it will return one of the following 
     - 6 (Error allocating memory)
     - 8 (Error in chosen encoding parameters)
     - 10 (Error reading input audio)
-    - 12 (Error occured while encoding)
+    - 12 (Error occurred while encoding)
     - 14 (Error writing output audio)
 
 

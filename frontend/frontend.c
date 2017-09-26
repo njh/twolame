@@ -196,7 +196,7 @@ static void usage_long()
     fprintf(stderr, "\t    --original           mark as original (default)\n");
     fprintf(stderr, "\t    --private-ext        set the private extension bit\n");
     fprintf(stderr, "\t-p, --protect            enable CRC error protection\n");
-    fprintf(stderr, "\t-d, --padding            force padding bit/frame on\n");
+    fprintf(stderr, "\t-d, --padding            enable frame padding\n");
     fprintf(stderr, "\t-R, --reserve-bits num   set number of reserved bits in each frame\n");
     fprintf(stderr, "\t-e, --deemphasis emp     de-emphasis n/5/c (default: (n)one)\n");
     fprintf(stderr, "\t-E, --energy             turn on energy level extensions\n");

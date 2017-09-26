@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 99;
+use Test::More tests => 117;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
 my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
@@ -51,7 +51,7 @@ my $encoding_parameters = [
     'total_frames' => 22,
     'total_bytes' => 13792,
     'total_samples' => 25344,
-    'output_md5sum' => 'fef3bb4926978e56822d33eaa89208d2'
+    'output_md5sum' => 'b7937b5f2ea56460afaeee6f1a5dc77f'
   },
   {
     # Test Case 3 (MPEG-2 test)
@@ -71,7 +71,7 @@ my $encoding_parameters = [
     'total_frames' => 11,
     'total_bytes' => 2298,
     'total_samples' => 12672,
-    'output_md5sum' => '3175f5332040aaad42b00823cd1ec913'
+    'output_md5sum' => '336027628adcfd5f0bb02863920fd6f1'
   },
   {
     # Test Case 4 (error protection test)
@@ -112,6 +112,26 @@ my $encoding_parameters = [
     'total_bytes' => 13772,
     'total_samples' => 25344,
     'output_md5sum' => '695bb8ebb85e79442ff309c733e7551a'
+  },
+  {
+    # Test Case 6 (32-bit floating point input)
+    'input_filename' => 'testcase-float32.wav',
+    'input_md5sum' => '7c4f7598df7d31223463b3b1bbc03d35',
+    'bitrate' => 192,
+    'samplerate' => 44100,
+    'version' => '1',
+    'mode' => 'stereo',
+    'psycmode' => 3,
+    'original' => 1,
+    'extension' => 0,
+    'copyright' => 0,
+    'padding' => 0,
+    'protect' => 0,
+    'deemphasis' => 'n',
+    'total_frames' => 22,
+    'total_bytes' => 13772,
+    'total_samples' => 25344,
+    'output_md5sum' => 'b9e7341a171c619006fa44a075d3ced5'
   },
 ];
 

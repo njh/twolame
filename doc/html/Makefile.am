@@ -20,7 +20,7 @@ doxygen_files = \
 asciidoc_files = \
     api.html \
     authors.html \
-    changelog.html \
+    news.html \
     index.html \
     psycho.html \
     readme.html \
@@ -31,12 +31,12 @@ stylesheet_files = \
     twolame-manpage.css \
     twolame.css
 
-
-pkghtml_DATA = $(doxygen_files) $(asciidoc_files) $(stylesheet_files)
-EXTRA_DIST = Doxyfile.in $(pkghtml_DATA)
-
+EXTRA_DIST = Doxyfile.in
 
 if MAINTAINER_MODE
+
+pkghtml_DATA = $(doxygen_files) $(asciidoc_files) $(stylesheet_files)
+EXTRA_DIST += Doxyfile.in $(pkghtml_DATA)
 
 $(doxygen_files): Doxyfile $(top_srcdir)/libtwolame/twolame.h
 	@PATH_DOXYGEN@
@@ -51,7 +51,7 @@ readme.html: $(top_srcdir)/README
 authors.html: $(top_srcdir)/AUTHORS
 	$(asciidoc) -o $@ $<
 
-changelog.html: $(top_srcdir)/ChangeLog
+news.html: $(top_srcdir)/NEWS
 	$(asciidoc) -o $@ $<
 
 api.html: $(top_srcdir)/doc/api.txt
@@ -66,6 +66,7 @@ vbr.html: $(top_srcdir)/doc/vbr.txt
 twolame.1.html: $(top_srcdir)/doc/twolame.1.txt
 	$(asciidoc) -d manpage -o $@ $<
 
+MAINTAINERCLEANFILES = $(doxygen_files) $(asciidoc_files)
+
 endif
 
-MAINTAINERCLEANFILES = $(doxygen_files) $(asciidoc_files)

@@ -32,6 +32,9 @@ stamp-h1
 twolame.pc
 
 README
+NEWS
+ChangeLog
+INSTALL
 
 doc/html/*.html
 doc/html/*.js
