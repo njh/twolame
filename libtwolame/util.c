@@ -109,15 +109,12 @@ int twolame_get_samplerate_index(long sample_rate)
 
     switch (sample_rate) {
     case 44100L:
-        return 0;
-    case 48000L:
-        return 1;
-    case 32000L:
-        return 2;
     case 22050L:
         return 0;
+    case 48000L:
     case 24000L:
         return 1;
+    case 32000L:
     case 16000L:
         return 2;
     }
@@ -135,15 +132,11 @@ int twolame_get_version_for_samplerate(long sample_rate)
 
     switch (sample_rate) {
     case 48000L:
-        return TWOLAME_MPEG1;
     case 44100L:
-        return TWOLAME_MPEG1;
     case 32000L:
         return TWOLAME_MPEG1;
     case 24000L:
-        return TWOLAME_MPEG2;
     case 22050L:
-        return TWOLAME_MPEG2;
     case 16000L:
         return TWOLAME_MPEG2;
     }
