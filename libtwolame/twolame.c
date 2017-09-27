@@ -385,6 +385,17 @@ int twolame_init_params(twolame_options * glopts)
     glopts->subband = (subband_t *) TWOLAME_MALLOC(sizeof(subband_t));
     glopts->j_sample = (jsb_sample_t *) TWOLAME_MALLOC(sizeof(jsb_sample_t));
     glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof(sb_sample_t));
+    if (glopts->subband == NULL
+        ||
+        glopts->j_sample == NULL
+        ||
+        glopts->sb_sample == NULL)
+    {
+        TWOLAME_FREE(glopts->subband);
+        TWOLAME_FREE(glopts->j_sample);
+        TWOLAME_FREE(glopts->sb_sample);
+        return -1;
+    }
 
     // clear buffers
     memset((char *) glopts->buffer, 0, sizeof(glopts->buffer));
