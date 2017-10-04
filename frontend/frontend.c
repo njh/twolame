@@ -240,20 +240,9 @@ static void usage_short()
     Creates a short args string from the options structure
     for use with getopt_long
 */
-static char *build_shortopt_string(struct option *opts)
+static char *build_shortopt_string(char *shortstr, struct option *opts)
 {
-    int count = 0;
-    char *shortstr = NULL;
     int c = 0, n = 0;
-
-    // Start by counting the number of options
-    while (opts[count].val != 0) {
-        count++;
-    }
-
-
-    // Allocate memory for the string
-    shortstr = (char *) malloc((count * 2) + 1);
 
     // And loop through the options again
     for (n = 0; opts[n].val != 0; n++) {
@@ -282,6 +271,7 @@ static char *build_shortopt_string(struct option *opts)
 static void parse_args(int argc, char **argv, twolame_options * encopts)
 {
     int ch = 0;
+    char *shortopts;
 
     // process args
     struct option longopts[] = {
@@ -333,8 +323,18 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
     };
 
 
+    // Start by counting the number of options
+    while (longopts[ch].val != 0) {
+        ch++;
+    }
+
     // Create a short options structure from the long one
-    char *shortopts = build_shortopt_string(longopts);
+    shortopts = (char *) malloc((ch * 2) + 1);
+    if (shortopts == NULL) {
+        fprintf(stderr,"Error: parse_args failed memory allocation\n");
+        exit(ERR_MEM_ALLOC);
+    }
+    build_shortopt_string(shortopts, longopts);
     // fprintf(stderr,"shortopts: %s\n", shortopts);
 
 
