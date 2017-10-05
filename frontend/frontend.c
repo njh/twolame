@@ -92,21 +92,20 @@ static void new_extension(char *filename, char *extname, char *newname)
     }
 }
 
-static char *format_filesize_string(int filesize)
+static char *format_filesize_string(char *string, int string_size, int filesize)
 {
 #define CONST_KB  (1024)
 #define CONST_MB  (CONST_KB*CONST_KB)
 #define CONST_GB  (CONST_KB*CONST_KB*CONST_KB)
-    char *string = (char *) malloc(MAX_NAME_SIZE);
 
     if (filesize < CONST_KB) {
-        snprintf(string, MAX_NAME_SIZE, "%d bytes", filesize);
+        snprintf(string, string_size, "%d bytes", filesize);
     } else if (filesize < CONST_MB) {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f KB", (float) filesize / CONST_KB);
+        snprintf(string, string_size, "%2.2f KB", (float) filesize / CONST_KB);
     } else if (filesize < CONST_GB) {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float) filesize / CONST_MB);
+        snprintf(string, string_size, "%2.2f MB", (float) filesize / CONST_MB);
     } else {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f GB", (float) filesize / CONST_GB);
+        snprintf(string, string_size, "%2.2f GB", (float) filesize / CONST_GB);
     }
 
     return string;
@@ -762,10 +761,13 @@ int main(int argc, char **argv)
     }
 
     if (twolame_get_verbosity(encopts) > 1) {
-        char *filesize = format_filesize_string(total_bytes);
-        fprintf(stderr, "\nEncoding Finished.\n");
-        fprintf(stderr, "Total bytes written: %s.\n", filesize);
-        free(filesize);
+        char *filesize = (char *) malloc(MAX_NAME_SIZE);
+        if (filesize != NULL) {
+            format_filesize_string(filesize, MAX_NAME_SIZE, total_bytes);
+            fprintf(stderr, "\nEncoding Finished.\n");
+            fprintf(stderr, "Total bytes written: %s.\n", filesize);
+            free(filesize);
+        }
     }
     // Close input and output streams
     inputfile->close(inputfile);
