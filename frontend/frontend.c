@@ -596,6 +596,7 @@ int main(int argc, char **argv)
     int samples_read = 0;
     int mp2fill_size = 0;
     int audioReadSize = 0;
+    char filesize[20];
 
 
     // Initialise Encoder Options Structure
@@ -761,13 +762,9 @@ int main(int argc, char **argv)
     }
 
     if (twolame_get_verbosity(encopts) > 1) {
-        char *filesize = (char *) malloc(MAX_NAME_SIZE);
-        if (filesize != NULL) {
-            format_filesize_string(filesize, MAX_NAME_SIZE, total_bytes);
-            fprintf(stderr, "\nEncoding Finished.\n");
-            fprintf(stderr, "Total bytes written: %s.\n", filesize);
-            free(filesize);
-        }
+        format_filesize_string(filesize, sizeof(filesize), total_bytes);
+        fprintf(stderr, "\nEncoding Finished.\n");
+        fprintf(stderr, "Total bytes written: %s.\n", filesize);
     }
     // Close input and output streams
     inputfile->close(inputfile);
