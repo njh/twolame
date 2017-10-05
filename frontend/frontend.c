@@ -94,19 +94,19 @@ static void new_extension(char *filename, char *extname, char *newname)
 
 static char *format_filesize_string(int filesize)
 {
-    static const int constKB = 1024;    // Kilobyte
-    static const int constMB = 1024 * 1024; // Megabyte
-    static const int constGB = 1024 * 1024 * 1024;  // Gigabyte
+#define CONST_KB  (1024)
+#define CONST_MB  (CONST_KB*CONST_KB)
+#define CONST_GB  (CONST_KB*CONST_KB*CONST_KB)
     char *string = (char *) malloc(MAX_NAME_SIZE);
 
-    if (filesize < constKB) {
+    if (filesize < CONST_KB) {
         snprintf(string, MAX_NAME_SIZE, "%d bytes", filesize);
-    } else if (filesize < constMB) {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f KB", (float) filesize / constKB);
-    } else if (filesize < constGB) {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float) filesize / constMB);
+    } else if (filesize < CONST_MB) {
+        snprintf(string, MAX_NAME_SIZE, "%2.2f KB", (float) filesize / CONST_KB);
+    } else if (filesize < CONST_GB) {
+        snprintf(string, MAX_NAME_SIZE, "%2.2f MB", (float) filesize / CONST_MB);
     } else {
-        snprintf(string, MAX_NAME_SIZE, "%2.2f GB", (float) filesize / constGB);
+        snprintf(string, MAX_NAME_SIZE, "%2.2f GB", (float) filesize / CONST_GB);
     }
 
     return string;
