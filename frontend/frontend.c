@@ -34,10 +34,7 @@
 /*
   Global Variables
 */
-int use_raw = FALSE;            // use raw input?
-int sample_size = 16;           // number of bits per sample for raw input
 int single_frame_mode = FALSE;  // only encode a single frame of MPEG audio ?
-int byteswap = FALSE;           // swap endian on input audio ?
 int channelswap = FALSE;        // swap left and right channels ?
 SF_INFO sfinfo;                 // contains information about input file format
 
@@ -271,6 +268,9 @@ static char *build_shortopt_string(char *shortstr, struct option *opts)
 static void parse_args(int argc, char **argv, twolame_options * encopts)
 {
     int ch = 0;
+    int use_raw = FALSE;                  // use raw input?
+    int sample_size = DEFAULT_SAMPLESIZE; // number of bits per sample for raw input
+    int byteswap = FALSE;                 // swap endian on input audio ?
     char *shortopts;
 
     // process args
@@ -537,6 +537,45 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         argc--;
     }
 
+    /* fill sfinfo struct in case of raw input file */
+    if (use_raw) {
+        sfinfo.format = SF_FORMAT_RAW;
+        switch (sample_size) {
+            case 8:
+                sfinfo.format |= SF_FORMAT_PCM_S8;
+                break;
+            case 16:
+                sfinfo.format |= SF_FORMAT_PCM_16;
+                break;
+            case 24:
+                sfinfo.format |= SF_FORMAT_PCM_24;
+                break;
+            case 32:
+                sfinfo.format |= SF_FORMAT_PCM_32;
+                break;
+            default:
+                fprintf(stderr, "Unsupported sample size: %d\n", sample_size);
+                usage_short();
+        }
+
+        if (byteswap) {
+            union {
+                unsigned char  b[2];
+                unsigned short s;
+            } detect_endian;
+
+            detect_endian.b[0] = 0x34;
+            detect_endian.b[1] = 0x12;
+            if (detect_endian.s == 0x1234) {
+                /* we are on a little endian system */
+                sfinfo.format |= SF_ENDIAN_BIG;
+            }
+            else {
+                /* we are on a big endian system */
+                sfinfo.format |= SF_ENDIAN_LITTLE;
+            }
+        }
+    }
 
     // Check that we now have input and output file names ok
     if (inputfilename[0] == '\0') {
@@ -612,13 +651,7 @@ int main(int argc, char **argv)
     print_filenames(twolame_get_verbosity(encopts));
 
     // Open the input file
-    if (use_raw) {
-        // use raw input handler
-        inputfile = open_audioin_raw(inputfilename, &sfinfo, sample_size);
-    } else {
-        // use libsndfile
-        inputfile = open_audioin_sndfile(inputfilename, &sfinfo);
-    }
+    inputfile = open_audioin_sndfile(inputfilename, &sfinfo);
 
     // Display input information
     if (twolame_get_verbosity(encopts) > 1) {
@@ -665,6 +698,7 @@ int main(int argc, char **argv)
     while ((samples_read = inputfile->read(inputfile, pcmaudio, audioReadSize)) > 0) {
         int bytes_out = 0;
 
+#if 0
         // Force byte swapping if requested
         if (byteswap) {
             int i;
@@ -676,6 +710,7 @@ int main(int argc, char **argv)
                 dst[1] = src[0];
             }
         }
+#endif
         // Calculate the number of samples we have (per channel)
         samples_read /= sfinfo.channels;
         total_samples += (unsigned int)samples_read;

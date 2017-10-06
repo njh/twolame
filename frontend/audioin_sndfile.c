@@ -146,7 +146,6 @@ audioin_t *open_audioin_sndfile(char *filename, SF_INFO * sfinfo)
         exit(ERR_OPENING_INPUT);
     }
     // Fill-in data structure
-    audioin->samplesize = 0;
     audioin->sfinfo = sfinfo;
     audioin->print_info = print_info_sndfile;
     audioin->read = read_sndfile;
