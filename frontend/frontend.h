@@ -71,6 +71,9 @@ typedef struct audioin_s {
     // Pointer to linsndfile info structure
     SF_INFO *sfinfo;
 
+    // store the number of frames to be encoded - zero when unknown
+    unsigned int total_frames;
+
 } audioin_t;
 
 

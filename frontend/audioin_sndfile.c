@@ -83,11 +83,12 @@ static void print_info_sndfile(struct audioin_s *audioin)
     // Get the version of libsndfile
     sf_command(file, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
 
-    // Get human readable duration of the input file
-    duration = format_duration_string(audioin->sfinfo);
-
     fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name);
-    fprintf(stderr, "Input Duration: %s\n", duration);
+    if (audioin->total_frames) {
+        // Get human readable duration of the input file
+        duration = format_duration_string(audioin->sfinfo);
+        fprintf(stderr, "Input Duration: %s\n", duration);
+    }
     fprintf(stderr, "Input Library: %s\n", sndlibver);
 
     free(duration);

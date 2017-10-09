@@ -37,6 +37,7 @@
 int single_frame_mode = FALSE;  // only encode a single frame of MPEG audio ?
 int channelswap = FALSE;        // swap left and right channels ?
 SF_INFO sfinfo;                 // contains information about input file format
+int stdin_input = FALSE;        /* we're going to read from stdin */
 
 char inputfilename[MAX_NAME_SIZE] = "\0";
 char outputfilename[MAX_NAME_SIZE] = "\0";
@@ -596,6 +597,8 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
         fprintf(stderr, "Error: please use RAW audio '-r' switch when reading from STDIN.\n");
         usage_short();
     }
+    if (strcmp(inputfilename, "-") == 0)
+        stdin_input = TRUE;
 }
 
 
@@ -629,7 +632,6 @@ int main(int argc, char **argv)
     FILE *outputfile = NULL;
     short int *pcmaudio = NULL;
     unsigned int frame_count = 0;
-    unsigned int total_frames = 0;
     unsigned int total_samples = 0;
     unsigned int total_bytes = 0;
     unsigned char *mp2buffer = NULL;
@@ -652,6 +654,12 @@ int main(int argc, char **argv)
 
     // Open the input file
     inputfile = open_audioin_sndfile(inputfilename, &sfinfo);
+
+    // Calculate the size and number of frames we are going to encode
+    if (sfinfo.frames && !stdin_input)
+        inputfile->total_frames = (sfinfo.frames -1) / TWOLAME_SAMPLES_PER_FRAME +1;
+    else
+        inputfile->total_frames = 0;
 
     // Display input information
     if (twolame_get_verbosity(encopts) > 1) {
@@ -688,10 +696,6 @@ int main(int argc, char **argv)
         audioReadSize = TWOLAME_SAMPLES_PER_FRAME;
     else
         audioReadSize = AUDIO_BUF_SIZE;
-
-    // Calculate the size and number of frames we are going to encode
-    if (sfinfo.frames)
-        total_frames = (sfinfo.frames -1) / TWOLAME_SAMPLES_PER_FRAME +1;
 
 
     // Now do the reading/encoding/writing
@@ -760,8 +764,8 @@ int main(int argc, char **argv)
         frame_count = total_samples / TWOLAME_SAMPLES_PER_FRAME;
         if (twolame_get_verbosity(encopts) > 0) {
             fprintf(stderr, "\rEncoding frame: %i", frame_count);
-            if (total_frames) {
-                fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
+            if (inputfile->total_frames) {
+                fprintf(stderr, "/%i (%i%%)", inputfile->total_frames, (frame_count * 100) / inputfile->total_frames);
             }
             fflush(stderr);
         }
@@ -787,8 +791,8 @@ int main(int argc, char **argv)
         else {
             if (twolame_get_verbosity(encopts) > 0) {
                 fprintf(stderr, "\rEncoding frame: %i", frame_count);
-                if (total_frames) {
-                    fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
+                if (inputfile->total_frames) {
+                    fprintf(stderr, "/%i (%i%%)", inputfile->total_frames, (frame_count * 100) / inputfile->total_frames);
                 }
                 fflush(stderr);
             }
