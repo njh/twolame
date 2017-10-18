@@ -8,4 +8,5 @@ Description: An optimized MPEG Audio Layer 2 encoder
 Requires:
 Version: @VERSION@
 Libs: -L${libdir} -ltwolame
+Libs.Private: @LIBS@
 Cflags: -I${includedir}
