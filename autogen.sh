@@ -365,13 +365,6 @@ do
 	fi
       fi
 
-      for docs in NEWS README; do
-	if test ! -f $docs; then
-	  echo "$program: Creating empty $docs file to allow configure to work"
-	  $DRYRUN touch -t 200001010000 $docs
-	fi
-      done
-
       echo "$program: Running $aclocal $aclocal_args"
       $DRYRUN $aclocal $aclocal_args
       if grep "^A[CM]_CONFIG_HEADER" configure.ac >/dev/null; then
