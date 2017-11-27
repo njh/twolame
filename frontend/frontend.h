@@ -31,6 +31,7 @@
 #define OUTPUT_SUFFIX        ".mp2"
 #define DEFAULT_CHANNELS     (2)
 #define DEFAULT_SAMPLERATE   (44100)
+#define DEFAULT_SAMPLESIZE   (16)
 
 
 /*
@@ -70,8 +71,8 @@ typedef struct audioin_s {
     // Pointer to linsndfile info structure
     SF_INFO *sfinfo;
 
-    // Size of the samples (in bits)
-    int samplesize;
+    // store the number of frames to be encoded - zero when unknown
+    unsigned int total_frames;
 
 } audioin_t;
 
@@ -79,4 +80,4 @@ typedef struct audioin_s {
 
 /* Initialisers */
 audioin_t *open_audioin_sndfile(char *filename, SF_INFO * sfinfo);
-audioin_t *open_audioin_raw(char *filename, SF_INFO * sfinfo, int samplesize);
+
