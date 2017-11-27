@@ -153,7 +153,7 @@ int twolame_get_framelength(twolame_options * glopts)
 {
     int bytes = 144 * (glopts->bitrate * 1000) / glopts->samplerate_out;
 
-    if (glopts->padding)
+    if ((glopts->header).padding)
         bytes++;
 
     return bytes;
