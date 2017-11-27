@@ -1,17 +1,14 @@
 SUBDIRS=html
 
-
 ## Building the manpage requires:
 ##    asciidoc:	http://www.methods.co.nz/asciidoc/
 ##    xmlto:	http://cyberelk.net/tim/xmlto/
 ##
 
-EXTRA_DIST =
+## Man Page
+dist_man_MANS = twolame.1
 
 if MAINTAINER_MODE
-
-## Man Page
-man_MANS = twolame.1
 
 twolame.1.xml: twolame.1.txt
 	@PATH_ASCIIDOC@ -d manpage -b docbook -o twolame.1.xml twolame.1.txt
@@ -19,7 +16,6 @@ twolame.1.xml: twolame.1.txt
 twolame.1: twolame.1.xml
 	@PATH_XMLTO@ man twolame.1.xml
 
-EXTRA_DIST += twolame.1 twolame.1.xml
 MAINTAINERCLEANFILES = twolame.1 twolame.1.xml
 
 endif
@@ -30,7 +26,7 @@ pkgdoc_DATA = \
 	psycho.txt \
 	vbr.txt
 
-EXTRA_DIST += \
+EXTRA_DIST = \
 	$(pkgdoc_DATA) \
 	dist10-text/common.txt \
 	dist10-text/commonh.txt \
