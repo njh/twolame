@@ -31,30 +31,23 @@
   format_duration_string()
   Create human readable duration string from libsndfile info
 */
-static char *format_duration_string(SF_INFO * sfinfo)
+static char *format_duration_string(SF_INFO * sfinfo, char *string, int string_size)
 {
     float seconds = 0.0f;
-    char *string = NULL;
     int minutes = 0;
 
-    string = (char *) malloc(MAX_NAME_SIZE);
-    if (!string) {
-        return NULL;
-    }
-
     if (sfinfo->frames == 0 || sfinfo->samplerate == 0) {
-        snprintf(string, MAX_NAME_SIZE, "Unknown");
-        return string;
+        snprintf(string, string_size, "Unknown");
+    } else {
+
+        // Calculate the number of minutes and seconds
+        seconds = sfinfo->frames / sfinfo->samplerate;
+        minutes = (seconds / 60);
+        seconds -= (minutes * 60);
+
+        // Create a string out of it
+        snprintf(string, string_size, "%imin %1.1fsec", minutes, seconds);
     }
-
-    // Calculate the number of minutes and seconds
-    seconds = sfinfo->frames / sfinfo->samplerate;
-    minutes = (seconds / 60);
-    seconds -= (minutes * 60);
-
-    // Create a string out of it
-    snprintf(string, MAX_NAME_SIZE, "%imin %1.1fsec", minutes, seconds);
-
     return string;
 }
 
@@ -70,7 +63,7 @@ static void print_info_sndfile(struct audioin_s *audioin)
     SF_FORMAT_INFO format_info;
     SF_FORMAT_INFO subformat_info;
     char sndlibver[128];
-    char *duration = NULL;
+    char duration[40];
 
     // Get the format
     format_info.format = audioin->sfinfo->format & SF_FORMAT_TYPEMASK;
@@ -84,13 +77,11 @@ static void print_info_sndfile(struct audioin_s *audioin)
     sf_command(file, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
 
     // Get human readable duration of the input file
-    duration = format_duration_string(audioin->sfinfo);
+    format_duration_string(audioin->sfinfo, duration, sizeof(duration));
 
     fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name);
     fprintf(stderr, "Input Duration: %s\n", duration);
     fprintf(stderr, "Input Library: %s\n", sndlibver);
-
-    free(duration);
 
 }
 
