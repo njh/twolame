@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 117;
+use Test::More tests => 116;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
 my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
@@ -131,7 +131,8 @@ my $encoding_parameters = [
     'total_frames' => 22,
     'total_bytes' => 13772,
     'total_samples' => 25344,
-    'output_md5sum' => 'b9e7341a171c619006fa44a075d3ced5'
+    # Disabled because different architectures seem to give different floating point results
+    #'output_md5sum' => 'b9e7341a171c619006fa44a075d3ced5'
   },
 ];
 
@@ -180,7 +181,10 @@ foreach my $params (@$encoding_parameters) {
   is($info->{total_samples}, $params->{total_samples}, "[$count] total number of samples");
 
   is(filesize($OUTPUT_FILENAME), $params->{total_bytes}, , "[$count] file size of output file");
-  is(md5_file($OUTPUT_FILENAME), $params->{output_md5sum}, "[$count] md5sum of output file");
+
+  if ($params->{output_md5sum}) {
+    is(md5_file($OUTPUT_FILENAME), $params->{output_md5sum}, "[$count] md5sum of output file");
+  }
 
   $count++;
 }
