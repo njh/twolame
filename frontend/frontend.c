@@ -702,19 +702,6 @@ int main(int argc, char **argv)
     while ((samples_read = inputfile->read(inputfile, pcmaudio, audioReadSize)) > 0) {
         int bytes_out = 0;
 
-#if 0
-        // Force byte swapping if requested
-        if (byteswap) {
-            int i;
-            for (i = 0; i < samples_read; i++) {
-                short tmp = pcmaudio[i];
-                char *src = (char *) &tmp;
-                char *dst = (char *) &pcmaudio[i];
-                dst[0] = src[1];
-                dst[1] = src[0];
-            }
-        }
-#endif
         // Calculate the number of samples we have (per channel)
         samples_read /= sfinfo.channels;
         total_samples += (unsigned int)samples_read;
