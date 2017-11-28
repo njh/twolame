@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Digest::MD5 qw(md5_hex);
-use Test::More tests => 117;
+use Test::More tests => 118;
 
 my $TWOLAME_CMD = $ENV{TWOLAME_CMD} || "../frontend/twolame";
 my $STWOLAME_CMD = $ENV{STWOLAME_CMD} || "../simplefrontend/stwolame";
@@ -189,12 +189,20 @@ foreach my $params (@$encoding_parameters) {
   $count++;
 }
 
-# Ensure that encoding with bitrate of '0' results in error
+# Ensure that encoding 44khz with bitrate of '0' results in error
 {
   my $INPUT_FILENAME = input_filepath('testcase-44100.wav');
   my $OUTPUT_FILENAME = 'testcase-44100.mp2';
   my $result = system("$TWOLAME_CMD --quiet -b 0 $INPUT_FILENAME $OUTPUT_FILENAME");
-  ok($result != 0, "bitrate of '0' should result in an error");
+  ok($result != 0, "44100 samplerate with bitrate of '0' should result in an error");
+}
+
+# Ensure that encoding 22khz with bitrate of '0' results in error
+{
+  my $INPUT_FILENAME = input_filepath('testcase-22050.wav');
+  my $OUTPUT_FILENAME = 'testcase-22050.mp2';
+  my $result = system("$TWOLAME_CMD --quiet -b 0 $INPUT_FILENAME $OUTPUT_FILENAME");
+  ok($result != 0, "22050 samplerate with bitrate of '0' should result in an error");
 }
 
 # Test encoding from STDIN
