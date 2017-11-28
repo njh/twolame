@@ -173,6 +173,7 @@ AC_CONFIG_HEADERS([libtwolame/config.h])
 AC_CONFIG_FILES([
 	Makefile \
 	twolame.pc \
+	twolame.spec \
 	doc/Makefile \
 	doc/html/Makefile \
 	doc/html/Doxyfile \

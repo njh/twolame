@@ -22,6 +22,7 @@ ChangeLog:
 EXTRA_DIST = \
 	autogen.sh \
 	twolame.pc.in \
+	twolame.spec \
 	win32/configwin.h \
 	win32/libtwolame_dll.sln \
 	win32/libtwolame_dll.vcproj \
