@@ -152,12 +152,16 @@ static int init_header_info(twolame_options * glopts)
             return -1;
         }
     }
-    // Convert the max VBR bitrate to the an index
-    glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
-    if (glopts->vbr_upper_index < 0) {
-        fprintf(stderr, "Not a valid max VBR bitrate for this version: %i\n",
-                glopts->vbr_max_bitrate);
-        return -1;
+    if (glopts->vbr && glopts->vbr_max_bitrate > 0)
+    {
+        /* user required vbr and a specified max bitrate */
+        /* convert max VBR bitrate to an index */
+        glopts->vbr_upper_index = twolame_get_bitrate_index(glopts->vbr_max_bitrate, header->version);
+        if (glopts->vbr_upper_index < 0) {
+            fprintf(stderr, "Not a valid max VBR bitrate for this version: %i\n",
+                    glopts->vbr_max_bitrate);
+            return -1;
+        }
     }
     // Copy accross the other settings
     header->padding = 0; /* when requested, padding will be evaluated later for this frame */
