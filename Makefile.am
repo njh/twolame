@@ -20,7 +20,6 @@ ChangeLog:
 	[ -d .git ] && git log > ChangeLog || true
 
 EXTRA_DIST = \
-	autogen.sh \
 	twolame.pc.in \
 	twolame.spec \
 	win32/configwin.h \
