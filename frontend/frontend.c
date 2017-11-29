@@ -624,14 +624,92 @@ static FILE *open_output_file(char *filename)
 }
 
 
+static SNDFILE *open_input_sndfile(const char *filename, SF_INFO * sfinfo)
+{
+    // Open the input file by filename
+    SNDFILE *file = sf_open(filename, SFM_READ, sfinfo);
+
+    // Check for errors
+    if (file == NULL) {
+        fprintf(stderr, "Failed to open input file (%s):\n", filename);
+        fprintf(stderr, "  %s\n", sf_strerror(NULL));
+        exit(ERR_OPENING_INPUT);
+    }
+
+    /* enable scaling for floating point input files */
+    sf_command(file, SFC_SET_SCALE_FLOAT_INT_READ, NULL, SF_TRUE);
+
+    return file;
+}
+
+/*
+  format_duration_string()
+  Create human readable duration string from libsndfile info
+*/
+static char *format_duration_string(SF_INFO * sfinfo, char *string, int string_size)
+{
+    float seconds = 0.0f;
+    int minutes = 0;
+
+    if (sfinfo->frames == 0 || sfinfo->samplerate == 0) {
+        snprintf(string, string_size, "Unknown");
+    } else {
+
+        // Calculate the number of minutes and seconds
+        seconds = sfinfo->frames / sfinfo->samplerate;
+        minutes = (seconds / 60);
+        seconds -= (minutes * 60);
+
+        // Create a string out of it
+        snprintf(string, string_size, "%imin %1.1fsec", minutes, seconds);
+    }
+    return string;
+}
+
+
+
+/*
+  print_info_sndfile()
+  Display information about input file
+*/
+static void print_info_sndfile(SNDFILE *file, SF_INFO *sfinfo, unsigned int total_frames)
+{
+    SF_FORMAT_INFO format_info;
+    SF_FORMAT_INFO subformat_info;
+    char sndlibver[128];
+    char duration[40];
+
+    // Get the format
+    format_info.format = sfinfo->format & SF_FORMAT_TYPEMASK;
+    sf_command(file, SFC_GET_FORMAT_INFO, &format_info, sizeof(format_info));
+
+    // Get the sub-format info
+    subformat_info.format = sfinfo->format & SF_FORMAT_SUBMASK;
+    sf_command(file, SFC_GET_FORMAT_INFO, &subformat_info, sizeof(subformat_info));
+
+    // Get the version of libsndfile
+    sf_command(file, SFC_GET_LIB_VERSION, sndlibver, sizeof(sndlibver));
+
+    fprintf(stderr, "Input Format: %s, %s\n", format_info.name, subformat_info.name);
+    if (total_frames) {
+        // Get human readable duration of the input file
+        format_duration_string(sfinfo, duration, sizeof(duration));
+        fprintf(stderr, "Input Duration: %s\n", duration);
+    }
+    fprintf(stderr, "Input Library: %s\n", sndlibver);
+}
+
+
+
 int main(int argc, char **argv)
 {
     twolame_options *encopts = NULL;
-    audioin_t *inputfile = NULL;
+    SNDFILE *inputfile = NULL;
     FILE *outputfile = NULL;
     short int *pcmaudio = NULL;
     unsigned int frame_count = 0;
     unsigned int total_samples = 0;
+    unsigned int total_frames = 0;
     unsigned int total_bytes = 0;
     unsigned char *mp2buffer = NULL;
     int samples_read = 0;
@@ -653,18 +731,19 @@ int main(int argc, char **argv)
     print_filenames(twolame_get_verbosity(encopts));
 
     // Open the input file
-    inputfile = open_audioin_sndfile(inputfilename, &sfinfo);
+    inputfile = open_input_sndfile(inputfilename, &sfinfo);
 
     // Calculate the size and number of frames we are going to encode
     if (sfinfo.frames && !stdin_input)
-        inputfile->total_frames = (sfinfo.frames -1) / TWOLAME_SAMPLES_PER_FRAME +1;
+        total_frames = (sfinfo.frames -1) / TWOLAME_SAMPLES_PER_FRAME +1;
     else
-        inputfile->total_frames = 0;
+        total_frames = 0;
 
     // Display input information
     if (twolame_get_verbosity(encopts) > 1) {
-        inputfile->print_info(inputfile);
+        print_info_sndfile(inputfile, &sfinfo, total_frames);
     }
+
     // Use information from input file to configure libtwolame
     twolame_set_num_channels(encopts, sfinfo.channels);
     twolame_set_in_samplerate(encopts, sfinfo.samplerate);
@@ -688,6 +767,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Error: mp2buffer memory allocation failed\n");
         exit(ERR_MEM_ALLOC);
     }
+
     // Open the output file
     outputfile = open_output_file(outputfilename);
 
@@ -699,7 +779,7 @@ int main(int argc, char **argv)
 
 
     // Now do the reading/encoding/writing
-    while ((samples_read = inputfile->read(inputfile, pcmaudio, audioReadSize)) > 0) {
+    while ((samples_read = sf_read_short(inputfile, pcmaudio, audioReadSize)) > 0) {
         int bytes_out = 0;
 
         // Calculate the number of samples we have (per channel)
@@ -751,19 +831,20 @@ int main(int argc, char **argv)
         frame_count = total_samples / TWOLAME_SAMPLES_PER_FRAME;
         if (twolame_get_verbosity(encopts) > 0) {
             fprintf(stderr, "\rEncoding frame: %i", frame_count);
-            if (inputfile->total_frames) {
-                fprintf(stderr, "/%i (%i%%)", inputfile->total_frames, (frame_count * 100) / inputfile->total_frames);
+            if (total_frames) {
+                fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
             }
             fflush(stderr);
         }
     }
 
     // Was there an error reading the audio?
-    if (inputfile->error_str(inputfile)) {
-        fprintf(stderr, "Error reading from input file: %s\n", inputfile->error_str(inputfile));
+    if (sf_error(inputfile) != SF_ERR_NO_ERROR) {
+        fprintf(stderr, "Error reading from input file: %s\n", sf_strerror(inputfile));
     }
+
     //
-    // flush any remaining audio. (don't send any new audio data) There
+    // Flush any remaining audio. (don't send any new audio data) There
     // should only ever be a max of 1 frame on a flush. There may be zero
     // frames if the audio data was an exact multiple of 1152
     //
@@ -778,8 +859,8 @@ int main(int argc, char **argv)
         else {
             if (twolame_get_verbosity(encopts) > 0) {
                 fprintf(stderr, "\rEncoding frame: %i", frame_count);
-                if (inputfile->total_frames) {
-                    fprintf(stderr, "/%i (%i%%)", inputfile->total_frames, (frame_count * 100) / inputfile->total_frames);
+                if (total_frames) {
+                    fprintf(stderr, "/%i (%i%%)", total_frames, (frame_count * 100) / total_frames);
                 }
                 fflush(stderr);
             }
@@ -793,7 +874,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "Total bytes written: %s.\n", filesize);
     }
     // Close input and output streams
-    inputfile->close(inputfile);
+    sf_close(inputfile);
     fclose(outputfile);
 
     // Close the libtwolame encoder

@@ -19,8 +19,6 @@
  *
  */
 
-#include <sndfile.h>
-
 
 /*
   Constants
@@ -46,38 +44,4 @@
 #define ERR_READING_INPUT    (10)    // Error reading input
 #define ERR_ENCODING         (12)    // Error occurred during encoding
 #define ERR_WRITING_OUTPUT   (14)    // Error occurred writing to output file
-
-
-
-
-typedef struct audioin_s {
-
-    // Display information about input stream
-    void (*print_info) (struct audioin_s *);
-
-    // Read in some audio
-    int (*read) (struct audioin_s *, short *buffer, int samples);
-
-    // Return error string (if any)
-    const char *(*error_str) (struct audioin_s *);
-
-    // Close the inout stream
-    int (*close) (struct audioin_s *);
-
-
-    // Pointer to file / input stream
-    void *file;
-
-    // Pointer to linsndfile info structure
-    SF_INFO *sfinfo;
-
-    // store the number of frames to be encoded - zero when unknown
-    unsigned int total_frames;
-
-} audioin_t;
-
-
-
-/* Initialisers */
-audioin_t *open_audioin_sndfile(char *filename, SF_INFO * sfinfo);
 
