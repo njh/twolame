@@ -152,6 +152,19 @@ fi
 AC_SUBST(TWOLAME_BIN)
 
 
+dnl ############## Check for MinGW
+AC_CANONICAL_HOST
+
+build_mingw=no
+
+case "${host_os}" in
+    mingw*)
+        build_mingw=yes
+        ;;
+esac
+
+AM_CONDITIONAL([MINGW], [test "$build_mingw" = "yes"])
+
 
 dnl ############## Compiler and Linker Flags
 
@@ -164,8 +177,13 @@ fi
 
 dnl Required for linking binaries to static lib
 if test $enable_static = yes; then
-   CFLAGS+=" -DLIBTWOLAME_STATIC"
+    if test $build_mingw = yes; then
+        CFLAGS_STATIC=" -DLIBTWOLAME_STATIC"
+    else
+        CFLAGS_STATIC=""
+    fi
 fi
+AC_SUBST(CFLAGS_STATIC)
 
 dnl ############## Output files
 
