@@ -68,6 +68,7 @@
 #define            SCALE                    32768
 #define            CRC16_POLYNOMIAL         0x8005
 #define            CRC8_POLYNOMIAL          0x1D
+#define            FREEFORMAT_MAX_BITRATE   450
 
 #define            MIN(A, B)        ((A) < (B) ? (A) : (B))
 #define            MAX(A, B)        ((A) > (B) ? (A) : (B))
