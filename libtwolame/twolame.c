@@ -356,6 +356,14 @@ int twolame_init_params(twolame_options * glopts)
         fprintf(stderr, "Error: Can't do padding and VBR at same time\n");
         return -1;
     }
+
+    /* Simple patch for the `bit_stream buffer needs to be bigger' warning */
+    /* Fix FREEFORMAT_MAX_BITRATE definition when github issue #51 will be closed */
+    if (glopts->freeformat && glopts->bitrate > FREEFORMAT_MAX_BITRATE) {
+        fprintf(stderr, "twolame_init_params(): cannot encode freeformat stream at %d kbps\n", glopts->bitrate);
+        return -1;
+    }
+
     // Set the Number of output channels
     glopts->num_channels_out = (glopts->mode == TWOLAME_MONO) ? 1 : 2;
 
