@@ -1,6 +1,27 @@
 What is new in TwoLAME
 ======================
 
+Version 0.4.0 (2018-??-??)
+--------------------------
+- Make libsndfile dependency (and therefore the frontend) optional
+- Silenced Valgrind warnings
+- Added DAB utility methods for ScF-CRC handling
+- Fixed setting for error protection flag
+- Added free format encoding (now up to 450 kbps)
+- New check for invalid bitrate/channel encoder settings
+- Fixed VBR encoding
+- Updated autogen.sh and configure.ac
+- Updated to Doxygen 1.8.13
+- Minor fixes (speed related)
+- New twolame_get_original() and twolame_set_original()
+- Fix compilation on mingw or mxe cross compiler
+- New checks against failed memory allocations
+- Fixed padding policy (now adding an empty slot)
+- Fixed build when maintainer mode is disabled
+- Fixed scaling of floating point input source through libsdnfile
+- Ensure that twolame.1 is included in .tar.gz even outside of maintainer mode
+
+
 Version 0.3.13 (2010-01-21)
 ---------------------------
 
