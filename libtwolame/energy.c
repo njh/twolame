@@ -71,7 +71,7 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs)
     unsigned char rhibyte, rlobyte, lhibyte, llobyte;
 
     // Get the position (in butes) of the end of the mpeg audio frame
-    int frameEnd = buffer_sstell(bs) / 8;
+    int frameEnd = bitbuffer_sstell(bs) / 8;
 
 
     // find the maximum in the left and right channels
