@@ -13,12 +13,13 @@ Version 0.4.0 (2018-??-??)
 - Updated autogen.sh and configure.ac
 - Updated to Doxygen 1.8.13
 - Minor fixes (speed related)
-- New twolame_get_original() and twolame_set_original()
+- New `twolame_get_original()` and `twolame_set_original()`
 - Fix compilation on mingw or mxe cross compiler
 - New checks against failed memory allocations
 - Fixed padding policy (now adding an empty slot)
 - Fixed build when maintainer mode is disabled
 - Fixed scaling of floating point input source through libsdnfile
+- Removed `slotinfo` global variables to fix thread safety bug
 - Ensure that twolame.1 is included in .tar.gz even outside of maintainer mode
 
 
