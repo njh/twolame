@@ -64,6 +64,8 @@ twolame_options *twolame_init(void)
         return NULL;
     }
 
+    memset(newoptions, 0, sizeof(twolame_options));
+
     newoptions->version = -1;
     newoptions->num_channels_in = 0;
     newoptions->num_channels_out = 0;
@@ -101,7 +103,6 @@ twolame_options *twolame_init(void)
     newoptions->do_energy_levels = FALSE;
     newoptions->num_ancillary_bits = -1;
 
-
     newoptions->vbr_frame_count = 0;    // only used for debugging
     newoptions->tablenum = 0;
 
@@ -116,8 +117,6 @@ twolame_options *twolame_init(void)
     newoptions->p2mem = NULL;
     newoptions->p3mem = NULL;
     newoptions->p4mem = NULL;
-
-    memset(newoptions->vbrstats, 0, sizeof(newoptions->vbrstats));
 
     return (newoptions);
 }
