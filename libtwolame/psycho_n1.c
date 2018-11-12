@@ -60,7 +60,7 @@ static const FLOAT snrdefc[32] = {
 };
 #endif
 
-void psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo)
+void twolame_psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo)
 {
     int i, k;
 

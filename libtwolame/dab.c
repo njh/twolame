@@ -30,10 +30,10 @@
 
 
 void
-dab_crc_calc(twolame_options * glopts,
-             unsigned int bit_alloc[2][SBLIMIT],
-             unsigned int scfsi[2][SBLIMIT],
-             unsigned int scalar[2][3][SBLIMIT], unsigned int *crc, int packed)
+twolame_dab_crc_calc(twolame_options * glopts,
+                     unsigned int bit_alloc[2][SBLIMIT],
+                     unsigned int scfsi[2][SBLIMIT],
+                     unsigned int scalar[2][3][SBLIMIT], unsigned int *crc, int packed)
 {
     int i, j, k;
     int nch = glopts->num_channels_out;
@@ -55,22 +55,22 @@ dab_crc_calc(twolame_options * glopts,
                 case 0:
                     for (j = 0; j < 3; j++) {
                         nb_scalar++;
-                        dab_crc_update(scalar[k][j][i] >> 3, 3, crc);
+                        twolame_dab_crc_update(scalar[k][j][i] >> 3, 3, crc);
                     }
                     break;
                 case 1:
                 case 3:
                     nb_scalar += 2;
-                    dab_crc_update(scalar[k][0][i] >> 3, 3, crc);
-                    dab_crc_update(scalar[k][2][i] >> 3, 3, crc);
+                    twolame_dab_crc_update(scalar[k][0][i] >> 3, 3, crc);
+                    twolame_dab_crc_update(scalar[k][2][i] >> 3, 3, crc);
                     break;
                 case 2:
                     nb_scalar++;
-                    dab_crc_update(scalar[k][0][i] >> 3, 3, crc);
+                    twolame_dab_crc_update(scalar[k][0][i] >> 3, 3, crc);
                 }
 }
 
-void dab_crc_update(unsigned int data, unsigned int length, unsigned int *crc)
+void twolame_dab_crc_update(unsigned int data, unsigned int length, unsigned int *crc)
 {
     unsigned int masking, carry;
 

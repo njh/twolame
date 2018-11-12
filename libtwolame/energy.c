@@ -33,7 +33,7 @@
 
 // Returns the desired number of ancillary bits to be
 // reserved at the end of the frame
-int get_required_energy_bits(twolame_options * glopts)
+int twolame_get_required_energy_bits(twolame_options * glopts)
 {
     if (glopts->mode == TWOLAME_MONO) {
         // only 2 bytes + zero at n-3 needed for energy level for mono channel
@@ -49,7 +49,7 @@ int get_required_energy_bits(twolame_options * glopts)
 
 // Calculates the energy levels of current frame and
 // inserts it into the end of the frame
-void do_energy_levels(twolame_options * glopts, bit_stream * bs)
+void twolame_do_energy_levels(twolame_options * glopts, bit_stream * bs)
 {
     /* Reference: Using the BWF Energy Levels in AudioScience Bitstreams
        http://www.audioscience.com/internet/download/notes/note0001_MPEG_energy.pdf
@@ -71,7 +71,7 @@ void do_energy_levels(twolame_options * glopts, bit_stream * bs)
     unsigned char rhibyte, rlobyte, lhibyte, llobyte;
 
     // Get the position (in butes) of the end of the mpeg audio frame
-    int frameEnd = buffer_sstell(bs) / 8;
+    int frameEnd = twolame_buffer_sstell(bs) / 8;
 
 
     // find the maximum in the left and right channels

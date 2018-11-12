@@ -184,7 +184,7 @@ static int get_js_bound(int m_ext)
 }
 
 
-int encode_init(twolame_options * glopts)
+int twolame_encode_init(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
     int br_per_ch, sfrq;
@@ -214,7 +214,7 @@ int encode_init(twolame_options * glopts)
     // glopts->sblimit = pick_table ( glopts );
     /* MFC FIX this up */
     glopts->sblimit = table_sblimit[glopts->tablenum];
-    // fprintf(stderr,"encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum,
+    // fprintf(stderr,"twolame_encode_init: using tablenum %i with sblimit %i\n",glopts->tablenum,
     // glopts->sblimit);
 
     if (glopts->mode == TWOLAME_JOINT_STEREO)
@@ -280,8 +280,8 @@ int encode_init(twolame_options * glopts)
    sample_encoding
 */
 
-void scalefactor_calc(FLOAT sb_sample[][3][SCALE_BLOCK][SBLIMIT],
-                      unsigned int sf_index[][3][SBLIMIT], int nch, int sblimit)
+void twolame_scalefactor_calc(FLOAT sb_sample[][3][SCALE_BLOCK][SBLIMIT],
+                              unsigned int sf_index[][3][SBLIMIT], int nch, int sblimit)
 {
     /* Optimized to use binary search instead of linear scan through the scalefactor table;
        guarantees to find scalefactor in only 5 jumps/comparisons and not in {0 (lin. best) to 63
@@ -329,8 +329,8 @@ void scalefactor_calc(FLOAT sb_sample[][3][SCALE_BLOCK][SBLIMIT],
 
 
 /* Combine L&R channels into a mono joint stereo channel */
-void combine_lr(FLOAT sb_sample[2][3][SCALE_BLOCK][SBLIMIT],
-                FLOAT joint_sample[3][SCALE_BLOCK][SBLIMIT], int sblimit)
+void twolame_combine_lr(FLOAT sb_sample[2][3][SCALE_BLOCK][SBLIMIT],
+                        FLOAT joint_sample[3][SCALE_BLOCK][SBLIMIT], int sblimit)
 {
     int sb, sample, gr;
 
@@ -353,8 +353,8 @@ void combine_lr(FLOAT sb_sample[2][3][SCALE_BLOCK][SBLIMIT],
 
    MFC FIX: Feb 2003 - is this only needed for psy model 1?
 */
-void find_sf_max(twolame_options * glopts,
-                 unsigned int sf_index[2][3][SBLIMIT], FLOAT sf_max[2][SBLIMIT])
+void twolame_find_sf_max(twolame_options * glopts,
+                         unsigned int sf_index[2][3][SBLIMIT], FLOAT sf_max[2][SBLIMIT])
 {
     unsigned int sb, gr, ch;
     unsigned int lowest_sf_index;
@@ -381,9 +381,9 @@ void find_sf_max(twolame_options * glopts,
     and
     Table C.4 "LayerII Scalefactors Transmission Pattern"
 */
-void sf_transmission_pattern(twolame_options * glopts,
-                             unsigned int sf_index[2][3][SBLIMIT],
-                             unsigned int sf_selectinfo[2][SBLIMIT])
+void twolame_sf_transmission_pattern(twolame_options * glopts,
+                                     unsigned int sf_index[2][3][SBLIMIT],
+                                     unsigned int sf_selectinfo[2][SBLIMIT])
 {
     int nch = glopts->num_channels_out;
     int sblimit = glopts->sblimit;
@@ -451,7 +451,7 @@ void sf_transmission_pattern(twolame_options * glopts,
         }
 }
 
-void write_header(twolame_options * glopts, bit_stream * bs)
+void twolame_write_header(twolame_options * glopts, bit_stream * bs)
 {
     frame_header *header = &glopts->header;
 
@@ -478,7 +478,7 @@ void write_header(twolame_options * glopts, bit_stream * bs)
  4,3,2, or 0 bits depending on the quantization table used.
 
 ************************************************************************/
-void write_bit_alloc(twolame_options * glopts, unsigned int bit_alloc[2][SBLIMIT], bit_stream * bs)
+void twolame_write_bit_alloc(twolame_options * glopts, unsigned int bit_alloc[2][SBLIMIT], bit_stream * bs)
 {
     int nch = glopts->num_channels_out;
     int sblimit = glopts->sblimit;
@@ -505,10 +505,10 @@ void write_bit_alloc(twolame_options * glopts, unsigned int bit_alloc[2][SBLIMIT
 
 ************************************************************************/
 
-void write_scalefactors(twolame_options * glopts,
-                        unsigned int bit_alloc[2][SBLIMIT],
-                        unsigned int sf_selectinfo[2][SBLIMIT],
-                        unsigned int sf_index[2][3][SBLIMIT], bit_stream * bs)
+void twolame_write_scalefactors(twolame_options * glopts,
+                                unsigned int bit_alloc[2][SBLIMIT],
+                                unsigned int sf_selectinfo[2][SBLIMIT],
+                                unsigned int sf_index[2][3][SBLIMIT], bit_stream * bs)
 {
     int nch = glopts->num_channels_out;
     int sblimit = glopts->sblimit;
@@ -577,14 +577,13 @@ static const FLOAT b[18] = {
  negative number x is equivalent to adding 1 to it.
 
 ************************************************************************/
-void
-subband_quantization(twolame_options * glopts,
-                     unsigned int sf_index[2][3][SBLIMIT],
-                     FLOAT sb_samples[2][3][SCALE_BLOCK][SBLIMIT],
-                     unsigned int j_scale[3][SBLIMIT],
-                     FLOAT j_samps[3][SCALE_BLOCK][SBLIMIT],
-                     unsigned int bit_alloc[2][SBLIMIT],
-                     unsigned int sbband[2][3][SCALE_BLOCK][SBLIMIT])
+void twolame_subband_quantization(twolame_options * glopts,
+                                  unsigned int sf_index[2][3][SBLIMIT],
+                                  FLOAT sb_samples[2][3][SCALE_BLOCK][SBLIMIT],
+                                  unsigned int j_scale[3][SBLIMIT],
+                                  FLOAT j_samps[3][SCALE_BLOCK][SBLIMIT],
+                                  unsigned int bit_alloc[2][SBLIMIT],
+                                  unsigned int sbband[2][3][SCALE_BLOCK][SBLIMIT])
 {
     int sb, j, ch, gr, qnt_coeff_index, sig;
     int nch = glopts->num_channels_out;
@@ -656,9 +655,9 @@ subband_quantization(twolame_options * glopts,
  that are not a power of 2.
 
 ***********************************************************************/
-void write_samples(twolame_options * glopts,
-                   unsigned int sbband[2][3][SCALE_BLOCK][SBLIMIT],
-                   unsigned int bit_alloc[2][SBLIMIT], bit_stream * bs)
+void twolame_write_samples(twolame_options * glopts,
+                           unsigned int sbband[2][3][SCALE_BLOCK][SBLIMIT],
+                           unsigned int bit_alloc[2][SBLIMIT], bit_stream * bs)
 {
     unsigned int nch = glopts->num_channels_out;
     unsigned int sblimit = glopts->sblimit;
@@ -725,10 +724,10 @@ void write_samples(twolame_options * glopts,
 *
 ************************************************************************/
 
-int bits_for_nonoise(twolame_options * glopts,
-                     FLOAT SMR[2][SBLIMIT],
-                     unsigned int scfsi[2][SBLIMIT], FLOAT min_mnr,
-                     unsigned int bit_alloc[2][SBLIMIT])
+int twolame_bits_for_nonoise(twolame_options * glopts,
+                             FLOAT SMR[2][SBLIMIT],
+                             unsigned int scfsi[2][SBLIMIT], FLOAT min_mnr,
+                             unsigned int bit_alloc[2][SBLIMIT])
 {
     frame_header *header = &glopts->header;
     int sb, ch, ba;
@@ -799,7 +798,7 @@ int bits_for_nonoise(twolame_options * glopts,
 
 
 /* must be called before calling main_bit_allocation */
-int init_bit_allocation(twolame_options * glopts)
+int twolame_init_bit_allocation(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
     int nch = glopts->num_channels_out;
@@ -898,10 +897,10 @@ int init_bit_allocation(twolame_options * glopts)
 *      This function calls *_bits_for_nonoise() and *_a_bit_allocation().
 *
 ************************************************************************/
-void main_bit_allocation(twolame_options * glopts,
-                         FLOAT SMR[2][SBLIMIT],
-                         unsigned int scfsi[2][SBLIMIT],
-                         unsigned int bit_alloc[2][SBLIMIT], int *adb)
+void twolame_main_bit_allocation(twolame_options * glopts,
+                                 FLOAT SMR[2][SBLIMIT],
+                                 unsigned int scfsi[2][SBLIMIT],
+                                 unsigned int bit_alloc[2][SBLIMIT], int *adb)
 {
     frame_header *header = &glopts->header;
     int mode = glopts->mode;
@@ -914,13 +913,13 @@ void main_bit_allocation(twolame_options * glopts,
         header->mode = TWOLAME_STEREO;
         header->mode_ext = 0;
         glopts->jsbound = glopts->sblimit;
-        if ((rq_db = bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc)) > *adb) {
+        if ((rq_db = twolame_bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc)) > *adb) {
             header->mode = TWOLAME_JOINT_STEREO;
             mode_ext = 4;       /* 3 is least severe reduction */
             do {
                 --mode_ext;
                 glopts->jsbound = get_js_bound(mode_ext);
-                rq_db = bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc);
+                rq_db = twolame_bits_for_nonoise(glopts, SMR, scfsi, 0, bit_alloc);
             }
             while ((rq_db > *adb) && (mode_ext > 0));
             header->mode_ext = mode_ext;
@@ -930,14 +929,14 @@ void main_bit_allocation(twolame_options * glopts,
     /* decide on which bit allocation method to use */
     if (glopts->vbr == FALSE) {
         /* Just do the old bit allocation method */
-        a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        twolame_a_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     } else {
         /* do the VBR bit allocation method */
         {
             int brindex;
 
             /* Work out how many bits are needed for there to be no noise (ie all MNR > VBRLEVEL) */
-            int req = bits_for_nonoise(glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc);
+            int req = twolame_bits_for_nonoise(glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc);
 
             /* Look up this value in the bitrateindextobits table to find what bitrate we should
                use for this frame */
@@ -958,7 +957,7 @@ void main_bit_allocation(twolame_options * glopts,
 
         header->bitrate_index = guessindex;
         glopts->bitrate = twolame_index_bitrate((int)glopts->version, guessindex);
-        *adb = available_bits(glopts);
+        *adb = twolame_available_bits(glopts);
 
         /* update the statistics */
         glopts->vbrstats[header->bitrate_index]++;
@@ -978,11 +977,11 @@ void main_bit_allocation(twolame_options * glopts,
                 fprintf(stderr,
                         "> bitrate index %2i has %i bits available to encode the %i bits\n",
                         header->bitrate_index, *adb,
-                        bits_for_nonoise(glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc));
+                        twolame_bits_for_nonoise(glopts, SMR, scfsi, glopts->vbrlevel, bit_alloc));
 
         }
 
-        vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
+        twolame_vbr_bit_allocation(glopts, SMR, scfsi, bit_alloc, adb);
     }
 }
 
@@ -1036,9 +1035,9 @@ each subband gets its required bits, why quibble?
 This function doesn't chew much CPU, so I haven't made any attempt
 to do this yet.
 *********************/
-int vbr_bit_allocation(twolame_options * glopts,
-                       FLOAT SMR[2][SBLIMIT],
-                       unsigned int scfsi[2][SBLIMIT], unsigned int bit_alloc[2][SBLIMIT], int *adb)
+int twolame_vbr_bit_allocation(twolame_options * glopts,
+                               FLOAT SMR[2][SBLIMIT],
+                               unsigned int scfsi[2][SBLIMIT], unsigned int bit_alloc[2][SBLIMIT], int *adb)
 {
     int sb, min_ch, min_sb, oth_ch, ch, increment, scale, seli, ba;
     int bspl, bscf, bsel, ad, bbal = 0;
@@ -1189,8 +1188,8 @@ static void maxmnr(FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimit,
 *
 ************************************************************************/
 
-int a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
-                     unsigned int scfsi[2][SBLIMIT], unsigned int bit_alloc[2][SBLIMIT], int *adb)
+int twolame_a_bit_allocation(twolame_options * glopts, FLOAT SMR[2][SBLIMIT],
+                             unsigned int scfsi[2][SBLIMIT], unsigned int bit_alloc[2][SBLIMIT], int *adb)
 {
     int sb, min_ch, min_sb, oth_ch, ch, increment, scale, seli, ba;
     int bspl, bscf, bsel, ad, bbal = 0;

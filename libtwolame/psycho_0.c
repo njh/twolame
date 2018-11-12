@@ -50,7 +50,7 @@
    logs, whatever. Fiddle with the numbers until we get a good SMR output */
 
 
-static psycho_0_mem *psycho_0_init(twolame_options * glopts, int sfreq)
+static psycho_0_mem *twolame_psycho_0_init(twolame_options * glopts, int sfreq)
 {
     FLOAT freqperline = (FLOAT) sfreq / 1024.0;
     psycho_0_mem *mem = (psycho_0_mem *) TWOLAME_MALLOC(sizeof(psycho_0_mem));
@@ -63,7 +63,7 @@ static psycho_0_mem *psycho_0_init(twolame_options * glopts, int sfreq)
     /* Find the minimum ATH in each subband */
     for (i = 0; i < 512; i++) {
         FLOAT thisfreq = i * freqperline;
-        FLOAT ath_val = ath_db(thisfreq, 0);
+        FLOAT ath_val = twolame_ath_db(thisfreq, 0);
         if (ath_val < mem->ath_min[i >> 4])
             mem->ath_min[i >> 4] = ath_val;
     }
@@ -73,7 +73,7 @@ static psycho_0_mem *psycho_0_init(twolame_options * glopts, int sfreq)
 
 
 
-void psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT])
+void twolame_psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT])
 {
     psycho_0_mem *mem;
     int nch = glopts->num_channels_out;
@@ -82,7 +82,7 @@ void psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scal
     unsigned int minscaleindex[2][SBLIMIT]; /* Smaller scale indexes mean bigger scalefactors */
 
     if (!glopts->p0mem) {
-        glopts->p0mem = psycho_0_init(glopts, sfreq);
+        glopts->p0mem = twolame_psycho_0_init(glopts, sfreq);
     }
     mem = glopts->p0mem;
 
@@ -117,7 +117,7 @@ void psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scal
 }
 
 
-void psycho_0_deinit(psycho_0_mem ** mem)
+void twolame_psycho_0_deinit(psycho_0_mem ** mem)
 {
 
     if (mem == NULL || *mem == NULL)

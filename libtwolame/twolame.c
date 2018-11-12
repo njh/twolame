@@ -323,7 +323,7 @@ int twolame_init_params(twolame_options * glopts)
     /* Set the number of ancillary bits automatically, if none set */
     if (glopts->num_ancillary_bits < 0) {
         if (glopts->do_energy_levels) {
-            glopts->num_ancillary_bits = get_required_energy_bits(glopts);
+            glopts->num_ancillary_bits = twolame_get_required_energy_bits(glopts);
         } else {
             glopts->num_ancillary_bits = 0;
         }
@@ -331,7 +331,7 @@ int twolame_init_params(twolame_options * glopts)
 
     /* Check that if we're doing energy levels, that there's enough space to put the information */
     if (glopts->do_energy_levels) {
-        int required = get_required_energy_bits(glopts);
+        int required = twolame_get_required_energy_bits(glopts);
         if (glopts->num_ancillary_bits < required) {
             fprintf(stderr, "Warning: Too few ancillary bits to store energy levels: %i<%i\n",
                     glopts->num_ancillary_bits, required);
@@ -376,11 +376,11 @@ int twolame_init_params(twolame_options * glopts)
         return -1;
     }
     // initialise bitrate allocation
-    if (init_bit_allocation(glopts) < 0) {
+    if (twolame_init_bit_allocation(glopts) < 0) {
         return -1;
     }
     // Select table number and sblimit
-    if (encode_init(glopts) < 0) {
+    if (twolame_encode_init(glopts) < 0) {
         return -1;
     }
     // Check input samplerate is same as output samplerate
@@ -400,10 +400,10 @@ int twolame_init_params(twolame_options * glopts)
     glopts->j_sample = (jsb_sample_t *) TWOLAME_MALLOC(sizeof(jsb_sample_t));
     glopts->sb_sample = (sb_sample_t *) TWOLAME_MALLOC(sizeof(sb_sample_t));
     if (glopts->subband == NULL
-        ||
-        glopts->j_sample == NULL
-        ||
-        glopts->sb_sample == NULL)
+            ||
+            glopts->j_sample == NULL
+            ||
+            glopts->sb_sample == NULL)
     {
         TWOLAME_FREE(glopts->subband);
         TWOLAME_FREE(glopts->j_sample);
@@ -422,7 +422,7 @@ int twolame_init_params(twolame_options * glopts)
     memset((char *) glopts->max_sc, 0, sizeof(glopts->max_sc));
 
     // Initialise subband windowfilter
-    if (init_subband(&glopts->smem) < 0) {
+    if (twolame_init_subband(&glopts->smem) < 0) {
         return -1;
     }
     // All initalised now :)
@@ -511,9 +511,9 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     glopts->num_crc_bits = 0;
 
     // Store the number of bits initially in the bit buffer
-    initial_bits = buffer_sstell(bs);
+    initial_bits = twolame_buffer_sstell(bs);
 
-    adb = available_bits(glopts);
+    adb = twolame_available_bits(glopts);
 
     /* allow the user to reserve some space at the end of the frame This will however leave fewer
        bits for the audio. Need to do a sanity check here to see that there are *some* bits left. */
@@ -539,17 +539,17 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         for (gr = 0; gr < 3; gr++)
             for (bl = 0; bl < 12; bl++)
                 for (ch = 0; ch < nch; ch++)
-                    window_filter_subband(&glopts->smem,
-                                          &glopts->buffer[ch][gr * 12 * 32 + 32 * bl], ch,
-                                          &(*glopts->sb_sample)[ch][gr][bl][0]);
+                    twolame_window_filter_subband(&glopts->smem,
+                                                  &glopts->buffer[ch][gr * 12 * 32 + 32 * bl], ch,
+                                                  &(*glopts->sb_sample)[ch][gr][bl][0]);
     }
 
-    scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
-    find_sf_max(glopts, glopts->scalar, glopts->max_sc);
+    twolame_scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
+    twolame_find_sf_max(glopts, glopts->scalar, glopts->max_sc);
     if (glopts->mode == TWOLAME_JOINT_STEREO) {
         // this way we calculate more mono than we need but it is cheap
-        combine_lr(*glopts->sb_sample, *glopts->j_sample, glopts->sblimit);
-        scalefactor_calc(glopts->j_sample, &glopts->j_scale, 1, glopts->sblimit);
+        twolame_combine_lr(*glopts->sb_sample, *glopts->j_sample, glopts->sblimit);
+        twolame_scalefactor_calc(glopts->j_sample, &glopts->j_scale, 1, glopts->sblimit);
     }
 
     if ((glopts->quickmode == TRUE) && (++glopts->psycount % glopts->quickcount != 0)) {
@@ -564,24 +564,24 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         // calculate the psymodel
         switch (glopts->psymodel) {
         case -1:
-            psycho_n1(glopts, glopts->smr, nch);
+            twolame_psycho_n1(glopts, glopts->smr, nch);
             break;
         case 0:                // Psy Model A
-            psycho_0(glopts, glopts->smr, glopts->scalar);
+            twolame_psycho_0(glopts, glopts->smr, glopts->scalar);
             break;
         case 1:
-            psycho_1(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
+            twolame_psycho_1(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
             break;
         case 2:
-            psycho_2(glopts, glopts->buffer, sam, glopts->smr);
+            twolame_psycho_2(glopts, glopts->buffer, sam, glopts->smr);
             break;
         case 3:
             // Modified psy model 1
-            psycho_3(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
+            twolame_psycho_3(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
             break;
         case 4:
             // Modified psy model 2
-            psycho_4(glopts, glopts->buffer, sam, glopts->smr);
+            twolame_psycho_4(glopts, glopts->buffer, sam, glopts->smr);
             break;
         default:
             fprintf(stderr, "Invalid psy model specification: %i\n", glopts->psymodel);
@@ -599,21 +599,21 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     }
 
 
-    sf_transmission_pattern(glopts, glopts->scalar, glopts->scfsi);
-    main_bit_allocation(glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
+    twolame_sf_transmission_pattern(glopts, glopts->scalar, glopts->scfsi);
+    twolame_main_bit_allocation(glopts, glopts->smr, glopts->scfsi, glopts->bit_alloc, &adb);
 
-    write_header(glopts, bs);
+    twolame_write_header(glopts, bs);
 
     // Leave space for 2 bytes of CRC to be filled in later
     if (glopts->error_protection)
         buffer_putbits(bs, 0, 16);
 
-    write_bit_alloc(glopts, glopts->bit_alloc, bs);
-    write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
+    twolame_write_bit_alloc(glopts, glopts->bit_alloc, bs);
+    twolame_write_scalefactors(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar, bs);
 
-    subband_quantization(glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale,
-                         *glopts->j_sample, glopts->bit_alloc, *glopts->subband);
-    write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
+    twolame_subband_quantization(glopts, glopts->scalar, *glopts->sb_sample, glopts->j_scale,
+                                 *glopts->j_sample, glopts->bit_alloc, *glopts->subband);
+    twolame_write_samples(glopts, *glopts->subband, glopts->bit_alloc, bs);
 
     // If not all the bits were used, write out a stack of zeros
     for (i = 0; i < adb; i++)
@@ -630,8 +630,8 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         // It will be up to the frontend to insert it into the end of the
         // previous frame.
         for (i = glopts->dab_crc_len - 1; i >= 0; i--) {
-            dab_crc_calc(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar,
-                         &glopts->dab_crc[i], i);
+            twolame_dab_crc_calc(glopts, glopts->bit_alloc, glopts->scfsi, glopts->scalar,
+                                 &glopts->dab_crc[i], i);
         }
     }
     // Allocate space for the reserved ancillary bits
@@ -640,7 +640,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
 
 
     // Calulate the number of bits in this frame
-    frameBits = buffer_sstell(bs) - initial_bits;
+    frameBits = twolame_buffer_sstell(bs) - initial_bits;
     if (frameBits % 8) {        /* a program failure */
         fprintf(stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits / 8,
                 frameBits % 8);
@@ -651,12 +651,12 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     }
     // Store the energy levels at the end of the frame
     if (glopts->do_energy_levels)
-        do_energy_levels(glopts, bs);
+        twolame_do_energy_levels(glopts, bs);
 
     // MEANX: Recompute checksum from bitstream
     if (glopts->error_protection) {
         unsigned char *frame_ptr = bs->buf + (initial_bits >> 3);
-        crc_writeheader(frame_ptr, glopts->num_crc_bits);
+        twolame_crc_writeheader(frame_ptr, glopts->num_crc_bits);
     }
     // fprintf(stderr,"Frame size: %li\n\n",frameBits/8);
 
@@ -690,7 +690,7 @@ int twolame_encode_buffer(twolame_options * glopts,
 
     // now would be a great time to validate the size of the buffer.
     // samples/1152 * sizeof(frame) < mp2buffer_size
-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+    mybs = twolame_buffer_init(mp2buffer, mp2buffer_size);
 
     if (mybs != NULL) {
         // Use up all the samples in in_buffer
@@ -721,7 +721,7 @@ int twolame_encode_buffer(twolame_options * glopts,
             if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
                 int bytes = encode_frame(glopts, mybs);
                 if (bytes <= 0) {
-                    buffer_deinit(&mybs);
+                    twolame_buffer_deinit(&mybs);
                     return bytes;
                 }
                 mp2_size += bytes;
@@ -730,7 +730,7 @@ int twolame_encode_buffer(twolame_options * glopts,
         }
 
         // free up the bit stream buffer structure
-        buffer_deinit(&mybs);
+        twolame_buffer_deinit(&mybs);
     }
 
     return (mp2_size);
@@ -751,7 +751,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
 
     // now would be a great time to validate the size of the buffer.
     // samples/1152 * sizeof(frame) < mp2buffer_size
-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+    mybs = twolame_buffer_init(mp2buffer, mp2buffer_size);
 
     if (mybs != NULL) {
         // Use up all the samples in in_buffer
@@ -782,7 +782,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
             if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
                 int bytes = encode_frame(glopts, mybs);
                 if (bytes <= 0) {
-                    buffer_deinit(&mybs);
+                    twolame_buffer_deinit(&mybs);
                     return bytes;
                 }
                 mp2_size += bytes;
@@ -791,7 +791,7 @@ int twolame_encode_buffer_interleaved(twolame_options * glopts,
         }
 
         // free up the bit stream buffer structure
-        buffer_deinit(&mybs);
+        twolame_buffer_deinit(&mybs);
     }
 
     return (mp2_size);
@@ -839,7 +839,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
 
     // now would be a great time to validate the size of the buffer.
     // samples/1152 * sizeof(frame) < mp2buffer_size
-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+    mybs = twolame_buffer_init(mp2buffer, mp2buffer_size);
 
     if (mybs != NULL) {
         // Use up all the samples in in_buffer
@@ -868,7 +868,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
             if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
                 int bytes = encode_frame(glopts, mybs);
                 if (bytes <= 0) {
-                    buffer_deinit(&mybs);
+                    twolame_buffer_deinit(&mybs);
                     return bytes;
                 }
                 mp2_size += bytes;
@@ -877,7 +877,7 @@ int twolame_encode_buffer_float32(twolame_options * glopts,
         }
 
         // free up the bit stream buffer structure
-        buffer_deinit(&mybs);
+        twolame_buffer_deinit(&mybs);
     }
 
     return (mp2_size);
@@ -898,7 +898,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
 
     // now would be a great time to validate the size of the buffer.
     // samples/1152 * sizeof(frame) < mp2buffer_size
-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+    mybs = twolame_buffer_init(mp2buffer, mp2buffer_size);
 
     if (mybs != NULL) {
         // Use up all the samples in in_buffer
@@ -927,7 +927,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
             if (glopts->samples_in_buffer >= TWOLAME_SAMPLES_PER_FRAME) {
                 int bytes = encode_frame(glopts, mybs);
                 if (bytes <= 0) {
-                    buffer_deinit(&mybs);
+                    twolame_buffer_deinit(&mybs);
                     return bytes;
                 }
                 mp2_size += bytes;
@@ -936,7 +936,7 @@ int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
         }
 
         // free up the bit stream buffer structure
-        buffer_deinit(&mybs);
+        twolame_buffer_deinit(&mybs);
     }
 
     return (mp2_size);
@@ -955,7 +955,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
         return 0;
     }
     // Create bit stream structure
-    mybs = buffer_init(mp2buffer, mp2buffer_size);
+    mybs = twolame_buffer_init(mp2buffer, mp2buffer_size);
 
     if (mybs != NULL) {
         // Pad out the PCM buffers with 0 and encode the frame
@@ -968,7 +968,7 @@ int twolame_encode_flush(twolame_options * glopts, unsigned char *mp2buffer, int
         glopts->samples_in_buffer = 0;
 
         // free up the bit stream buffer structure
-        buffer_deinit(&mybs);
+        twolame_buffer_deinit(&mybs);
     }
 
     return mp2_size;
@@ -989,11 +989,11 @@ void twolame_close(twolame_options ** glopts)
         return;
 
     // free mem
-    psycho_4_deinit(&opts->p4mem);
-    psycho_3_deinit(&opts->p3mem);
-    psycho_2_deinit(&opts->p2mem);
-    psycho_1_deinit(&opts->p1mem);
-    psycho_0_deinit(&opts->p0mem);
+    twolame_psycho_4_deinit(&opts->p4mem);
+    twolame_psycho_3_deinit(&opts->p3mem);
+    twolame_psycho_2_deinit(&opts->p2mem);
+    twolame_psycho_1_deinit(&opts->p1mem);
+    twolame_psycho_0_deinit(&opts->p0mem);
 
     TWOLAME_FREE(opts->subband);
     TWOLAME_FREE(opts->j_sample);

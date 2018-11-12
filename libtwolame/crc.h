@@ -23,7 +23,7 @@
 #ifndef TWOLAME_CRC_H
 #define TWOLAME_CRC_H
 
-void crc_writeheader(unsigned char *bitstream, int bit_count);
+void twolame_crc_writeheader(unsigned char *bitstream, int bit_count);
 
 #endif
 

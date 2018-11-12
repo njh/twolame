@@ -53,7 +53,7 @@ static unsigned int crc_update(unsigned int value, unsigned int crc, unsigned in
  * and then the bits up and until the scale-factor bits.
  */
 
-void crc_writeheader(unsigned char *bitstream, int bit_count)
+void twolame_crc_writeheader(unsigned char *bitstream, int bit_count)
 {
     unsigned int crc = 0xffff;  /* (jo) init crc16 for error_protection */
     int whole_bytes = (bit_count >> 3);

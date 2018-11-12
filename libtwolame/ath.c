@@ -30,7 +30,7 @@
 
 
 /* freq in hz */
-FLOAT ath_db(FLOAT f, FLOAT value)
+FLOAT twolame_ath_db(FLOAT f, FLOAT value)
 {
     /* from Painter & Spanias modified by Gabriel Bouvigne to better fit the reality ath = 3.640 *
        pow(f,-0.8) - 6.800 * exp(-0.6*pow(f-3.4,2.0)) + 6.000 * exp(-0.15*pow(f-8.7,2.0)) + 0.6*
@@ -69,10 +69,10 @@ FLOAT ath_db(FLOAT f, FLOAT value)
 
 
 /* Convert ATH values from dB into energy values as required by the psycho model */
-FLOAT ath_energy(FLOAT freq, FLOAT value)
+FLOAT twolame_ath_energy(FLOAT freq, FLOAT value)
 {
     FLOAT db;
-    db = ath_db(freq, 0) + value;   // Originally: ath_db(freq,value)
+    db = twolame_ath_db(freq, 0) + value;   // Originally: ath_db(freq,value)
     /* The values in the standard, and from the ATH formula are in dB. In the psycho model we are
        working in the energy domain. Hence the values that are in the absthr_X tables are not in
        dB. This function converts from dB into the energy domain. As noted on the LAME mailing list
@@ -89,7 +89,7 @@ FLOAT ath_energy(FLOAT freq, FLOAT value)
 /* Convert a frequency (in Hz) to a bark value
    Taken from LAME. MFC Feb 2003
    see for example "Zwicker: Psychoakustik, 1982; ISBN 3-540-11401-7 */
-FLOAT ath_freq2bark(FLOAT freq)
+FLOAT twolame_ath_freq2bark(FLOAT freq)
 {
     if (freq < 0)
         freq = 0;

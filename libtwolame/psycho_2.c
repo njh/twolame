@@ -75,7 +75,7 @@ int table;
 /********************************
  * init psycho model 2
  ********************************/
-psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
+psycho_2_mem *twolame_psycho_2_init(twolame_options * glopts, int sfreq)
 {
     psycho_2_mem *mem;
     FLOAT *cbval, *rnorm;
@@ -249,8 +249,8 @@ psycho_2_mem *psycho_2_init(twolame_options * glopts, int sfreq)
     return (mem);
 }
 
-void psycho_2(twolame_options * glopts, short int buffer[2][1152],
-              short int savebuf[2][1056], FLOAT smr[2][32])
+void twolame_psycho_2(twolame_options * glopts, short int buffer[2][1152],
+                      short int savebuf[2][1056], FLOAT smr[2][32])
 {
     psycho_2_mem *mem;
     unsigned int i, j, k, ch;
@@ -279,7 +279,7 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
 
 
     if (!glopts->p2mem) {
-        glopts->p2mem = psycho_2_init(glopts, sfreq);
+        glopts->p2mem = twolame_psycho_2_init(glopts, sfreq);
     }
     mem = glopts->p2mem;
     {
@@ -340,7 +340,7 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
             }
 
             /**Compute FFT****************************************************************/
-            psycho_2_fft(wsamp_r, energy, phi);
+            twolame_psycho_2_fft(wsamp_r, energy, phi);
             /*****************************************************************************
              * calculate the unpredictability measure, given energy[f] and phi[f]           *
              *****************************************************************************/
@@ -510,7 +510,7 @@ void psycho_2(twolame_options * glopts, short int buffer[2][1152],
 
 }
 
-void psycho_2_deinit(psycho_2_mem ** mem)
+void twolame_psycho_2_deinit(psycho_2_mem ** mem)
 {
 
     if (mem == NULL || *mem == NULL)

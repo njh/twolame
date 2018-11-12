@@ -25,8 +25,8 @@
 #ifndef TWOLAME_ENERGY_H
 #define TWOLAME_ENERGY_H
 
-int get_required_energy_bits(twolame_options * glopts);
-void do_energy_levels(twolame_options * glopts, bit_stream * bs);
+int twolame_get_required_energy_bits(twolame_options * glopts);
+void twolame_do_energy_levels(twolame_options * glopts, bit_stream * bs);
 
 #endif
 

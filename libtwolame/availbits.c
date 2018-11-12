@@ -30,7 +30,7 @@
 
 
 /* function returns the number of available bits */
-int available_bits(twolame_options * glopts)
+int twolame_available_bits(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
     FLOAT average;

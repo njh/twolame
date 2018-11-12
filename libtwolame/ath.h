@@ -23,9 +23,9 @@
 #ifndef TWOLAME_ATH_H
 #define TWOLAME_ATH_H
 
-FLOAT ath_db(FLOAT f, FLOAT value);
-FLOAT ath_energy(FLOAT f, FLOAT value);
-FLOAT ath_freq2bark(FLOAT freq);
+FLOAT twolame_ath_db(FLOAT f, FLOAT value);
+FLOAT twolame_ath_energy(FLOAT f, FLOAT value);
+FLOAT twolame_ath_freq2bark(FLOAT freq);
 
 #endif
 

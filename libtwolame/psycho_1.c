@@ -182,7 +182,7 @@ static void psycho_1_hann_fft_pickmax(FLOAT sample[FFT_SIZE], mask power[HAN_SIZ
     for (i = 0; i < FFT_SIZE; i++)
         x_real[i] = (FLOAT) (sample[i] * window[i]);
 
-    psycho_1_fft(x_real, energy, FFT_SIZE);
+    twolame_psycho_1_fft(x_real, energy, FFT_SIZE);
 
     for (i = 0; i < HAN_SIZE; i++) {    /* calculate power density spectrum */
         if (energy[i] < 1E-20)
@@ -554,8 +554,8 @@ static void psycho_1_dump(mask power[HAN_SIZE], int *tone, int *noise) {
 */
 
 
-void psycho_1(twolame_options * glopts, short buffer[2][1152], FLOAT scale[2][SBLIMIT],
-              FLOAT ltmin[2][SBLIMIT])
+void twolame_psycho_1(twolame_options * glopts, short buffer[2][1152], FLOAT scale[2][SBLIMIT],
+                      FLOAT ltmin[2][SBLIMIT])
 {
     psycho_1_mem *mem;
     frame_header *header = &glopts->header;
@@ -631,7 +631,7 @@ void psycho_1(twolame_options * glopts, short buffer[2][1152], FLOAT scale[2][SB
 
 }
 
-void psycho_1_deinit(psycho_1_mem ** mem)
+void twolame_psycho_1_deinit(psycho_1_mem ** mem)
 {
 
     if (mem == NULL || *mem == NULL)

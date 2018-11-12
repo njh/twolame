@@ -162,7 +162,7 @@ static FLOAT psycho_4_spreading_function(FLOAT bark)
 /********************************
  * init psycho model 2
  ********************************/
-static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
+static psycho_4_mem *twolame_psycho_4_init(twolame_options * glopts, int sfreq)
 {
     psycho_4_mem *mem;
     FLOAT *cbval, *rnorm;
@@ -216,11 +216,11 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
        should be 1/1024th of the Sampling Freq Line 512 should be the nyquist freq */
     for (i = 0; i < HBLKSIZE; i++) {
         FLOAT freq = i * (FLOAT) sfreq / (FLOAT) BLKSIZE;
-        bark[i] = ath_freq2bark(freq);
+        bark[i] = twolame_ath_freq2bark(freq);
         /* The ath tables in the dist10 code seem to be a little out of kilter. they seem to start
            with index 0 corresponding to (sampling freq)/1024. When in doubt, i'm going to assume
            that the dist10 code is wrong. MFC Feb2003 */
-        ath[i] = ath_energy(freq, glopts->athlevel);
+        ath[i] = twolame_ath_energy(freq, glopts->athlevel);
         // fprintf(stderr,"%.2f ",ath[i]);
     }
 
@@ -294,8 +294,8 @@ static psycho_4_mem *psycho_4_init(twolame_options * glopts, int sfreq)
 }
 
 
-void psycho_4(twolame_options * glopts,
-              short int buffer[2][1152], short int savebuf[2][1056], FLOAT smr[2][32])
+void twolame_psycho_4(twolame_options * glopts,
+                      short int buffer[2][1152], short int savebuf[2][1056], FLOAT smr[2][32])
 /* to match prototype : FLOAT args are always FLOAT */
 {
     psycho_4_mem *mem;
@@ -320,7 +320,7 @@ void psycho_4(twolame_options * glopts,
     int sfreq = glopts->samplerate_out;
 
     if (!glopts->p4mem) {
-        glopts->p4mem = psycho_4_init(glopts, sfreq);
+        glopts->p4mem = twolame_psycho_4_init(glopts, sfreq);
     }
 
     mem = glopts->p4mem;
@@ -377,7 +377,7 @@ void psycho_4(twolame_options * glopts,
             }
 
             /* Compute FFT */
-            psycho_2_fft(wsamp_r, energy, phi);
+            twolame_psycho_2_fft(wsamp_r, energy, phi);
 
             /* calculate the unpredictability measure, given energy[f] and phi[f] (the age pointers
                [new/old/oldest] are reset automatically on the second pass */
@@ -542,7 +542,7 @@ void psycho_4(twolame_options * glopts,
 }
 
 
-void psycho_4_deinit(psycho_4_mem ** mem)
+void twolame_psycho_4_deinit(psycho_4_mem ** mem)
 {
 
     if (mem == NULL || *mem == NULL)

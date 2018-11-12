@@ -24,12 +24,12 @@
 #ifndef TWOLAME_DAB_H
 #define TWOLAME_DAB_H
 
-void dab_crc_calc(twolame_options * glopts,
-                  unsigned int bit_alloc[2][SBLIMIT],
-                  unsigned int scfsi[2][SBLIMIT],
-                  unsigned int scalar[2][3][SBLIMIT], unsigned int *crc, int i);
+void twolame_dab_crc_calc(twolame_options * glopts,
+                          unsigned int bit_alloc[2][SBLIMIT],
+                          unsigned int scfsi[2][SBLIMIT],
+                          unsigned int scalar[2][3][SBLIMIT], unsigned int *crc, int i);
 
-void dab_crc_update(unsigned int, unsigned int, unsigned int *);
+void twolame_dab_crc_update(unsigned int, unsigned int, unsigned int *);
 
 #endif
 

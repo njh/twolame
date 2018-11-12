@@ -87,7 +87,7 @@ static void psycho_3_fft(FLOAT sample[BLKSIZE], FLOAT energy[BLKSIZE])
     for (i = 0; i < BLKSIZE; i++)
         x_real[i] = (FLOAT) (sample[i] * window[i]);
     /* do the FFT */
-    psycho_1_fft(x_real, energy, BLKSIZE);
+    twolame_psycho_1_fft(x_real, energy, BLKSIZE);
 }
 
 
@@ -399,7 +399,7 @@ static void psycho_3_smr(FLOAT * LTmin, FLOAT * Lsb)
 }
 
 
-static psycho_3_mem *psycho_3_init(twolame_options * glopts)
+static psycho_3_mem *twolame_psycho_3_init(twolame_options * glopts)
 {
     int i;
     int cbase = 0;              /* current base index for the bark range calculation */
@@ -427,8 +427,8 @@ static psycho_3_mem *psycho_3_init(twolame_options * glopts)
     sfreq = (FLOAT) glopts->samplerate_out;
     for (i = 1; i < HBLKSIZE; i++) {
         FLOAT freq = i * sfreq / BLKSIZE;
-        bark[i] = ath_freq2bark(freq);
-        ath[i] = ath_db(freq, glopts->athlevel);
+        bark[i] = twolame_ath_freq2bark(freq);
+        ath[i] = twolame_ath_db(freq, glopts->athlevel);
     }
 
     {   /* Work out the critical bands Starting from line 0, all lines
@@ -521,8 +521,8 @@ static void psycho_3_dump(int *tonelabel, FLOAT * Xtm, int *noiselabel, FLOAT * 
 }
 
 
-void psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2][32],
-              FLOAT ltmin[2][32])
+void twolame_psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2][32],
+                      FLOAT ltmin[2][32])
 {
     psycho_3_mem *mem;
     int nch = glopts->num_channels_out;
@@ -537,7 +537,7 @@ void psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2
     FLOAT Lsb[SBLIMIT];
 
     if (!glopts->p3mem) {
-        glopts->p3mem = psycho_3_init(glopts);
+        glopts->p3mem = twolame_psycho_3_init(glopts);
     }
     mem = glopts->p3mem;
 
@@ -574,7 +574,7 @@ void psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2
 }
 
 
-void psycho_3_deinit(psycho_3_mem ** mem)
+void twolame_psycho_3_deinit(psycho_3_mem ** mem)
 {
 
     if (mem == NULL || *mem == NULL)

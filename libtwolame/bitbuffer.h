@@ -37,11 +37,11 @@ typedef struct bit_stream_struc {
 } bit_stream;
 
 
-bit_stream *buffer_init(unsigned char *buffer, int buffer_size);
-void buffer_deinit(bit_stream ** bs);
+bit_stream *twolame_buffer_init(unsigned char *buffer, int buffer_size);
+void twolame_buffer_deinit(bit_stream ** bs);
 
 /*return the current bit stream length (in bits)*/
-#define buffer_sstell(bs) (bs->totbit)
+#define twolame_buffer_sstell(bs) (bs->totbit)
 
 #endif
 
