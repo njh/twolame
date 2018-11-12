@@ -28,41 +28,37 @@
 #include "availbits.h"
 
 
-struct slotinfo {
-    FLOAT average;
-    FLOAT frac;
-    int whole;
-    FLOAT lag;
-} slots;
-
 
 /* function returns the number of available bits */
 int available_bits(twolame_options * glopts)
 {
     frame_header *header = &glopts->header;
+    FLOAT average;
+    FLOAT frac;
+    int whole;
     int adb;
 
-    slots.average = (1152.0 / ((FLOAT) glopts->samplerate_out / 1000.0))
-                    * ((FLOAT) glopts->bitrate / 8.0);
+    average = (1152.0 / ((FLOAT) glopts->samplerate_out / 1000.0))
+              * ((FLOAT) glopts->bitrate / 8.0);
 
     // fprintf(stderr,"availbits says: sampling freq is %i. version %i. bitrateindex %i slots
-    // %f\n",header->sampling_frequency, header->version, header->bitrate_index, slots.average);
+    // %f\n",header->sampling_frequency, header->version, header->bitrate_index, average);
 
-    slots.whole = (int) slots.average;
-    slots.frac = slots.average - (FLOAT) slots.whole;
+    whole = (int) average;
+    frac = average - (FLOAT) whole;
 
     /* never allow padding for a VBR frame. Don't ask me why, I've forgotten why I set this */
-    if (slots.frac != 0 && glopts->padding && glopts->vbr == FALSE) {
-        if (slots.lag > (slots.frac - 1.0)) {   /* no padding for this frame */
-            slots.lag -= slots.frac;
+    if (frac != 0 && glopts->padding && glopts->vbr == FALSE) {
+        if (glopts->slots_lag > (frac - 1.0)) {   /* no padding for this frame */
+            glopts->slots_lag -= frac;
             header->padding = 0;
         } else {                /* padding */
             header->padding = 1;
-            slots.lag += (1 - slots.frac);
+            glopts->slots_lag += (1 - frac);
         }
     }
 
-    adb = slots.whole * 8;
+    adb = whole * 8;
 
     return adb;
 }

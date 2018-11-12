@@ -314,7 +314,8 @@ struct twolame_options_struct {
     FLOAT scale_left;
     FLOAT scale_right;
 
-
+    // Available Bits
+    FLOAT slots_lag;
 
     // Bit allocation stuff
     int lower_index;

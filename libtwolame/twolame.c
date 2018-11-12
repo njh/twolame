@@ -92,6 +92,8 @@ twolame_options *twolame_init(void)
     newoptions->verbosity = 2;
     newoptions->vbr_upper_index = 0;
 
+    newoptions->slots_lag = 0.0;
+
     newoptions->scale = 1.0;    // scaling disabled
     newoptions->scale_left = 1.0;   // scaling disabled
     newoptions->scale_right = 1.0;  // scaling disabled
