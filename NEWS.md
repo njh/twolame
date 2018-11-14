@@ -23,7 +23,7 @@ Version 0.4.0 (2018-??-??)
 - Ensure that twolame.1 is included in .tar.gz even outside of maintainer mode
 
 
-Version 0.3.13 (2010-01-21)
+Version 0.3.13 (2011-01-21)
 ---------------------------
 
 - Fixed documentation location (--docdir in configure)
