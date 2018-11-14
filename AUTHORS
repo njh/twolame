@@ -10,6 +10,11 @@ TwoLAME Authors
  -    Lots of cleaning and improving!
  -  New frontend
 
+.Elio Blanca - <eblanca76 at users.sourceforge.net>
+ -  Memory allocation improvements
+ -  Code optimisations
+ -  Cleanups and bug fixes
+
 
 .Christophe Massiot - <cmassiot at freebox.fr>
  -  Changes to make libtwolame thread-safe
