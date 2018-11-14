@@ -259,6 +259,6 @@ lame(1), mpg123(1), madplay(1), sox(1)
 
 COPYING
 -------
-Copyright (C) 2004-2017 The TwoLAME Project. Free use of this software is
+Copyright (C) 2004-2018 The TwoLAME Project. Free use of this software is
 granted under the terms of the GNU Lesser General Public License (LGPL).
 
