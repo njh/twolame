@@ -22,8 +22,15 @@ NEWS:
 ChangeLog:
 	[ -d .git ] && git log > ChangeLog || true
 
+pkgdocdir = @docdir@
+pkgdoc_DATA = \
+	AUTHORS \
+	COPYING \
+	README \
+	NEWS
 
 EXTRA_DIST = \
+	$(pkgdoc_DATA) \
 	twolame.pc.in \
 	twolame.spec \
 	win32/configwin.h \
