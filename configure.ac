@@ -56,8 +56,6 @@ AC_C_BIGENDIAN
 AC_C_INLINE
 AC_C_CONST
 
-LT_INIT
-
 if test "$USE_MAINTAINER_MODE" = yes; then
   AC_PATH_PROG([PATH_ASCIIDOC], [asciidoc])
   if test -z "$PATH_ASCIIDOC"; then
