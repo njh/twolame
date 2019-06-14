@@ -249,8 +249,7 @@ psycho_2_mem *twolame_psycho_2_init(twolame_options * glopts, int sfreq)
     return (mem);
 }
 
-void twolame_psycho_2(twolame_options * glopts, short int buffer[2][1152],
-                      short int savebuf[2][1056], FLOAT smr[2][32])
+void twolame_psycho_2(twolame_options * glopts)
 {
     psycho_2_mem *mem;
     unsigned int i, j, k, ch;
@@ -273,9 +272,12 @@ void twolame_psycho_2(twolame_options * glopts, short int buffer[2][1152],
     FHBLK *lthr;
     F2HBLK *r, *phi_sav;
     FLOAT *absthr;
+    short int savebuf[2][1056];
 
     int nch = glopts->num_channels_out;
     int sfreq = glopts->samplerate_out;
+    FLOAT (*smr)[32] = glopts->smr;
+    short int (*buffer)[1152] = glopts->buffer;
 
 
     if (!glopts->p2mem) {
@@ -311,6 +313,7 @@ void twolame_psycho_2(twolame_options * glopts, short int buffer[2][1152],
         absthr = mem->absthr;
     }
 
+    memset(savebuf, 0, sizeof(savebuf));
 
     for (ch = 0; ch < nch; ch++) {
         for (i = 0; i < 2; i++) {

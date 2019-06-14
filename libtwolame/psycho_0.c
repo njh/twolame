@@ -73,13 +73,15 @@ static psycho_0_mem *twolame_psycho_0_init(twolame_options * glopts, int sfreq)
 
 
 
-void twolame_psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT])
+void twolame_psycho_0(twolame_options * glopts)
 {
     psycho_0_mem *mem;
     int nch = glopts->num_channels_out;
     int sfreq = glopts->samplerate_out;
     int ch, sb, gr;
     unsigned int minscaleindex[2][SBLIMIT]; /* Smaller scale indexes mean bigger scalefactors */
+    unsigned int (*scalar)[3][SBLIMIT] = glopts->scalar;
+    FLOAT (*smr)[SBLIMIT] = glopts->smr;
 
     if (!glopts->p0mem) {
         glopts->p0mem = twolame_psycho_0_init(glopts, sfreq);
@@ -113,7 +115,7 @@ void twolame_psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned 
        these values, but who cares? It works pretty well MFC Mar 03 */
     for (ch = 0; ch < nch; ch++)
         for (sb = 0; sb < SBLIMIT; sb++)
-            SMR[ch][sb] = 2.0 * (30.0 - minscaleindex[ch][sb]) - mem->ath_min[sb];
+            smr[ch][sb] = 2.0 * (30.0 - minscaleindex[ch][sb]) - mem->ath_min[sb];
 }
 
 
