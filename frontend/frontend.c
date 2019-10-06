@@ -77,7 +77,7 @@ static void new_extension(char *filename, char *extname, char *newname)
     } while (found == 0);
 
     if (found == -1) {
-        strncpy(newname, filename, MAX_NAME_SIZE);
+        strncpy(newname, filename, MAX_NAME_SIZE-1);
     }
     if (found == 1) {
         strncpy(newname, filename, dotpos);
@@ -85,7 +85,7 @@ static void new_extension(char *filename, char *extname, char *newname)
     }
     // Make sure there is room in the string for the
     // new filename and the extension
-    if (strlen(newname) + strlen(extname) + 1 < MAX_NAME_SIZE) {
+    if (strlen(newname) + strlen(extname) < MAX_NAME_SIZE-1) {
         strcat(newname, extname);
     }
 }
@@ -525,9 +525,9 @@ static void parse_args(int argc, char **argv, twolame_options * encopts)
     argv += optind;
     while (argc) {
         if (inputfilename[0] == '\0')
-            strncpy(inputfilename, *argv, MAX_NAME_SIZE);
+            strncpy(inputfilename, *argv, MAX_NAME_SIZE-1);
         else if (outputfilename[0] == '\0')
-            strncpy(outputfilename, *argv, MAX_NAME_SIZE);
+            strncpy(outputfilename, *argv, MAX_NAME_SIZE-1);
         else {
             fprintf(stderr, "excess argument: %s\n", *argv);
             usage_short();
