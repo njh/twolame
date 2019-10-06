@@ -6,7 +6,7 @@ compiler:
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y build-essential pkg-config automake autoconf libtool
-  - sudo apt-get install -y libsndfile1-dev doxygen asciidoc
+  - sudo apt-get install -y libsndfile1-dev doxygen asciidoc xmlto
 
 script:
   - ./autogen.sh
