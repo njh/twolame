@@ -1,12 +1,37 @@
 language: c
 
+os:
+  - linux
+  - osx
+
 compiler:
   - gcc
+  - clang
 
-before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y build-essential pkg-config automake autoconf libtool
-  - sudo apt-get install -y libsndfile1-dev doxygen asciidoc xmlto
+addons:
+  apt:
+    packages:
+      - build-essential
+      - pkg-config
+      - automake
+      - autoconf
+      - libtool
+      - libsndfile1-dev
+      - doxygen
+      - asciidoc
+      - xmlto
+    update: true
+  homebrew:
+    packages:
+      - pkg-config
+      - automake
+      - autoconf
+      - libtool
+      - libsndfile
+      - doxygen
+      - asciidoc
+      - xmlto
+    update: true
 
 script:
   - ./autogen.sh
