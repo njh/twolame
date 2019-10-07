@@ -42,7 +42,7 @@ extern "C" {
 #endif
 
 #ifdef _WIN32
-# ifdef TWOLAME_BUILD
+# ifdef LIBTWOLAME_BUILD
 #  ifdef DLL_EXPORT
 #   define TL_API __declspec(dllexport)
 #  else
