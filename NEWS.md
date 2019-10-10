@@ -3,24 +3,33 @@ What is new in TwoLAME
 
 Version 0.4.0 (2018-??-??)
 --------------------------
-- Make libsndfile dependency (and therefore the frontend) optional
-- Silenced Valgrind warnings
-- Added DAB utility methods for ScF-CRC handling
-- Fixed setting for error protection flag
 - Added free format encoding (now up to 450 kbps)
-- New check for invalid bitrate/channel encoder settings
+- Added DAB utility methods for ScF-CRC handling
+- Added `twolame_get_original()` and `twolame_set_original()`
+- Added `twolame_get_extension()` and `twolame_set_extension()`
+- Bundled .spec file in tarball for building RPM for twolame
+- Make libsndfile dependency (and therefore the frontend) optional
 - Fixed VBR encoding
-- Updated autogen.sh and configure.ac
-- Updated to Doxygen 1.8.13
-- Minor fixes (speed related)
-- New `twolame_get_original()` and `twolame_set_original()`
-- Fix compilation on mingw or mxe cross compiler
+- Fixed setting for error protection flag
+- New check for invalid bitrate/channel encoder settings
 - New checks against failed memory allocations
 - Fixed padding policy (now adding an empty slot)
 - Fixed build when maintainer mode is disabled
-- Fixed scaling of floating point input source through libsdnfile
+- Fixed scaling of floating point input source through libsndfile
 - Removed `slotinfo` global variables to fix thread safety bug
-- Ensure that twolame.1 is included in .tar.gz even outside of maintainer mode
+- Switched to handling reading from STDIN using libsndfile
+- Fix for potential buffer overrun relating to `MAX_NAME_SIZE` in CLI tool
+- Install AUTHORS, COPYING, README, NEWS in `$prefix/share/doc/twolame/`
+- Zero the whole of the data structure when calling `twolame_init()`
+- Prefixed all global symbols with `twolame_` to prevent symbol conflicts
+- Fix for `twolame_get_framelength()` returning the correct frame size when padding is enabled
+- Fix progress counter in twolame CLI
+- Fix compilation on mingw or mxe cross compiler
+- Fix symbols visibility on Windows
+- Add `-no-undefined` for compilation on Windows
+- Added `win32-dll` option to `LT_INIT`
+- Compiler and Valgrind warning fixes
+- Various other minor fixes
 
 
 Version 0.3.13 (2011-01-21)
