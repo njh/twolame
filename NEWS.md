@@ -1,7 +1,7 @@
 What is new in TwoLAME
 ======================
 
-Version 0.4.0 (2018-??-??)
+Version 0.4.0 (2019-10-11)
 --------------------------
 - Added free format encoding (now up to 450 kbps)
 - Added DAB utility methods for ScF-CRC handling
