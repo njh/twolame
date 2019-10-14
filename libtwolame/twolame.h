@@ -777,14 +777,6 @@ TL_API float twolame_get_VBR_level(twolame_options * glopts);
 
 
 
-/*
-   Using the twolame_set_VBR_q()/twolame_get_VBR_q functions
-   are deprecated, please use twolame_set_VBR_level() instead.
-*/
-TL_API int twolame_set_VBR_q(twolame_options * glopts, float level);
-TL_API float twolame_get_VBR_q(twolame_options * glopts);
-
-
 /** Set the adjustment (in dB) applied to the ATH for Psycho models 3 and 4.
  *
  *  Default: 0.0

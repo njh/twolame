@@ -1,6 +1,12 @@
 What is new in TwoLAME
 ======================
 
+Version 1.0.0 (????-??-??)
+--------------------------
+
+- (libtwolame) Removed the long deprecated `twolame_get_VBR_q()` / `twolame_set_VBR_q()`
+
+
 Version 0.4.0 (2019-10-11)
 --------------------------
 - Added free format encoding (now up to 450 kbps)
