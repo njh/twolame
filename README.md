@@ -1,7 +1,7 @@
 TwoLAME
 =======
 
-[![Travis Build Status](https://travis-ci.org/njh/twolame.svg?branch=master)](https://travis-ci.org/njh/twolame)
+[![Build Status](https://travis-ci.com/njh/twolame.svg?branch=main)](https://travis-ci.com/njh/twolame)
 
 Based on tooLAME by Michael Cheng
 
