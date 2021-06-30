@@ -263,7 +263,7 @@ TL_API int twolame_encode_buffer_float32(twolame_options * glopts,
  *  \return                The number of bytes put in output buffer
  *                         or a negative value on error
  */
-int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
+TL_API int twolame_encode_buffer_float32_interleaved(twolame_options * glopts,
         const float pcm[],
         int num_samples,
         unsigned char *mp2buffer, int mp2buffer_size);
