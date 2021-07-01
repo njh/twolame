@@ -56,9 +56,9 @@ extern "C" {
 #  endif
 # endif
 #else
-# ifdef GNUC
-#  if GNUC >= 4
-#   define TL_API attribute ((visibility("default")))
+# ifdef __GNUC__
+#  if __GNUC__ >= 4
+#   define TL_API __attribute__ ((visibility("default")))
 #  else
 #   define TL_API
 #  endif
