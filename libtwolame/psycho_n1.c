@@ -60,9 +60,11 @@ static const FLOAT snrdefc[32] = {
 };
 #endif
 
-void twolame_psycho_n1(twolame_options * glopts, FLOAT ltmin[2][SBLIMIT], int stereo)
+void twolame_psycho_n1(twolame_options * glopts)
 {
     int i, k;
+    int stereo = glopts->num_channels_out;
+    FLOAT (*ltmin)[SBLIMIT] = glopts->smr;
 
     for (k = 0; k < stereo; k++)
         for (i = 0; i < SBLIMIT; i++)
