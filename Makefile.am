@@ -20,7 +20,7 @@ NEWS:
 	[ -f NEWS.md ] && cat $(top_srcdir)/NEWS.md > $@ || true
 
 ChangeLog:
-	[ -d .git ] && git log > ChangeLog || true
+	[ -e .git ] && git log > ChangeLog || true
 
 pkgdocdir = @docdir@
 pkgdoc_DATA = \
