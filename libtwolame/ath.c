@@ -38,12 +38,12 @@ FLOAT twolame_ath_db(FLOAT f, FLOAT value)
 
 
        In the past LAME was using the Painter &Spanias formula. But we had some recurrent problems
-       with HF content. We measured real ATH values, and found the older formula to be inacurate in
+       with HF content. We measured real ATH values, and found the older formula to be inaccurate in
        the higher part. So we made this new formula and this solved most of HF problematic
        testcases. The tradeoff is that in VBR mode it increases a lot the bitrate. */
 
 
-    /* this curve can be udjusted according to the VBR scale: it adjusts from something close to
+    /* this curve can be adjusted according to the VBR scale: it adjusts from something close to
        Painter & Spanias on V9 up to Bouvigne's formula for V0. This way the VBR bitrate is more
        balanced according to the -V value. */
 
@@ -76,7 +76,7 @@ FLOAT twolame_ath_energy(FLOAT freq, FLOAT value)
     /* The values in the standard, and from the ATH formula are in dB. In the psycho model we are
        working in the energy domain. Hence the values that are in the absthr_X tables are not in
        dB. This function converts from dB into the energy domain. As noted on the LAME mailing list
-       from years ago (MFC FIX find the reference), the absolute threhsold of hearing values in the
+       from years ago (MFC FIX find the reference), the absolute threshold of hearing values in the
        tables in the standard are dodgy - the ATH in the tables do not correspond to any previously
        known values of the ATH. From ISO 11172 Tables D.4.x "A value of 0dB represents a level in
        the absolute threshold calculation of 96dB below the energy of a sine wave of amplitude

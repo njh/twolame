@@ -213,7 +213,7 @@ How CBR works
       subband
  - Keep increasing the bits to whichever subband currently has the min MNR
       value until we have no bits left.
- - This mode does not guarentee that all the subbands are without noise
+ - This mode does not guarantee that all the subbands are without noise
       ie there may still be subbands with MNR less than  0.0  (noisy!)
 
 How VBR works

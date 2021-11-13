@@ -164,7 +164,7 @@ static int init_header_info(twolame_options * glopts)
             return -1;
         }
     }
-    // Copy accross the other settings
+    // Copy across the other settings
     header->padding = 0; /* when requested, padding will be evaluated later for this frame */
     header->private_extension = glopts->private_extension;
     header->mode = glopts->mode;
@@ -389,7 +389,7 @@ int twolame_init_params(twolame_options * glopts)
         return -1;
     }
 
-    // Initialise interal variables
+    // Initialise internal variables
     glopts->samples_in_buffer = 0;
     glopts->psycount = 0;
 
@@ -424,7 +424,7 @@ int twolame_init_params(twolame_options * glopts)
     if (twolame_init_subband(&glopts->smem) < 0) {
         return -1;
     }
-    // All initalised now :)
+    // All initialised now :)
     glopts->twolame_init++;
 
     return (0);
@@ -638,7 +638,7 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         buffer_put1bit(bs, 0);
 
 
-    // Calulate the number of bits in this frame
+    // Calculate the number of bits in this frame
     frameBits = twolame_buffer_sstell(bs) - initial_bits;
     if (frameBits % 8) {        /* a program failure */
         fprintf(stderr, "Sent %ld bits = %ld slots plus %ld\n", frameBits, frameBits / 8,

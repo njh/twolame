@@ -809,7 +809,7 @@ int twolame_init_bit_allocation(twolame_options * glopts)
        outside these ranges, otherwise a new alloc table would have to be loaded in the middle of
        encoding. This VBR hack is dodgy - the standard says that LayerII decoders don't have to
        support a variable bitrate, but Layer3 decoders must do so. Hence, it is unlikely that a
-       compliant layer2 decoder would be written to dynmically change allocation tables. *BUT* a
+       compliant layer2 decoder would be written to dynamically change allocation tables. *BUT* a
        layer3 encoder might handle it by default, meaning we could switch tables mid-encode and
        enjoy a wider range of bitrates for the VBR encoding. None of this needs to be done for LSF,
        since there is only *one* possible alloc table in LSF MFC Feb 2003 */
@@ -1027,7 +1027,7 @@ static void vbr_maxmnr(FLOAT mnr[2][SBLIMIT], char used[2][SBLIMIT], int sblimit
 MFC Feb 2003
 vbr_bit_allocation is different to the normal a_bit_allocation in that
 it is known beforehand that there are definitely enough bits to do what we
-have to - i.e. a bitrate was specificially chosen in main_bit_allocation so
+have to - i.e. a bitrate was specifically chosen in main_bit_allocation so
 that we have enough bits to encode what we have to.
 This function should take that into account and just greedily assign
 the bits, rather than fussing over the minimum MNR subband - we know
