@@ -32,7 +32,7 @@
 
 /* a bunch of SNR values I sort of made up    MFC 1 oct 99
    Found by averaging the SNR values over a sound file
-   FIXME: Do a more rigourous investigation MFC Feb 2003 */
+   FIXME: Do a more rigorous investigation MFC Feb 2003 */
 
 // From Castanets.wav
 static const FLOAT snrdef[32] = {

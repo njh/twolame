@@ -44,7 +44,7 @@ static inline FLOAT psycho_3_add_db(psycho_3_mem * mem, FLOAT a, FLOAT b)
 {
     /* MFC - if the difference between a and b is large (>99), then just return the largest one.
        (about 10% of the time) - For differences between 0 and 99, return the largest value, but
-       add in a pre-calculated difference value. - the value 99 was chosen arbitarily. - maximum
+       add in a pre-calculated difference value. - the value 99 was chosen arbitrarily. - maximum
        (a-b) i've seen is 572 */
     FLOAT fdiff;
     int idiff;
@@ -358,7 +358,7 @@ static void psycho_3_threshold(psycho_3_mem * mem, FLOAT * LTg, int *tonelabel, 
         }
     }
 
-    /* ISO11172 D.1 Step 7 Calculate the global masking threhold */
+    /* ISO11172 D.1 Step 7 Calculate the global masking threshold */
     for (i = 0; i < SUBSIZE; i++) {
         LTg[i] = psycho_3_add_db(mem, LTnm[i], LTtm[i]);
         if (bit_rate < 96)
@@ -456,7 +456,7 @@ static psycho_3_mem *twolame_psycho_3_init(twolame_options * glopts)
         cbandindex[cbands] = 513;   /* Set the top of the last critical band */
         mem->cbands = cbands;   // make a not of the number of cbands
 
-        /* For each crtical band calculate the average bark value cbval [central bark value] */
+        /* For each critical band calculate the average bark value cbval [central bark value] */
         for (i = 1; i < HBLKSIZE; i++)
             cbval[partition[i]] += bark[i]; /* sum up all the bark values */
         for (i = 1; i < CBANDS; i++) {

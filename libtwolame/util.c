@@ -31,7 +31,7 @@
 #include "util.h"
 
 
-// Return string containg version number
+// Return string containing version number
 // of this library
 const char *get_twolame_version(void)
 {
@@ -40,7 +40,7 @@ const char *get_twolame_version(void)
     return str;
 }
 
-// Return string containg version number
+// Return string containing version number
 // of this library
 const char *get_twolame_url(void)
 {
@@ -157,7 +157,7 @@ int twolame_get_framelength(twolame_options * glopts)
 }
 
 
-// Get the bitrate corrensponding to a given index
+// Get the bitrate corresponding to a given index
 int twolame_index_bitrate(int mpeg_ver, int index)
 {
     if (index>0 && index<15) {

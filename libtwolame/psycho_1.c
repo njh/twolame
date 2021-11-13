@@ -130,7 +130,7 @@ static inline FLOAT add_db(psycho_1_mem * mem, FLOAT a, FLOAT b)
 {
     /* MFC - if the difference between a and b is large (>99), then just return the largest one.
        (about 10% of the time) - For differences between 0 and 99, return the largest value, but
-       add in a pre-calculated difference value. - the value 99 was chosen arbitarily. - maximum
+       add in a pre-calculated difference value. - the value 99 was chosen arbitrarily. - maximum
        (a-b) i've seen is 572 */
     FLOAT fdiff;
     int idiff;
@@ -171,7 +171,7 @@ static void psycho_1_hann_fft_pickmax(FLOAT sample[FFT_SIZE], mask power[HAN_SIZ
 
     if (!init) {
         /* calculate window function for the Fourier transform */
-        /* These values need only be initiliased once, regardless of the caller */
+        /* These values need only be initialised once, regardless of the caller */
         sqrt_8_over_3 = pow(8.0 / 3.0, 0.5);
         for (i = 0; i < FFT_SIZE; i++) {
             /* Hann window formula */
