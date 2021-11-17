@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/libtwolameTargets.cmake")
+
+check_required_components(libtwolame)
+
+get_target_property(libtwolame_LOCATION libtwolame::libtwolame LOCATION)
+message(STATUS "Found twolame: ${libtwolame_LOCATION}")
