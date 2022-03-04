@@ -554,8 +554,7 @@ static void psycho_1_dump(mask power[HAN_SIZE], int *tone, int *noise) {
 */
 
 
-void twolame_psycho_1(twolame_options * glopts, short buffer[2][1152], FLOAT scale[2][SBLIMIT],
-                      FLOAT ltmin[2][SBLIMIT])
+void twolame_psycho_1(twolame_options * glopts)
 {
     psycho_1_mem *mem;
     frame_header *header = &glopts->header;
@@ -566,6 +565,9 @@ void twolame_psycho_1(twolame_options * glopts, short buffer[2][1152], FLOAT sca
     FLOAT spike[2][SBLIMIT];
     FLOAT *fft_buf[2];
     FLOAT energy[FFT_SIZE];
+    FLOAT (*ltmin)[SBLIMIT] = glopts->smr;
+    FLOAT (*scale)[SBLIMIT] = glopts->max_sc;
+    short (*buffer)[1152] = glopts->buffer;
 
     /* call functions for critical boundaries, freq. */
     if (!glopts->p1mem) {       /* bands, bark values, and mapping */

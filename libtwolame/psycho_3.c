@@ -521,8 +521,7 @@ static void psycho_3_dump(int *tonelabel, FLOAT * Xtm, int *noiselabel, FLOAT * 
 }
 
 
-void twolame_psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT scale[2][32],
-                      FLOAT ltmin[2][32])
+void twolame_psycho_3(twolame_options * glopts)
 {
     psycho_3_mem *mem;
     int nch = glopts->num_channels_out;
@@ -535,6 +534,9 @@ void twolame_psycho_3(twolame_options * glopts, short int buffer[2][1152], FLOAT
     int tonelabel[HBLKSIZE], noiselabel[HBLKSIZE] = {0};
     FLOAT LTg[HBLKSIZE];
     FLOAT Lsb[SBLIMIT];
+    FLOAT (*ltmin)[32] = glopts->smr;
+    FLOAT (*scale)[32] = glopts->max_sc;
+    short int (*buffer)[1152] = glopts->buffer;
 
     if (!glopts->p3mem) {
         glopts->p3mem = twolame_psycho_3_init(glopts);
