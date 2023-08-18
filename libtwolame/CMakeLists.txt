@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.5)
+project (twolame)
+
+ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
+
+set(CMAKE_BUILD_TYPE Release)
+
+set(PROJECT_MAIN_SRCS
+	${CMAKE_CURRENT_SOURCE_DIR}/ath.c
+	${CMAKE_CURRENT_SOURCE_DIR}/availbits.c
+	${CMAKE_CURRENT_SOURCE_DIR}/bitbuffer.c
+	${CMAKE_CURRENT_SOURCE_DIR}/crc.c
+	${CMAKE_CURRENT_SOURCE_DIR}/dab.c
+	${CMAKE_CURRENT_SOURCE_DIR}/encode.c
+	${CMAKE_CURRENT_SOURCE_DIR}/energy.c
+	${CMAKE_CURRENT_SOURCE_DIR}/fft.c
+	${CMAKE_CURRENT_SOURCE_DIR}/get_set.c
+	${CMAKE_CURRENT_SOURCE_DIR}/mem.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_0.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_1.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_2.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_3.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_4.c
+	${CMAKE_CURRENT_SOURCE_DIR}/psycho_n1.c
+	${CMAKE_CURRENT_SOURCE_DIR}/subband.c
+	${CMAKE_CURRENT_SOURCE_DIR}/twolame.c
+	${CMAKE_CURRENT_SOURCE_DIR}/util.c
+)
+
+add_library(${PROJECT_NAME} SHARED STATIC ${PROJECT_MAIN_SRCS})
+
+### OS specific stuff ###
+if(NOT WIN32)
+	install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
+	install(DIRECTORY ../include/ DESTINATION include/${PROJECT_NAME})
+endif()
+#########################
+
