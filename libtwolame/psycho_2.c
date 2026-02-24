@@ -54,9 +54,7 @@ static const FLOAT bmax[27] = { 20.0, 20.0, 20.0, 20.0, 20.0, 17.0, 15.0,
                                 4.5, 4.5, 4.5, 3.5, 3.5, 3.5
                               };
 
-static void psycho_2_read_absthr(absthr, table)
-FLOAT *absthr;
-int table;
+static void psycho_2_read_absthr(FLOAT *absthr, int table)
 {
     int j;
 #include "psycho_2_absthr.h"
