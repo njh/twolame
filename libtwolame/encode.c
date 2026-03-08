@@ -751,10 +751,12 @@ int twolame_bits_for_nonoise(twolame_options * glopts,
     /* Count the number of bits required to encode the quantization index for both channels in each
        subband. If we're above the jsbound, then pretend we only have one channel */
     for (sb = 0; sb < jsbound; ++sb)
-        bbal += nch * nbal[line[glopts->tablenum][sb]]; // (*alloc)[sb][0].bits;
+        if (line[glopts->tablenum][sb] != -1)
+            bbal += nch * nbal[line[glopts->tablenum][sb]]; // (*alloc)[sb][0].bits;
 
     for (sb = jsbound; sb < sblimit; ++sb)
-        bbal += nbal[line[glopts->tablenum][sb]];   // (*alloc)[sb][0].bits;
+        if (line[glopts->tablenum][sb] != -1)
+            bbal += nbal[line[glopts->tablenum][sb]];   // (*alloc)[sb][0].bits;
     req_bits = banc + bbal + berr;
 
     for (sb = 0; sb < sblimit; ++sb)
