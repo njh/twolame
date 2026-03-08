@@ -294,8 +294,7 @@ static psycho_4_mem *twolame_psycho_4_init(twolame_options * glopts, int sfreq)
 }
 
 
-void twolame_psycho_4(twolame_options * glopts,
-                      short int buffer[2][1152], short int savebuf[2][1056], FLOAT smr[2][32])
+void twolame_psycho_4(twolame_options * glopts)
 /* to match prototype : FLOAT args are always FLOAT */
 {
     psycho_4_mem *mem;
@@ -315,9 +314,12 @@ void twolame_psycho_4(twolame_options * glopts,
     FLOAT *tmn;
     FCB *s;
     F2HBLK *r, *phi_sav;
+    short int savebuf[2][1056];
 
     int nch = glopts->num_channels_out;
     int sfreq = glopts->samplerate_out;
+    FLOAT (*smr)[32] = glopts->smr;
+    short int (*buffer)[1152] = glopts->buffer;
 
     if (!glopts->p4mem) {
         glopts->p4mem = twolame_psycho_4_init(glopts, sfreq);
@@ -352,6 +354,8 @@ void twolame_psycho_4(twolame_options * glopts,
         r = mem->r;
         phi_sav = mem->phi_sav;
     }
+
+    memset(savebuf, 0, sizeof(savebuf));
 
     for (ch = 0; ch < nch; ch++) {
         for (run = 0; run < 2; run++) {

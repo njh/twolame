@@ -23,7 +23,7 @@
 #ifndef TWOLAME_PSYCHO_0_H
 #define TWOLAME_PSYCHO_0_H
 
-void twolame_psycho_0(twolame_options * glopts, FLOAT SMR[2][SBLIMIT], unsigned int scalar[2][3][SBLIMIT]);
+void twolame_psycho_0(twolame_options * glopts);
 void twolame_psycho_0_deinit(psycho_0_mem ** mem);
 
 #endif

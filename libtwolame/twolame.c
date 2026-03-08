@@ -47,6 +47,17 @@
 
 #include "bitbuffer_inline.h"
 
+typedef void (*psycho_model_t)(twolame_options *);
+
+psycho_model_t psycho_model_array[] =
+{
+    &twolame_psycho_n1,
+    &twolame_psycho_0,
+    &twolame_psycho_1,
+    &twolame_psycho_2,
+    &twolame_psycho_3,
+    &twolame_psycho_4
+};
 
 /*
   twolame_init
@@ -388,6 +399,12 @@ int twolame_init_params(twolame_options * glopts)
                 "twolame_init_params(): sorry, twolame doesn't support resampling (yet).\n");
         return -1;
     }
+    // Check requested psychoacoustic model
+    if (glopts->psymodel < -1 || glopts->psymodel > 4) {
+        fprintf(stderr,
+                "twolame_init_params(): Invalid psy model specification %d, valid values are into [-1, .. 4].\n", glopts->psymodel);
+        return -1;
+    }
 
     // Initialise internal variables
     glopts->samples_in_buffer = 0;
@@ -490,10 +507,8 @@ static void scale_and_mix_samples(twolame_options * glopts)
 */
 static int encode_frame(twolame_options * glopts, bit_stream * bs)
 {
-    int nch = glopts->num_channels_out;
     int sb, ch, adb, i;
     unsigned long frameBits, initial_bits;
-    short sam[2][1056];
 
     if (!glopts->twolame_init) {
         fprintf(stderr, "Please call twolame_init_params() before starting encoding.\n");
@@ -501,10 +516,6 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     }
     // Scale and mix the input buffer
     scale_and_mix_samples(glopts);
-
-
-    // Clear the saved audio buffer
-    memset((char *) sam, 0, sizeof(sam));
 
     // Number of bits to calculate CRC on
     glopts->num_crc_bits = 0;
@@ -537,13 +548,13 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
         /* New polyphase filter Combines windowing and filtering. Ricardo Feb'03 */
         for (gr = 0; gr < 3; gr++)
             for (bl = 0; bl < 12; bl++)
-                for (ch = 0; ch < nch; ch++)
+                for (ch = 0; ch < glopts->num_channels_out; ch++)
                     twolame_window_filter_subband(&glopts->smem,
                                                   &glopts->buffer[ch][gr * 12 * 32 + 32 * bl], ch,
                                                   &(*glopts->sb_sample)[ch][gr][bl][0]);
     }
 
-    twolame_scalefactor_calc(*glopts->sb_sample, glopts->scalar, nch, glopts->sblimit);
+    twolame_scalefactor_calc(*glopts->sb_sample, glopts->scalar, glopts->num_channels_out, glopts->sblimit);
     twolame_find_sf_max(glopts, glopts->scalar, glopts->max_sc);
     if (glopts->mode == TWOLAME_JOINT_STEREO) {
         // this way we calculate more mono than we need but it is cheap
@@ -554,43 +565,18 @@ static int encode_frame(twolame_options * glopts, bit_stream * bs)
     if ((glopts->quickmode == TRUE) && (++glopts->psycount % glopts->quickcount != 0)) {
         /* We're using quick mode, so we're only calculating the model every 'quickcount' frames.
            Otherwise, just copy the old ones across */
-        for (ch = 0; ch < nch; ch++) {
+        for (ch = 0; ch < glopts->num_channels_out; ch++) {
             for (sb = 0; sb < SBLIMIT; sb++) {
                 glopts->smr[ch][sb] = glopts->smrdef[ch][sb];
             }
         }
     } else {
-        // calculate the psymodel
-        switch (glopts->psymodel) {
-        case -1:
-            twolame_psycho_n1(glopts, glopts->smr, nch);
-            break;
-        case 0:                // Psy Model A
-            twolame_psycho_0(glopts, glopts->smr, glopts->scalar);
-            break;
-        case 1:
-            twolame_psycho_1(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
-            break;
-        case 2:
-            twolame_psycho_2(glopts, glopts->buffer, sam, glopts->smr);
-            break;
-        case 3:
-            // Modified psy model 1
-            twolame_psycho_3(glopts, glopts->buffer, glopts->max_sc, glopts->smr);
-            break;
-        case 4:
-            // Modified psy model 2
-            twolame_psycho_4(glopts, glopts->buffer, sam, glopts->smr);
-            break;
-        default:
-            fprintf(stderr, "Invalid psy model specification: %i\n", glopts->psymodel);
-            return -1;
-            break;
-        }
+
+        psycho_model_array[glopts->psymodel+1](glopts);
 
         if (glopts->quickmode == TRUE) {
             // copy the smr values and reuse them later
-            for (ch = 0; ch < nch; ch++) {
+            for (ch = 0; ch < glopts->num_channels_out; ch++) {
                 for (sb = 0; sb < SBLIMIT; sb++)
                     glopts->smrdef[ch][sb] = glopts->smr[ch][sb];
             }
