@@ -53,3 +53,6 @@ frontend/twolame
 
 tests/*.mp2
 tests/*.raw
+
+# CMake build directory
+build

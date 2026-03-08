@@ -24,10 +24,12 @@
 #ifndef TWOLAME_COMMON_H
 #define TWOLAME_COMMON_H
 
-#ifdef _WIN32
-# include "../win32/configwin.h"
-#else
-# include "config.h"
+#ifndef CMAKE
+# ifdef _WIN32
+#  include "../win32/configwin.h"
+# else
+#  include "config.h"
+# endif
 #endif
 
 #include "twolame.h"
