@@ -10,9 +10,7 @@ pkghtmldir = $(pkgdocdir)/html
 
 doxygen_files = \
     doxygen.css \
-    doxygen.png \
-    nav_f.png \
-    nav_h.png \
+    doxygen.svg \
     tabs.css \
     twolame_8h_source.html \
     twolame_8h.html

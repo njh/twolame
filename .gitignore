@@ -44,6 +44,8 @@ doc/twolame.1
 doc/twolame.1.xml
 doc/html/doxygen.css
 doc/html/doxygen.png
+doc/html/doxygen.svg
+doc/html/navtree.css
 doc/html/tabs.css
 
 libtwolame/config.h
