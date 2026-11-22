@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Linux / gcc
+    runs-on: ubuntu-latest
+    env:
+      CC: gcc
+      TARGET_DIR: ${{ github.workspace }}/target
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential pkg-config automake autoconf libtool \
+            libsndfile1-dev doxygen asciidoc-base xmlto docbook-xsl
+
+      - name: Configure
+        run: ./autogen.sh --prefix="$TARGET_DIR"
+
+      - name: Build
+        run: make
+
+      - name: Distcheck
+        run: make distcheck
+
+      - name: Upload test logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: '**/*.log'
+          if-no-files-found: ignore
+
+      - name: Upload distribution tarball
+        uses: actions/upload-artifact@v4
+        with:
+          name: twolame-dist
+          path: twolame-*.tar.gz
